@@ -32,7 +32,7 @@ static void	signal_handler(int signum)
 	}
 }
 
-void	setup_signal_handlers(void)
+void	shell_signal_handlers(void)
 {
 	struct sigaction	sa;
 

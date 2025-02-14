@@ -14,7 +14,7 @@
 
 int	main(void)
 {
-	setup_signal_handlers();
+	shell_signal_handlers();
 	shell_loop();
 	return (EXIT_SUCCESS);
 }

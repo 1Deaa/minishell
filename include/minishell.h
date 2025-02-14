@@ -57,7 +57,7 @@ char	*create_prompt(void);
 /*
 Handles the signals CTRL-C CTRL-\
 */
-void	setup_signal_handlers(void);
+void	shell_signal_handlers(void);
 /*
 Keeps the shell alive and working.
 */
