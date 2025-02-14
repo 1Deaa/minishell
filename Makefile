@@ -1,6 +1,6 @@
 NAME = minishell
 
-FILES = main.c prompt.c signals.c shell.c find_cmd_path.c \
+FILES = main.c prompt.c signals.c shell.c find_cmd_path.c token.c \
 		ft_strchr.c ft_strlen.c ft_calloc.c ft_strcat.c
 
 CC = cc
