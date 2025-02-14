@@ -14,19 +14,7 @@
 
 int	main(void)
 {
-	t_input	shell;
-
 	setup_signal_handlers();
-	shell.prompt = create_prompt();
-	while (true)
-	{
-		shell.command = readline(shell.prompt);
-		if (!shell.command)
-		{
-			free(shell.prompt);
-			break ;
-		}
-		free(shell.command);
-	}
+	shell_loop();
 	return (EXIT_SUCCESS);
 }
