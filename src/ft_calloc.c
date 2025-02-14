@@ -22,9 +22,7 @@ void	*ft_calloc(size_t count, size_t size)
 	total_size = count * size;
 	ptr = (unsigned char *)malloc(total_size);
 	if (!ptr)
-	{
 		return (NULL);
-	}
 	while (++j < total_size)
 		ptr[j] = 0;
 	return (ptr);
