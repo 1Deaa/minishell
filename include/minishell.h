@@ -24,6 +24,7 @@
 # include <termios.h>
 # include "colors.h"
 # include "structs.h"
+# include "libft.h"
 
 typedef struct s_input
 {
@@ -34,22 +35,6 @@ typedef struct s_input
 	char	*command;
 }	t_input;
 
-/*
-Return the length of S
-*/
-int		ft_strlen(const char *s);
-/*
-Allocate COUNT elements of SIZE bytes each, all initialized to 0.
-*/
-void	*ft_calloc(size_t count, size_t size);
-/*
-Append SRC onto DEST.
-*/
-char	*ft_strcat(char *dest, const char *src);
-/*
-Finds the first occurence of C in S.
-*/
-char	*ft_strchr(const char *s, int c);
 /*
 Creates a custom prompt for the shell.
 */
