@@ -29,5 +29,4 @@ void	shell_loop(void)
 		free(shell.command);
 	}
 	rl_clear_history();
-	exit(EXIT_SUCCESS);
 }
