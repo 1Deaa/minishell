@@ -12,18 +12,22 @@
 
 #include "minishell.h"
 
-void	signal_handler(int signum)
+static void	disable_ctrl_backslash(void)
+{
+	struct termios	term;
+
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_cc[VQUIT] = 0;
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
+
+static void	signal_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-	if (signum == SIGQUIT)
-	{
-		rl_on_new_line();
 		rl_redisplay();
 	}
 }
@@ -41,4 +45,5 @@ void	setup_signal_handlers(void)
 		printf("Sigaction Error\n");
 		exit(EXIT_FAILURE);
 	}
+	disable_ctrl_backslash();
 }
