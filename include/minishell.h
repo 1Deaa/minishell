@@ -23,6 +23,7 @@
 # include <signal.h>
 # include <termios.h>
 # include "colors.h"
+# include "structs.h"
 
 typedef struct s_input
 {
@@ -46,6 +47,10 @@ Append SRC onto DEST.
 */
 char	*ft_strcat(char *dest, const char *src);
 /*
+Finds the first occurence of C in S.
+*/
+char	*ft_strchr(const char *s, int c);
+/*
 Creates a custom prompt for the shell.
 */
 char	*create_prompt(void);
@@ -57,5 +62,9 @@ void	setup_signal_handlers(void);
 Keeps the shell alive and working.
 */
 void	shell_loop(void);
+/*
+Find the path for CMD.
+*/
+char	*find_cmd_path(char *cmd);
 
 #endif
