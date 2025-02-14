@@ -33,15 +33,28 @@ typedef struct s_input
 }	t_input;
 
 /*
-Return the length of s
+Return the length of S
 */
 int		ft_strlen(const char *s);
 /*
-Join two strings together
+Allocate COUNT elements of SIZE bytes each, all initialized to 0.
 */
 void	*ft_calloc(size_t count, size_t size);
+/*
+Append SRC onto DEST.
+*/
 char	*ft_strcat(char *dest, const char *src);
+/*
+Creates a custom prompt for the shell.
+*/
 char	*create_prompt(void);
+/*
+Handles the signals CTRL-C CTRL-\
+*/
 void	setup_signal_handlers(void);
+/*
+Keeps the shell alive and working.
+*/
+void	shell_loop(void);
 
 #endif
