@@ -20,8 +20,9 @@
 # include <unistd.h>
 # include <errno.h>
 # include <stdbool.h>
-# include "colors.h"
 # include <signal.h>
+# include <termios.h>
+# include "colors.h"
 
 typedef struct s_input
 {
