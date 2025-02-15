@@ -21,10 +21,27 @@
 # include <errno.h>
 # include <stdbool.h>
 # include <signal.h>
+# include <limits.h>
 # include <termios.h>
 # include "colors.h"
 # include "structs.h"
 # include "libft.h"
+
+typedef enum
+{
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_REDIRECT_IN,
+	TOKEN_REDIRECT_OUT,
+	TOKEN_AMPERSAND,
+	TOKEN_UNKNOWN
+}	e_tokentype;
+
+typedef struct
+{
+	e_tokentype	type;
+	char		*value;
+}	t_token;
 
 typedef struct s_input
 {

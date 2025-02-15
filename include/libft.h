@@ -31,5 +31,9 @@ char	*ft_strcat(char *dest, const char *src);
 Finds the first occurence of C in S.
 */
 char	*ft_strchr(const char *s, int c);
+/*
+Checks for whitespace.
+*/
+int		ft_isspace(char c);
 
 #endif
