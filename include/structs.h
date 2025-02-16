@@ -14,6 +14,46 @@
 # define STRUCTS_H
 
 /*
+*/
+typedef enum e_parse_type
+{
+	EXEC,
+	REDIR,
+	PIPE
+}	t_type;
+/*
+*/
+struct s_cmd
+{
+	t_type	type;
+};
+/*
+*/
+struct s_execcmd
+{
+	t_type	type;
+	char	**argv;
+};
+/*
+*/
+struct s_pipecmd
+{
+	t_type			type;
+	struct s_cmd	*left;
+	struct s_cmd	*right;
+};
+/*
+*/
+struct s_redircmd
+{
+	t_type			type;
+	struct s_cmd	*cmd;
+	char			*file;
+	char			*efile;
+	int				mode;
+	int				fd;
+};
+/*
 Function specific struct.
 */
 typedef struct s_find_cmd_path
@@ -22,5 +62,25 @@ typedef struct s_find_cmd_path
 	char	*end;
 	char	*path;
 }	t_find_cmd_path;
+/*
+Function specific struct.
+*/
+typedef struct s_tokenize
+{
+	const char	*start;
+	char		**tokens;
+	int			token_count;
+	int			len;
+	int			i;
+}	t_tokenize;
+
+typedef struct s_prompt
+{
+	char	*device;
+	char	*user;
+	char	*cwd;
+	char	*prompt;
+	char	*command;
+}	t_prompt;
 
 #endif
