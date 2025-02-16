@@ -74,13 +74,14 @@ typedef struct s_tokenize
 	int			i;
 }	t_tokenize;
 
-typedef struct s_prompt
+typedef struct s_shell
 {
-	char	*device;
-	char	*user;
-	char	*cwd;
-	char	*prompt;
-	char	*command;
-}	t_prompt;
+	char			*device;
+	char			*user;
+	char			*cwd;
+	char			*prompt;
+	char			*command;
+	struct s_cmd	*parse;
+}	t_shell;
 
 #endif
