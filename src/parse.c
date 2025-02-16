@@ -12,18 +12,6 @@
 
 #include "minishell.h"
 
-/*
-
-HANDLE '|' '>' '<' '>>' '<<'
-
-"echo   "hello"   |   wc   -l   "
- ^   ^  ^      ^  ^   ^ ^  ^ ^  
- |   |  |      |  |   | |  | |
- s   e  s      e  p   s e  s e
-
-
-*/
-
 struct s_cmd	*parser(char **tokens)
 {
 	int				index;
@@ -33,5 +21,4 @@ struct s_cmd	*parser(char **tokens)
 	cmd = parse_redir(tokens, &index);
 	return (cmd);
 }
-
 /* ************************************************************************** */
