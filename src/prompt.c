@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static void	init_prompt(t_input *prt)
+static void	init_prompt(t_prompt *prt)
 {
 	size_t	size;
 
@@ -33,7 +33,7 @@ static void	init_prompt(t_input *prt)
 
 char	*create_prompt(void)
 {
-	t_input	prt;
+	t_prompt	prt;
 
 	init_prompt(&prt);
 	if (!prt.prompt)
@@ -53,3 +53,5 @@ char	*create_prompt(void)
 	free(prt.cwd);
 	return (prt.prompt);
 }
+
+/* ************************************************************************** */
