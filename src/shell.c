@@ -12,9 +12,9 @@
 
 #include "minishell.h"
 
-void	shell_loop(void)
+void	shell_loop(int mode)
 {
-	t_input	shell;
+	t_prompt	shell;
 
 	shell.prompt = create_prompt();
 	while (true)
@@ -25,6 +25,8 @@ void	shell_loop(void)
 			free(shell.prompt);
 			break ;
 		}
+		if (DEBUG == mode)
+			printf("%s\n", shell.command);
 		add_history(shell.command);
 		free(shell.command);
 	}
