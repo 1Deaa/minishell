@@ -71,7 +71,7 @@ char	**alloc_tokens(int count)
 {
 	char	**tokens;
 
-	tokens = malloc(sizeof(char *) * count);
+	tokens = malloc(sizeof(char *) * (count + 1));
 	if (!tokens)
 		return (NULL);
 	return (tokens);
