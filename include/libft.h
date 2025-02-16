@@ -13,7 +13,7 @@
 #ifndef LIBFT_H
 # define LIBFT_H
 
-#include "minishell.h"
+# include "minishell.h"
 
 /*
 Return the length of S
@@ -35,5 +35,13 @@ char	*ft_strchr(const char *s, int c);
 Checks for whitespace.
 */
 int		ft_isspace(char c);
+/*
+Duplicate of S size of N.
+*/
+char	*ft_strndup(const char *s, size_t n);
+/*
+Compare S1 with S2.
+*/
+int		ft_strcmp(const char *s1, const char *s2);
 
 #endif
