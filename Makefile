@@ -1,8 +1,10 @@
 NAME = minishell
 
-FILES = main.c prompt.c signals.c shell.c find_cmd_path.c token.c \
-		ft_strchr.c ft_strlen.c ft_calloc.c ft_strcat.c ft_isspace.c
-
+FILES = main.c prompt.c signals.c shell.c find_cmd_path.c token.c token_utils.c \
+		parse_utils.c parse.c \
+		ft_strchr.c ft_strlen.c ft_calloc.c ft_strcat.c ft_isspace.c ft_strndup.c \
+		ft_strcmp.c
+		
 CC = cc
 RM = rm -rf
 CFLAGS = -Wall -Werror -Wextra
