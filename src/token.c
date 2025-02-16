@@ -12,39 +12,33 @@
 
 #include "minishell.h"
 
-static void	skip_quoted_string(const char **p)
+char	**tokenize(const char *input)
 {
-	char	q;
+	t_tokenize	t;
 
-	q = *(*p)++;
-	while (**p && **p != q)
-		(*p)++;
-	if (**p)
-		(*p)++;
-}
-
-int	count_tokens(const char *input)
-{
-	int			count;
-	const char	*p;
-
-	p = input;
-	count = 0;
-	while (*p)
+	t.i = -1;
+	t.token_count = count_tokens(input);
+	t.tokens = alloc_tokens(t.token_count);
+	if (!t.tokens)
+		return (NULL);
+	while (*input)
 	{
-		while (ft_isspace((unsigned char)*p))
-			p++;
-		count++;
-		if (*p == '|' || *p == '<' || *p == '>' || *p == '&')
-			p++;
-		else if (*p == '"' || *p == '\'')
-			skip_quoted_string(&p);
-		else
-		{
-			while (*p && !ft_isspace((unsigned char)*p)
-				&& !ft_strchr("|<>&", *p))
-				p++;
-		}
+		while (ft_isspace((unsigned char)*input))
+			input++;
+		if (*input == '\0')
+			break ;
+		t.start = input;
+		while (*input && !ft_isspace((unsigned char)*input))
+			input++;
+		t.len = input - t.start;
+		t.tokens[++t.i] = ft_strndup(t.start, t.len);
+		if (!t.tokens[t.i])
+			free_tokens(t.tokens, t.i);
+		if (!t.tokens[t.i])
+			return (NULL);
 	}
-	return (count);
+	t.tokens[t.i] = NULL;
+	return (t.tokens);
 }
+
+/* ************************************************************************** */
