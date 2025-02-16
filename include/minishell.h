@@ -33,41 +33,49 @@
 /*
 Creates a custom prompt for the shell.
 */
-char			*create_prompt(void);
+char				*create_prompt(void);
 /*
 Handles the signals CTRL-C CTRL-\
 */
-void			shell_signal_handlers(void);
+void				shell_signal_handlers(void);
 /*
 Keeps the shell alive and working.
 */
-void			shell_loop(int mode);
+void				shell_loop(int mode);
 /*
 Find the path for CMD.
 */
-char			*find_cmd_path(char *cmd);
+char				*find_cmd_path(char *cmd);
 /* ************************************************************************** */
 /*                           TOKEN.C  TOKEN_UTILS.C                           */
 /* ************************************************************************** */
 /*
 Allocates COUNT tokens.
 */
-char			**alloc_tokens(int count);
+char				**alloc_tokens(int count);
 /*
 Count tokens in INPUT. 
 */
-int				count_tokens(const char *input);
+int					count_tokens(const char *input);
 /*
 frees COUNT tokens.
 */
-void			free_tokens(char **tokens, int count);
+void				free_tokens(char **tokens, int count);
+/*
+breaks INPUT into tokens.
+*/
+char				**tokenize(const char *input);
 /* ************************************************************************** */
 /* 							PARSE.C PARSE_UTILS.C							  */
 /* ************************************************************************** */
 struct s_cmd		*parse_redir(char **tokens, int *index);
 struct s_cmd		*parse_pipe(char **tokens, int *index);
-struct s_execcmd	*parse_exec(char **tokens, int *index);
+struct s_cmd		*parse_exec(char **tokens, int *index);
 int					count_exec_args(char **tokens);
 struct s_cmd		*parser(char **tokens);
+struct s_redircmd	*create_redircmd(struct s_cmd *cmd,
+						char **tokens, int *index);
+void				print_cmd(struct s_cmd *cmd, int indent);
+
 
 #endif
