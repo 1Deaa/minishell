@@ -12,11 +12,20 @@
 
 #include "minishell.h"
 
+static void	shell_debug(t_shell *shell)
+{
+	if (shell->command)
+		printf("INPUT: %s\n", shell->command);
+	if (shell->parse)
+		print_cmd(shell->parse, 0);
+}
+
 void	shell_loop(int mode)
 {
-	t_prompt	shell;
+	t_shell	shell;
 
 	shell.prompt = create_prompt();
+	shell.parse = NULL;
 	while (true)
 	{
 		shell.command = readline(shell.prompt);
@@ -25,8 +34,11 @@ void	shell_loop(int mode)
 			free(shell.prompt);
 			break ;
 		}
+		shell.parse = parser(tokenize(shell.command));
 		if (DEBUG == mode)
-			printf("%s\n", shell.command);
+		{
+			shell_debug(&shell);
+		}
 		add_history(shell.command);
 		free(shell.command);
 	}
