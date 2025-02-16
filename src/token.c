@@ -37,7 +37,7 @@ char	**tokenize(const char *input)
 		if (!t.tokens[t.i])
 			return (NULL);
 	}
-	t.tokens[t.i] = NULL;
+	t.tokens[++t.i] = NULL;
 	return (t.tokens);
 }
 
