@@ -34,7 +34,8 @@ void	shell_loop(int mode)
 			free(shell.prompt);
 			break ;
 		}
-		shell.parse = parser(tokenize(shell.command));
+		shell.tokens = tokenize(shell.command);
+		shell.parse = parser(shell.tokens);
 		if (DEBUG == mode)
 		{
 			shell_debug(&shell);
