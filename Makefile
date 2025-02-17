@@ -1,7 +1,7 @@
 NAME = minishell
 
 FILES = main.c prompt.c signals.c shell.c find_cmd_path.c token.c token_utils.c \
-		parse_utils.c parse.c parse_cmd.c \
+		parse_utils.c parse.c parse_cmd.c echo.c \
 		ft_strchr.c ft_strlen.c ft_calloc.c ft_strcat.c ft_isspace.c ft_strndup.c \
 		ft_strcmp.c
 		
