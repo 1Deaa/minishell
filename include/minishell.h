@@ -77,5 +77,6 @@ struct s_redircmd	*create_redircmd(struct s_cmd *cmd,
 						char **tokens, int *index);
 void				print_cmd(struct s_cmd *cmd, int indent);
 
+void				echo(struct s_cmd *cmd);
 
 #endif
