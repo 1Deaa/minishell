@@ -1,0 +1,34 @@
+name: Check Norminette
+
+on:
+  push:
+    branches:
+      - main  # Change to the branch you want this to run on
+
+jobs:
+  norminette-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Install Norminette
+      - name: Install Norminette
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y norminette
+
+      # Make the script executable
+      - name: Make script executable
+        run: chmod +x ./check_norminette.sh
+
+      # Run the script
+      - name: Run Norminette check
+        run: ./check_norminette.sh
+
+      # Optionally, you can fail the build if there are errors
+      - name: Fail the build on errors
+        if: ${{ failure() }}
+        run: exit 1
