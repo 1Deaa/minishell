@@ -14,7 +14,7 @@
 
 static struct s_execcmd	*create_execcmd(char **tokens, int *index)
 {
-	struct	s_execcmd	*cmd;
+	struct s_execcmd	*cmd;
 	int					i;
 
 	i = 0;
@@ -29,8 +29,8 @@ static struct s_execcmd	*create_execcmd(char **tokens, int *index)
 		return (NULL);
 	}
 	while (tokens[*index] && ft_strcmp(tokens[*index], "|") != 0
-			&& ft_strcmp(tokens[*index], "<") != 0
-			&& ft_strcmp(tokens[*index], ">") != 0)
+		&& ft_strcmp(tokens[*index], "<") != 0
+		&& ft_strcmp(tokens[*index], ">") != 0)
 	{
 		cmd->argv[i++] = tokens[*index];
 		(*index)++;
