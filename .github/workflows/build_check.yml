@@ -25,11 +25,11 @@ jobs:
 
       # Make the run_make.sh script executable
       - name: Make script executable
-        run: chmod +x ./run_make.sh
+        run: chmod +x ./check_make.sh
 
       # Run the script to execute make
       - name: Run make
-        run: ./run_make.sh
+        run: ./check_make.sh
 
       # Optionally, you can fail the build on errors
       - name: Fail the build if make fails
