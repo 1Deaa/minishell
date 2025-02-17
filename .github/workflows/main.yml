@@ -1,0 +1,42 @@
+name: Check Norminette
+
+on:
+  push:
+    branches:
+      - main  # Change to the branch you want this to run on
+  pull_request:
+    branches:
+      - main  # Change to the branch you want this to run on
+
+jobs:
+  norminette-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Install dependencies (curl, python3, pip)
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl python3 python3-pip
+
+      # Install Norminette via pip (official method)
+      - name: Install Norminette
+        run: |
+          pip3 install norminette
+
+      # Make the script executable
+      - name: Make script executable
+        run: chmod +x ./check_norminette.sh
+
+      # Run the script
+      - name: Run Norminette check
+        run: ./check_norminette.sh
+
+      # Optionally, fail the build on errors
+      - name: Fail the build on errors
+        if: ${{ failure() }}
+        run: exit 1
