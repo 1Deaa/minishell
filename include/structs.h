@@ -81,6 +81,7 @@ typedef struct s_shell
 	char			*cwd;
 	char			*prompt;
 	char			*command;
+	char			**tokens;
 	struct s_cmd	*parse;
 }	t_shell;
 
