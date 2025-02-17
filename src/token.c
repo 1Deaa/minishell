@@ -12,6 +12,35 @@
 
 #include "minishell.h"
 
+static const char	*extract_token(const char *input, t_tokenize *t)
+{
+	char	quote;
+
+	while (ft_isspace(*input))
+		input++;
+	if (*input == '\0')
+		return (NULL);
+	if (*input == '"' || *input == '\'')
+	{
+		quote = *input++;
+		t->start = input;
+		while (*input && *input != quote)
+			input++;
+		t->len = input - t->start;
+		if (*input == quote)
+			input++;
+	}
+	else
+	{
+		t->start = input;
+		while (*input && !ft_isspace(*input) && *input != '"' && *input != '\'')
+			input++;
+		t->len = input - t->start;
+	}
+	return (input);
+}
+/* ************************************************************************** */
+
 char	**tokenize(const char *input)
 {
 	t_tokenize	t;
@@ -23,22 +52,17 @@ char	**tokenize(const char *input)
 		return (NULL);
 	while (*input)
 	{
-		while (ft_isspace((unsigned char)*input))
-			input++;
-		if (*input == '\0')
+		input = extract_token(input, &t);
+		if (!input)
 			break ;
-		t.start = input;
-		while (*input && !ft_isspace((unsigned char)*input))
-			input++;
-		t.len = input - t.start;
 		t.tokens[++t.i] = ft_strndup(t.start, t.len);
 		if (!t.tokens[t.i])
+		{
 			free_tokens(t.tokens, t.i);
-		if (!t.tokens[t.i])
 			return (NULL);
+		}
 	}
 	t.tokens[++t.i] = NULL;
 	return (t.tokens);
 }
-
 /* ************************************************************************** */
