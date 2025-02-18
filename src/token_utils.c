@@ -24,20 +24,26 @@ static void	skip_quoted_string(const char **p)
 }
 
 /* ************************************************************************** */
-static void	skip_operator(const char **p)
+
+static void	count_op_and_strings(const char **p, int *count)
 {
-	if (**p == '|' || **p == '<' || **p == '>' || **p == '&')
+	if (ft_strchr("|<>&", **p))
 	{
-		if (((*p)[1] == '|' && **p == '|')
-			|| ((*p)[1] == '<' && **p == '<')
-			|| ((*p)[1] == '>' && **p == '>')
-			|| ((*p)[1] == '&' && **p == '&'))
+		(*count)++;
+		if ((**p == '<' && *(*p + 1) == '<')
+			|| (**p == '>' && *(*p + 1) == '>'))
+			(*p) += 2;
+		else
 			(*p)++;
-		(*p)++;
+	}
+	else if (**p == '"' || **p == '\'')
+	{
+		(*count)++;
+		skip_quoted_string(p);
 	}
 }
-
 /* ************************************************************************** */
+
 int	count_tokens(const char *input)
 {
 	int			count;
@@ -51,13 +57,10 @@ int	count_tokens(const char *input)
 			p++;
 		if (!*p)
 			break ;
-		count++;
-		if (*p == '|' || *p == '<' || *p == '>' || *p == '&')
-			skip_operator(&p);
-		else if (*p == '"' || *p == '\'')
-			skip_quoted_string(&p);
-		else
+		count_op_and_strings(&p, &count);
+		if (!ft_strchr("|<>&", *p) && *p != '"' && *p != '\'')
 		{
+			count++;
 			while (*p && !ft_isspace((unsigned char)*p)
 				&& !ft_strchr("|<>&", *p))
 				p++;
@@ -90,5 +93,4 @@ void	free_tokens(char **tokens, int count)
 	}
 	free(tokens);
 }
-
 /* ************************************************************************** */

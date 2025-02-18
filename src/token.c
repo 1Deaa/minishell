@@ -12,15 +12,20 @@
 
 #include "minishell.h"
 
-static const char	*extract_token(const char *input, t_tokenize *t)
+static const char	*extract_operator_or_quote(const char *input, t_tokenize *t)
 {
 	char	quote;
 
-	while (ft_isspace(*input))
-		input++;
-	if (*input == '\0')
-		return (NULL);
-	if (*input == '"' || *input == '\'')
+	if (ft_strchr("|<>&", *input))
+	{
+		t->start = input;
+		t->len = 1;
+		if ((*input == '<' && *(input + 1) == '<')
+			|| (*input == '>' && *(input + 1) == '>'))
+			t->len = 2;
+		return (input + t->len);
+	}
+	else if (*input == '"' || *input == '\'')
 	{
 		quote = *input++;
 		t->start = input;
@@ -29,16 +34,30 @@ static const char	*extract_token(const char *input, t_tokenize *t)
 		t->len = input - t->start;
 		if (*input == quote)
 			input++;
+		return (input);
 	}
-	else
-	{
-		t->start = input;
-		while (*input && !ft_isspace(*input) && *input != '"' && *input != '\'')
-			input++;
-		t->len = input - t->start;
-	}
+	return (NULL);
+}
+
+/* ************************************************************************** */
+static const char	*extract_token(const char *input, t_tokenize *t)
+{
+	const char	*next;
+
+	while (ft_isspace(*input))
+		input++;
+	if (*input == '\0')
+		return (NULL);
+	next = extract_operator_or_quote(input, t);
+	if (next)
+		return (next);
+	t->start = input;
+	while (*input && !ft_isspace(*input) && !ft_strchr("|<>&", *input))
+		input++;
+	t->len = input - t->start;
 	return (input);
 }
+
 /* ************************************************************************** */
 
 char	**tokenize(const char *input)
