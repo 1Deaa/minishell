@@ -16,6 +16,7 @@
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/wait.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <errno.h>
@@ -76,7 +77,16 @@ struct s_cmd		*parser(char **tokens);
 struct s_redircmd	*create_redircmd(struct s_cmd *cmd,
 						char **tokens, int *index);
 void				print_cmd(struct s_cmd *cmd, int indent);
+/* ************************************************************************** */
+/*                               BUILT-IN       							  */
+/* ************************************************************************** */
 
 void				echo(struct s_cmd *cmd);
+
+/* ************************************************************************** */
+/*                             EXECUTIONER.C       							  */
+/* ************************************************************************** */
+
+void				run_cmd(struct s_cmd *parse);
 
 #endif

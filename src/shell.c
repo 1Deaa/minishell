@@ -36,6 +36,7 @@ void	shell_loop(int mode)
 		}
 		shell.tokens = tokenize(shell.command);
 		shell.parse = parser(shell.tokens);
+		run_cmd(shell.parse);
 		if (DEBUG == mode)
 		{
 			shell_debug(&shell);
