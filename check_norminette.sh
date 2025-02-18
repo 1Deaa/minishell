@@ -27,6 +27,28 @@ for file in src/*.c; do
     fi
 done
 
+for file in libft/*.c; do
+    result=$(norminette $file)
+
+    if [[ "$result" == *"OK!"* ]]; then
+        echo "$file: OK!"
+    else
+        echo "$file: ERROR!"
+        all_ok=false
+    fi
+done
+
+for file in libft/*.h; do
+    result=$(norminette $file)
+
+    if [[ "$result" == *"OK!"* ]]; then
+        echo "$file: OK!"
+    else
+        echo "$file: ERROR!"
+        all_ok=false
+    fi
+done
+
 # Loop through all .h files in the include directory
 for file in include/*.h; do
     result=$(norminette $file)
