@@ -13,7 +13,9 @@
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# include "minishell.h"
+# include <unistd.h>
+# include <stddef.h>
+# include <stdlib.h>
 
 /*
 Return the length of S

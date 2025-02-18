@@ -26,7 +26,7 @@
 # include <termios.h>
 # include "colors.h"
 # include "structs.h"
-# include "libft.h"
+# include "../libft/libft.h"
 
 # define DEBUG 42
 
@@ -66,7 +66,7 @@ breaks INPUT into tokens.
 */
 char				**tokenize(const char *input);
 /* ************************************************************************** */
-/* 							PARSE.C PARSE_UTILS.C							  */
+/*                          PARSE.C PARSE_UTILS.C							  */
 /* ************************************************************************** */
 struct s_cmd		*parse_redir(char **tokens, int *index);
 struct s_cmd		*parse_pipe(char **tokens, int *index);
