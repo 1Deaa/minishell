@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:29:39 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/02/13 18:29:40 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/03 22:11:31 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char				*create_prompt(void);
 /*
 Handles the signals CTRL-C CTRL-\
 */
-void				shell_signal_handlers(void);
+void				shell_signal(void);
 /*
 Keeps the shell alive and working.
 */

@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 02:19:01 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/02/14 02:19:02 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/03 22:11:21 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	signal_handler(int signum)
 	}
 }
 
-void	shell_signal_handlers(void)
+void	shell_signal(void)
 {
 	struct sigaction	sa;
 

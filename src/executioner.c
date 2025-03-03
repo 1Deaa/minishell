@@ -6,12 +6,12 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 00:18:14 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/02/19 00:18:15 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/03 22:14:18 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/*
 void	run_cmd(struct s_cmd *parse)
 {
 	struct s_execcmd *ecmd;
@@ -46,5 +46,5 @@ void	run_cmd(struct s_cmd *parse)
 		else
 			waitpid(pid, NULL, 0);
 	}
-}
+}*/
 /* ************************************************************************** */

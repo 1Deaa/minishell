@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 14:17:40 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/02/14 14:17:40 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/03 22:15:08 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	shell_loop(int mode)
 		}
 		shell.tokens = tokenize(shell.command);
 		shell.parse = parser(shell.tokens);
-		run_cmd(shell.parse);
 		if (DEBUG == mode)
 		{
 			shell_debug(&shell);
