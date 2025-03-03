@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:29:39 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/01 20:16:02 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/03 21:41:47 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,67 +26,22 @@
 # include <limits.h>
 # include <termios.h>
 # include "colors.h"
-# include "structs.h"
-# include "../libft/libft.h"
 
 # define DEBUG 42
 
-/*
-Creates a custom prompt for the shell.
-*/
-char				*create_prompt(void);
-/*
-Handles the signals CTRL-C CTRL-\
-*/
-void				shell_signal_handlers(void);
-/*
-Keeps the shell alive and working.
-*/
-void				shell_loop(int mode);
-/*
-Find the path for CMD.
-*/
-char				*find_cmd_path(char *cmd);
-/* ************************************************************************** */
-/*                           TOKEN.C  TOKEN_UTILS.C                           */
-/* ************************************************************************** */
-/*
-Allocates COUNT tokens.
-*/
-char				**alloc_tokens(int count);
-/*
-Count tokens in INPUT. 
-*/
-int					count_tokens(const char *input);
-/*
-frees COUNT tokens.
-*/
-void				free_tokens(char **tokens, int count);
-/*
-breaks INPUT into tokens.
-*/
-char				**tokenize(const char *input);
-/* ************************************************************************** */
-/*                          PARSE.C PARSE_UTILS.C							  */
-/* ************************************************************************** */
-/*struct s_cmd		*parse_redir(char **tokens, int *index);
-struct s_cmd		*parse_pipe(char **tokens, int *index);
-struct s_cmd		*parse_exec(char **tokens, int *index);
-int					count_exec_args(char **tokens);
-struct s_cmd		*parser(char **tokens);
-struct s_redircmd	*create_redircmd(struct s_cmd *cmd,
-						char **tokens, int *index);
-void				print_cmd(struct s_cmd *cmd, int indent);*/
-/* ************************************************************************** */
-/*                               BUILT-IN       							  */
-/* ************************************************************************** */
-
-void				echo(struct s_cmd *cmd);
-
-/* ************************************************************************** */
-/*                             EXECUTIONER.C       							  */
-/* ************************************************************************** */
-
-//void				run_cmd(struct s_cmd *parse);
+typedef struct	s_mini
+{
+	int	pid;
+	int	exit;
+	int	ret;
+	int	in;
+	int	out;
+	int	fdin;
+	int	fdout;
+	int	pipout;
+	int	pipin;
+	int	parent;
+	int	last;
+}	t_mini;
 
 #endif
