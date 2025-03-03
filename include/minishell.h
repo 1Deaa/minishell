@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:29:39 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/02/13 18:29:40 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/01 20:16:02 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,14 @@ char				**tokenize(const char *input);
 /* ************************************************************************** */
 /*                          PARSE.C PARSE_UTILS.C							  */
 /* ************************************************************************** */
-struct s_cmd		*parse_redir(char **tokens, int *index);
+/*struct s_cmd		*parse_redir(char **tokens, int *index);
 struct s_cmd		*parse_pipe(char **tokens, int *index);
 struct s_cmd		*parse_exec(char **tokens, int *index);
 int					count_exec_args(char **tokens);
 struct s_cmd		*parser(char **tokens);
 struct s_redircmd	*create_redircmd(struct s_cmd *cmd,
 						char **tokens, int *index);
-void				print_cmd(struct s_cmd *cmd, int indent);
+void				print_cmd(struct s_cmd *cmd, int indent);*/
 /* ************************************************************************** */
 /*                               BUILT-IN       							  */
 /* ************************************************************************** */
@@ -87,6 +87,6 @@ void				echo(struct s_cmd *cmd);
 /*                             EXECUTIONER.C       							  */
 /* ************************************************************************** */
 
-void				run_cmd(struct s_cmd *parse);
+//void				run_cmd(struct s_cmd *parse);
 
 #endif
