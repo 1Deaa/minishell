@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 14:17:40 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/03 22:15:08 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/08 21:19:03 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,15 @@ static void	shell_debug(t_shell *shell)
 {
 	if (shell->command)
 		printf("INPUT: %s\n", shell->command);
-	if (shell->parse)
-		print_cmd(shell->parse, 0);
+	if (shell->tokens)
+		print_tokens(shell->tokens);
 }
 
 void	shell_loop(int mode)
 {
 	t_shell	shell;
 
+	(void)mode;
 	shell.prompt = create_prompt();
 	shell.parse = NULL;
 	while (true)
@@ -35,7 +36,6 @@ void	shell_loop(int mode)
 			break ;
 		}
 		shell.tokens = tokenize(shell.command);
-		shell.parse = parser(shell.tokens);
 		if (DEBUG == mode)
 		{
 			shell_debug(&shell);
