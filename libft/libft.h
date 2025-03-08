@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 19:30:52 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/02/14 19:30:55 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/08 20:38:52 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,13 @@ char	*ft_strndup(const char *s, size_t n);
 Compare S1 with S2.
 */
 int		ft_strcmp(const char *s1, const char *s2);
+/*
+Duplicate of STR.
+*/
+char	*ft_strdup(const char *str);
+/*
+Copy N bytes from SRC to DEST.
+*/
+char	*ft_strncpy(char *dest, const char *src, size_t n);
 
 #endif
