@@ -6,12 +6,14 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 18:40:26 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/02/14 18:40:27 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/08 21:23:08 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
+
+# include "token.h"
 
 /*
 */
@@ -81,7 +83,7 @@ typedef struct s_shell
 	char			*cwd;
 	char			*prompt;
 	char			*command;
-	char			**tokens;
+	t_token			*tokens;
 	struct s_cmd	*parse;
 }	t_shell;
 

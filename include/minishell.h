@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:29:39 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/03 22:11:31 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/08 21:23:00 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <termios.h>
 # include "colors.h"
 # include "structs.h"
+# include "token.h"
 # include "../libft/libft.h"
 
 # define DEBUG 42
@@ -47,25 +48,7 @@ void				shell_loop(int mode);
 Find the path for CMD.
 */
 char				*find_cmd_path(char *cmd);
-/* ************************************************************************** */
-/*                           TOKEN.C  TOKEN_UTILS.C                           */
-/* ************************************************************************** */
-/*
-Allocates COUNT tokens.
-*/
-char				**alloc_tokens(int count);
-/*
-Count tokens in INPUT. 
-*/
-int					count_tokens(const char *input);
-/*
-frees COUNT tokens.
-*/
-void				free_tokens(char **tokens, int count);
-/*
-breaks INPUT into tokens.
-*/
-char				**tokenize(const char *input);
+
 /* ************************************************************************** */
 /*                          PARSE.C PARSE_UTILS.C							  */
 /* ************************************************************************** */
