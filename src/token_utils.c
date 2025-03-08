@@ -5,92 +5,76 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/15 09:18:01 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/02/15 09:18:01 by drahwanj         ###   ########.fr       */
+/*   Created: 2025/03/08 14:23:49 by drahwanj          #+#    #+#             */
+/*   Updated: 2025/03/08 21:25:12 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "token.h"
 
-static void	skip_quoted_string(const char **p)
+t_token	*new_token(const char *value)
 {
-	char	q;
+	t_token	*node;
 
-	q = *(*p)++;
-	while (**p && **p != q)
-		(*p)++;
-	if (**p)
-		(*p)++;
-}
-
-/* ************************************************************************** */
-
-static void	count_op_and_strings(const char **p, int *count)
-{
-	if (ft_strchr("|<>&", **p))
+	node = malloc(sizeof(t_token));
+	if (!node)
 	{
-		(*count)++;
-		if ((**p == '<' && *(*p + 1) == '<')
-			|| (**p == '>' && *(*p + 1) == '>'))
-			(*p) += 2;
-		else
-			(*p)++;
-	}
-	else if (**p == '"' || **p == '\'')
-	{
-		(*count)++;
-		skip_quoted_string(p);
-	}
-}
-/* ************************************************************************** */
-
-int	count_tokens(const char *input)
-{
-	int			count;
-	const char	*p;
-
-	p = input;
-	count = 0;
-	while (*p)
-	{
-		while (ft_isspace((unsigned char)*p))
-			p++;
-		if (!*p)
-			break ;
-		count_op_and_strings(&p, &count);
-		if (!ft_strchr("|<>&", *p) && *p != '"' && *p != '\'')
-		{
-			count++;
-			while (*p && !ft_isspace((unsigned char)*p)
-				&& !ft_strchr("|<>&", *p))
-				p++;
-		}
-	}
-	return (count);
-}
-
-/* ************************************************************************** */
-char	**alloc_tokens(int count)
-{
-	char	**tokens;
-
-	tokens = malloc(sizeof(char *) * (count + 1));
-	if (!tokens)
+		perror("memory allocation error!");
 		return (NULL);
-	return (tokens);
-}
-
-/* ************************************************************************** */
-void	free_tokens(char **tokens, int count)
-{
-	int	i;
-
-	i = 0;
-	while (i < count)
-	{
-		free(tokens[i]);
-		i++;
 	}
-	free(tokens);
+	node->value = ft_strdup(value);
+	if (!node->value)
+	{
+		perror("ft_strdup allocation error!");
+		free(node);
+		return (NULL);
+	}
+	node->next = NULL;
+	return (node);
 }
-/* ************************************************************************** */
+
+void	add_token(t_token **head, const char *value)
+{
+	t_token	*node;
+	t_token	*current;
+
+	node = new_token(value);
+	if (!node)
+		return ;
+	if (*head == NULL)
+	{
+		*head = node;
+	}
+	else
+	{
+		current = *head;
+		while (current->next)
+			current = current->next;
+		current->next = node;
+	}
+}
+
+void	free_tokens(t_token	*token)
+{
+	t_token	*current;
+
+	while (token)
+	{
+		current = token;
+		token = token->next;
+		free(current->value);
+		free(current);
+	}
+}
+
+void	print_tokens(t_token *token)
+{
+	t_token	*current;
+
+	current = token;
+	while (current)
+	{
+		printf("TOKEN: [%s]\n", current->value);
+		current = current->next;
+	}
+}

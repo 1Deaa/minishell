@@ -5,83 +5,124 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/14 19:50:24 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/02/14 19:50:25 by drahwanj         ###   ########.fr       */
+/*   Created: 2025/03/08 13:26:52 by drahwanj          #+#    #+#             */
+/*   Updated: 2025/03/08 21:21:20 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static const char	*extract_operator_or_quote(const char *input, t_tokenize *t)
+static const char	*skip_whitespace(const char *p)
 {
-	char	quote;
-
-	if (ft_strchr("|<>&", *input))
+	while (*p && ft_isspace((unsigned char)*p))
 	{
-		t->start = input;
-		t->len = 1;
-		if ((*input == '<' && *(input + 1) == '<')
-			|| (*input == '>' && *(input + 1) == '>'))
-			t->len = 2;
-		return (input + t->len);
+		p++;
 	}
-	else if (*input == '"' || *input == '\'')
-	{
-		quote = *input++;
-		t->start = input;
-		while (*input && *input != quote)
-			input++;
-		t->len = input - t->start;
-		if (*input == quote)
-			input++;
-		return (input);
-	}
-	return (NULL);
+	return (p);
 }
 
-/* ************************************************************************** */
-static const char	*extract_token(const char *input, t_tokenize *t)
+static char	*special_token(const char **p)
 {
-	const char	*next;
+	char	buffer[3];
+	char	*token;
 
-	while (ft_isspace(*input))
-		input++;
-	if (*input == '\0')
+	if (!p || !*p || !**p)
 		return (NULL);
-	next = extract_operator_or_quote(input, t);
-	if (next)
-		return (next);
-	t->start = input;
-	while (*input && !ft_isspace(*input) && !ft_strchr("|<>&", *input))
-		input++;
-	t->len = input - t->start;
-	return (input);
+	buffer[0] = **p;
+	(*p)++;
+	if ((buffer[0] == '<' || buffer[0] == '>') && **p == buffer[0])
+	{
+		buffer[1] = **p;
+		(*p)++;
+	}
+	else
+	{
+		buffer[1] = '\0';
+	}
+	buffer[2] = '\0';
+	token = ft_strdup(buffer);
+	return (token);
 }
 
-/* ************************************************************************** */
-
-char	**tokenize(const char *input)
+static char	*quoted_token(const char **p)
 {
-	t_tokenize	t;
+	char		quote;
+	const char	*start;
+	size_t		len;
+	char		*token;
 
-	t.i = -1;
-	t.token_count = count_tokens(input);
-	t.tokens = alloc_tokens(t.token_count);
-	if (!t.tokens)
+	if (!p || !*p || !**p)
 		return (NULL);
-	while (*input)
+	quote = **p;
+	start = *p;
+	(*p)++;
+	while (**p && **p != quote)
+		(*p)++;
+	if (**p == quote)
+		(*p)++;
+	len = *p - start;
+	token = (char *)malloc(len + 1);
+	if (!token)
+		return (NULL);
+	ft_strncpy(token, start, len);
+	token[len] = '\0';
+	return (token);
+}
+
+static char	*word_token(const char **p)
+{
+	const char	*start;
+	size_t		len;
+	char		*token;
+
+	start = *p;
+	while (**p && !ft_isspace((unsigned char)**p) && **p != '|'
+		&& **p != '<' && **p != '>')
 	{
-		input = extract_token(input, &t);
-		if (!input)
-			break ;
-		t.tokens[++t.i] = ft_strndup(t.start, t.len);
-		if (!t.tokens[t.i])
+		if (**p == '\'' || **p == '"')
 		{
-			free_tokens(t.tokens, t.i);
-			return (NULL);
+			*p = quoted_token(p);
+			free((void *)*p);
+		}
+		else
+		{
+			(*p)++;
 		}
 	}
-	t.tokens[++t.i] = NULL;
-	return (t.tokens);
+	len = *p - start;
+	token = (char *)malloc(len + 1);
+	if (!token)
+		return (NULL);
+	ft_strncpy(token, start, len);
+	token[len] = '\0';
+	return (token);
 }
-/* ************************************************************************** */
+
+t_token	*tokenize(const char *input)
+{
+	t_token		*head;
+	const char	*p;
+	char		*token;
+
+	token = NULL;
+	head = NULL;
+	p = input;
+	while (*p)
+	{
+		p = skip_whitespace(p);
+		if (*p == '\0')
+			break ;
+		if (*p == '|' || *p == '<' || *p == '>')
+			token = special_token(&p);
+		else if (*p == '\'' || *p == '"')
+			token = quoted_token(&p);
+		else
+			token = word_token(&p);
+		if (token)
+		{
+			add_token(&head, token);
+			free(token);
+		}
+	}
+	return (head);
+}
