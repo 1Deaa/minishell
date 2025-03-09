@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 14:17:40 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/08 21:19:03 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/09 07:30:09 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	shell_loop(int mode)
 		}
 		add_history(shell.command);
 		free(shell.command);
+		free_tokens(shell.tokens);
 	}
 	rl_clear_history();
 }

@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 14:23:49 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/08 21:25:12 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/09 07:18:03 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	print_tokens(t_token *token)
 	current = token;
 	while (current)
 	{
-		printf("TOKEN: [%s]\n", current->value);
+		printf("TOKEN: %s\n", current->value);
 		current = current->next;
 	}
 }
