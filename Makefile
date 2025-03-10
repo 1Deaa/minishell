@@ -1,7 +1,7 @@
 NAME = minishell
 
 FILES = main.c prompt.c signals.c shell.c find_cmd_path.c token.c token_utils.c \
-		parse_utils.c parse.c parse_cmd.c echo.c executioner.c 
+		parse_utils.c parse.c parse_cmd.c echo.c executioner.c syntax.c
 
 CC = cc
 RM = rm -rf

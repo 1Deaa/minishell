@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:29:39 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/08 21:23:00 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/10 18:16:58 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ void				shell_loop(int mode);
 Find the path for CMD.
 */
 char				*find_cmd_path(char *cmd);
+
+bool				is_correct_syntax(t_token *tokens);
 
 /* ************************************************************************** */
 /*                          PARSE.C PARSE_UTILS.C							  */

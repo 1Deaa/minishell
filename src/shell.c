@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 14:17:40 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/09 07:30:09 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/10 18:18:11 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,13 @@
 static void	shell_debug(t_shell *shell)
 {
 	if (shell->command)
-		printf("INPUT: %s\n", shell->command);
+		printf("INPUT: %s\n\n", shell->command);
 	if (shell->tokens)
 		print_tokens(shell->tokens);
+	if (is_correct_syntax(shell->tokens))
+		printf("CORRECT SYNTAX!\n");
+	else
+		printf("WRONG SYNTAX!\n");
 }
 
 void	shell_loop(int mode)
@@ -37,9 +41,7 @@ void	shell_loop(int mode)
 		}
 		shell.tokens = tokenize(shell.command);
 		if (DEBUG == mode)
-		{
 			shell_debug(&shell);
-		}
 		add_history(shell.command);
 		free(shell.command);
 		free_tokens(shell.tokens);

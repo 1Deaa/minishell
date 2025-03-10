@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 18:40:26 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/08 21:23:08 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:20:10 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,25 +22,25 @@ typedef enum e_parse_type
 	EXEC,
 	REDIR,
 	PIPE
-}	t_type;
+}	t_parse_type;
 /*
 */
 struct s_cmd
 {
-	t_type	type;
+	t_parse_type	type;
 };
 /*
 */
 struct s_execcmd
 {
-	t_type	type;
-	char	**argv;
+	t_parse_type	type;
+	char			**argv;
 };
 /*
 */
 struct s_pipecmd
 {
-	t_type			type;
+	t_parse_type	type;
 	struct s_cmd	*left;
 	struct s_cmd	*right;
 };
@@ -48,7 +48,7 @@ struct s_pipecmd
 */
 struct s_redircmd
 {
-	t_type			type;
+	t_parse_type	type;
 	struct s_cmd	*cmd;
 	char			*file;
 	char			*efile;

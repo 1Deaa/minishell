@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 13:26:52 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/08 21:21:20 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:17:43 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,18 +76,9 @@ static char	*word_token(const char **p)
 	char		*token;
 
 	start = *p;
-	while (**p && !ft_isspace((unsigned char)**p) && **p != '|'
-		&& **p != '<' && **p != '>')
+	while (**p && !ft_isspace((unsigned char)**p) && !ft_strchr("|><'\"", **p))
 	{
-		if (**p == '\'' || **p == '"')
-		{
-			*p = quoted_token(p);
-			free((void *)*p);
-		}
-		else
-		{
-			(*p)++;
-		}
+		(*p)++;
 	}
 	len = *p - start;
 	token = (char *)malloc(len + 1);
@@ -104,7 +95,6 @@ t_token	*tokenize(const char *input)
 	const char	*p;
 	char		*token;
 
-	token = NULL;
 	head = NULL;
 	p = input;
 	while (*p)
@@ -112,9 +102,9 @@ t_token	*tokenize(const char *input)
 		p = skip_whitespace(p);
 		if (*p == '\0')
 			break ;
-		if (*p == '|' || *p == '<' || *p == '>')
+		if (ft_strchr("<|>", *p))
 			token = special_token(&p);
-		else if (*p == '\'' || *p == '"')
+		else if (ft_strchr("'\"", *p))
 			token = quoted_token(&p);
 		else
 			token = word_token(&p);
@@ -124,5 +114,6 @@ t_token	*tokenize(const char *input)
 			free(token);
 		}
 	}
+	assign_token_types(head);
 	return (head);
 }
