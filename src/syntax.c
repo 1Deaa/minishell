@@ -6,17 +6,24 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:46:48 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/10 19:32:52 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/10 22:12:41 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static bool	is_redirection(t_token *node)
+{
+	if (node->type == TK_APPEND || node->type == TK_HEREDOC
+		|| node->type == TK_REDIR_IN || node->type == TK_REDIR_OUT)
+		return (true);
+	return (false);
+}
+
 static bool	is_special(t_token *node)
 {
-	if (node->type == TK_PIPE || node->type == TK_REDIR_IN
-		|| node->type == TK_REDIR_OUT || node->type == TK_APPEND
-		|| node->type == TK_HEREDOC || node->type == TK_AMPERSAND)
+	if (node->type == TK_PIPE || is_redirection(node)
+		|| node->type == TK_AMPERSAND)
 		return (true);
 	else
 		return (false);
@@ -30,7 +37,7 @@ bool	is_correct_syntax(t_token *tokens)
 	current = tokens;
 	if (!current)
 		return (true);
-	if (is_special(current))
+	if (is_special(current) && !is_redirection(current))
 		return (false);
 	prev = current;
 	current = current->next;
