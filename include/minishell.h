@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:29:39 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/13 20:34:01 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:38:01 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 
 # define DEBUG 42
 
-# define PROMPT BLINK BLUE "· " RESET RED "minishell" BLUE " $ " RESET
+#define PROMPT "\033[5m\033[1;34m· \033[0m\033[1;31mminishell\033[1;34m $ \033[0m"
 
 /*
 Creates a custom prompt for the shell.
