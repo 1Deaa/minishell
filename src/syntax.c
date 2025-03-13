@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:46:48 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/13 20:12:04 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:14:44 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static bool	is_special(t_token *node)
 		return (false);
 }
 
-static bool is_closed_quote(t_token *node)
+static bool	is_closed_quote(t_token *node)
 {
 	int		i;
 
