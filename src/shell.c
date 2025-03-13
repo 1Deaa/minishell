@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 14:17:40 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/10 18:18:11 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:34:16 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,13 @@ void	shell_loop(int mode)
 {
 	t_shell	shell;
 
-	(void)mode;
-	shell.prompt = create_prompt();
+	shell.prompt = PROMPT;
 	shell.parse = NULL;
 	while (true)
 	{
 		shell.command = readline(shell.prompt);
 		if (!shell.command)
-		{
-			free(shell.prompt);
 			break ;
-		}
 		shell.tokens = tokenize(shell.command);
 		if (DEBUG == mode)
 			shell_debug(&shell);

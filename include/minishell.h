@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:29:39 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/10 18:16:58 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:34:01 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,13 @@
 
 # define DEBUG 42
 
+# define PROMPT BLINK BLUE "· " RESET RED "minishell" BLUE " $ " RESET
+
 /*
 Creates a custom prompt for the shell.
 */
 char				*create_prompt(void);
+char				*get_prompt(void);
 /*
 Handles the signals CTRL-C CTRL-\
 */
