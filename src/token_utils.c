@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 14:23:49 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/10 19:32:56 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:09:06 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,11 +97,9 @@ void	assign_token_types(t_token *tokens)
 			tokens->type = TK_APPEND;
 		else if (!ft_strcmp(tokens->value, "<<"))
 			tokens->type = TK_HEREDOC;
-		else if (tokens->value[0] == '\''
-			&& tokens->value[ft_strlen(tokens->value) - 1] == '\'')
+		else if (tokens->value[0] == '\'')
 			tokens->type = TK_SINGLE_QUOTED;
-		else if (tokens->value[0] == '"'
-			&& tokens->value[ft_strlen(tokens->value) - 1] == '"')
+		else if (tokens->value[0] == '"')
 			tokens->type = TK_DOUBLE_QUOTED;
 		else
 			tokens->type = TK_WORD;
