@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 18:40:26 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/10 17:20:10 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/13 20:24:33 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,23 +64,9 @@ typedef struct s_find_cmd_path
 	char	*end;
 	char	*path;
 }	t_find_cmd_path;
-/*
-Function specific struct.
-*/
-typedef struct s_tokenize
-{
-	const char	*start;
-	char		**tokens;
-	int			token_count;
-	int			len;
-	int			i;
-}	t_tokenize;
 
 typedef struct s_shell
 {
-	char			*device;
-	char			*user;
-	char			*cwd;
 	char			*prompt;
 	char			*command;
 	t_token			*tokens;
