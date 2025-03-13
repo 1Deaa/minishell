@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 19:30:52 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/08 20:38:52 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/13 22:29:14 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,9 @@ char	*ft_strdup(const char *str);
 Copy N bytes from SRC to DEST.
 */
 char	*ft_strncpy(char *dest, const char *src, size_t n);
+/*
+Joins S1 with S1.
+*/
+char	*ft_strjoin(char *s1, char *s2);
 
 #endif

@@ -1,34 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strndup.c                                       :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/16 18:44:40 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/13 22:22:14 by drahwanj         ###   ########.fr       */
+/*   Created: 2025/03/13 22:25:12 by drahwanj          #+#    #+#             */
+/*   Updated: 2025/03/13 22:36:06 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strndup(const char *s, size_t n)
+char	*ft_strjoin(char *s1, char *s2)
 {
-	size_t	len;
-	size_t	i;
-	char	*dup;
+	int		i;
+	int		j;
+	char	*str;
 
+	if (!s1)
+	{
+		s1 = (char *)malloc(1);
+		s1[0] = '\0';
+	}
+	if (!s1 || !s2)
+		return (NULL);
+	str = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!str)
+		return (NULL);
 	i = -1;
-	len = 0;
-	if (n <= 0)
-		return (NULL);
-	while (len < n && s[len] != '\0')
-		len++;
-	dup = (char *)malloc(len + 1);
-	if (!dup)
-		return (NULL);
-	while (++i < len)
-		dup[i] = s[i];
-	dup[len] = '\0';
-	return (dup);
+	j = 0;
+	if (s1)
+		while (s1[++i] != '\0')
+			str[i] = s1[i];
+	while (s2[j] != '\0')
+		str[i++] = s2[j++];
+	str[i] = '\0';
+	free(s1);
+	return (str);
 }
