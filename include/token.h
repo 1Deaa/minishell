@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 14:25:56 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/10 17:30:22 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/13 22:35:26 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_token
 
 t_token	*new_token(const char *value);
 t_token	*tokenize(const char *input);
+t_token	*expander(t_token *tokens);
 void	add_token(t_token **head, const char *value);
 void	free_tokens(t_token	*token);
 void	print_tokens(t_token *token);

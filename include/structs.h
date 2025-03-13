@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 18:40:26 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/13 20:24:33 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/14 00:03:46 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_shell
 {
 	char			*prompt;
 	char			*command;
+	int				exit;
 	t_token			*tokens;
 	struct s_cmd	*parse;
 }	t_shell;

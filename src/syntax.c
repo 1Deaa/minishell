@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:46:48 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/13 20:14:44 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/13 21:46:32 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ bool	is_correct_syntax(t_token *tokens)
 		prev = current;
 		current = current->next;
 	}
-	if (prev->type == TK_PIPE)
+	if (prev->type == TK_PIPE || is_redirection(prev))
 		return (false);
 	return (true);
 }
