@@ -6,7 +6,7 @@
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 19:30:52 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/13 22:29:14 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/03/14 14:57:50 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <unistd.h>
 # include <stddef.h>
+# include <stdbool.h>
 # include <stdlib.h>
 
 /*
@@ -57,5 +58,13 @@ char	*ft_strncpy(char *dest, const char *src, size_t n);
 Joins S1 with S1.
 */
 char	*ft_strjoin(char *s1, char *s2);
+/*
+Checks wether C is alpha numeric or not.
+*/
+bool	ft_isalpha(char c);
+/*
+Join a C with S.
+*/
+char	*ft_charjoin(char *s, char c);
 
 #endif
