@@ -67,7 +67,6 @@ typedef struct s_find_cmd_path
 
 typedef struct s_shell
 {
-	char			*prompt;
 	char			*command;
 	int				exit;
 	t_token			*tokens;

@@ -24,22 +24,35 @@ static void	shell_debug(t_shell *shell)
 		printf("WRONG SYNTAX!\n");
 }
 
+static char	*shell_read(char *prompt)
+{
+	char	*input;
+
+	input = readline(prompt);
+	if (input == NULL)
+	{
+		printf("exit\n");
+		exit(0);
+	}
+	if (ft_strlen(input) > 0)
+		add_history(input);
+	return (input);
+}
+
 void	shell_loop(int mode)
 {
 	t_shell	shell;
 
-	shell.prompt = PROMPT;
 	shell.parse = NULL;
 	while (0x1DEAA)
 	{
-		shell.command = readline(shell.prompt);
-		if (!shell.command)
-			break ;
+		shell.command = shell_read(PROMPT);
 		shell.tokens = tokenize(shell.command);
 		shell.tokens = expander(shell.tokens);
+		if (!is_correct_syntax(shell.tokens))
+			continue ;
 		if (DEBUG == mode)
 			shell_debug(&shell);
-		add_history(shell.command);
 		free(shell.command);
 		free_tokens(shell.tokens);
 	}
