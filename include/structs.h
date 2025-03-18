@@ -13,8 +13,6 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
-# include "token.h"
-
 /*
 */
 typedef enum e_parse_type
@@ -55,22 +53,5 @@ struct s_redircmd
 	int				mode;
 	int				fd;
 };
-/*
-Function specific struct.
-*/
-typedef struct s_find_cmd_path
-{
-	char	*start;
-	char	*end;
-	char	*path;
-}	t_find_cmd_path;
-
-typedef struct s_shell
-{
-	char			*command;
-	int				exit;
-	t_token			*tokens;
-	struct s_cmd	*parse;
-}	t_shell;
 
 #endif

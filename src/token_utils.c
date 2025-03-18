@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "token.h"
+#include "minishell.h"
 
 t_token	*new_token(const char *value)
 {

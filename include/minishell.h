@@ -27,49 +27,85 @@
 # include <termios.h>
 # include "colors.h"
 # include "structs.h"
-# include "token.h"
 # include "../libft/libft.h"
 
-# define DEBUG 42
+typedef struct s_shell	t_shell;
+typedef struct s_token	t_token;
 
+/* ************************************************************************** */
+/*                                 DEFINES                                    */
+/* ************************************************************************** */
+
+# define DEBUG 42
 # define PROMPT "\033[1;34m· \033[0m\033[1;31mminishell\033[1;34m $ \033[0m"
 
-/*
-Handles the signals CTRL-C CTRL-\
-*/
-void				shell_signal(void);
-/*
-Keeps the shell alive and working.
-*/
-void				shell_loop(int mode);
-/*
-Find the path for CMD.
-*/
-char				*find_cmd_path(char *cmd);
-
-bool				is_correct_syntax(t_token *tokens);
-
 /* ************************************************************************** */
-/*                          PARSE.C PARSE_UTILS.C							  */
-/* ************************************************************************** */
-struct s_cmd		*parse_redir(char **tokens, int *index);
-struct s_cmd		*parse_pipe(char **tokens, int *index);
-struct s_cmd		*parse_exec(char **tokens, int *index);
-int					count_exec_args(char **tokens);
-struct s_cmd		*parser(char **tokens);
-struct s_redircmd	*create_redircmd(struct s_cmd *cmd,
-						char **tokens, int *index);
-void				print_cmd(struct s_cmd *cmd, int indent);
-/* ************************************************************************** */
-/*                               BUILT-IN       							  */
+/*                                 SHELL                                      */
 /* ************************************************************************** */
 
-void				echo(struct s_cmd *cmd);
+typedef struct s_shell
+{
+	char			*command;
+	char			**argv;
+	char			**envp;
+	bool			debug;
+	int				exit;
+	t_token			*tokens;
+	struct s_cmd	*parse;
+}	t_shell;
+
+void	shell_signal(void);
+void	shell_loop(t_shell *shell);
 
 /* ************************************************************************** */
-/*                             EXECUTIONER.C       							  */
+/*                               BUILT-IN                                     */
 /* ************************************************************************** */
 
-void				run_cmd(struct s_cmd *parse);
+void	echo(struct s_cmd *cmd);
+
+/* ************************************************************************** */
+/*                         TOKEN + EXPANDER + SYNTAX                          */
+/* ************************************************************************** */
+
+typedef enum e_token_type
+{
+	TK_PIPE,
+	TK_WORD,
+	TK_REDIR_IN,
+	TK_REDIR_OUT,
+	TK_AMPERSAND,
+	TK_SINGLE_QUOTED,
+	TK_DOUBLE_QUOTED,
+	TK_APPEND,
+	TK_HEREDOC,
+}	t_type;
+
+typedef struct s_token
+{
+	char			*value;
+	t_type			type;
+	struct s_token	*next;
+	struct s_token	*prev;
+}	t_token;
+
+t_token	*new_token(const char *value);
+t_token	*tokenize(const char *input);
+t_token	*expander(t_token *tokens, t_shell *shell);
+
+char	*expand_word_util(t_token *token, t_shell *shell, int *i, bool *dollar);
+void	expand_quoted(t_token *token, t_shell *shell);
+void	expand_word(t_token *token, t_shell *shell);
+char	*exname(t_token token, int index);
+char	*expand(char *var_name, t_shell *shell);
+
+void	add_token(t_token **head, const char *value);
+void	free_tokens(t_token	*token);
+void	print_tokens(t_token *token);
+void	assign_token_types(t_token *tokens);
+
+bool	is_correct_syntax(t_token *tokens);
+bool	is_expandable(char c);
+
+/* ************************************************************************** */
 
 #endif

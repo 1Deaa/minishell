@@ -12,22 +12,53 @@
 
 #include "minishell.h"
 
-static void	expand_word(t_token *token)
+char	*expand(char *var_name, t_shell *shell)
 {
-	unsigned int	i;
-	char			*temp;
-	bool			dollar;
+	char	*ret;
+
+	ret = ft_strdup(getenv(var_name));
+	if (ft_strcmp(var_name, "1") == 0)
+		ret = ft_strdup(shell->argv[1]);
+	if (ft_strcmp(var_name, "0") == 0)
+		ret = ft_strdup(shell->argv[0]);
+	if (ft_strcmp(var_name, "?") == 0)
+		ret = NULL;
+	free(var_name);
+	return (ret);
+}
+
+char	*exname(t_token token, int index)
+{
+	char	*var_name;
+	int		i;
+
+	i = index;
+	while (token.value[i] && is_expandable(token.value[i])
+		&& token.value[i] != '\0')
+		i++;
+	var_name = ft_strndup((token.value) + index, i - index);
+	if (!var_name)
+		var_name = ft_strdup("");
+	return (var_name);
+}
+
+void	expand_word(t_token *token, t_shell *shell)
+{
+	int		i;
+	char	*temp;
+	bool	dollar;
 
 	dollar = false;
 	i = 0;
 	temp = NULL;
 	while (token->value && token->value[i] != '\0')
 	{
-		if (token->value[i] == '$' && token->value[i + 1] != '\0')
+		if (token->value[i] == '$' && token->value[i + 1] != '\0'
+			&& is_expandable(token->value[i + 1]))
 		{
 			if (!dollar)
 				temp = ft_strndup(token->value, i);
-			temp = ft_strjoin(temp, "EXPAND!");
+			temp = ft_strjoin(temp, expand(exname(*token, i + 1), shell));
 			dollar = true;
 		}
 		i++;
@@ -39,24 +70,22 @@ static void	expand_word(t_token *token)
 	}
 }
 
-static void	expand_quoted(t_token *token)
+void	expand_quoted(t_token *token, t_shell *shell)
 {
-	unsigned int	i;
-	char			*ret;
+	int		i;
+	char	*ret;
 
 	ret = NULL;
 	i = 0;
 	while (token->value && token->value[i] != '\0')
 	{
-		if (token->value[i] == '$' && token->value[i + 2] != '\0')
+		if (token->value[i] == '$' && is_expandable(token->value[i + 1])
+			&& token->value[i + 2] != '\0')
 		{
 			i++;
-			while (token->value[i]
-				&& (ft_isalpha(token->value[i]) || token->value[i] == '_'))
-			{
+			ret = ft_strjoin(ret, expand(exname(*token, i), shell));
+			while (token->value[i] && is_expandable(token->value[i]))
 				i++;
-			}
-			ret = ft_strjoin(ret, "EXPAND!");
 		}
 		else
 		{
@@ -67,9 +96,8 @@ static void	expand_quoted(t_token *token)
 	free(token->value);
 	token->value = ret;
 }
-/* ************************************************************************** */
 
-t_token	*expander(t_token *tokens)
+t_token	*expander(t_token *tokens, t_shell *shell)
 {
 	t_token	*current;
 
@@ -78,48 +106,13 @@ t_token	*expander(t_token *tokens)
 	{
 		if (current->type == TK_WORD)
 		{
-			expand_word(current);
+			expand_word(current, shell);
 		}
 		else if (current->type == TK_DOUBLE_QUOTED)
 		{
-			expand_quoted(current);
+			expand_quoted(current, shell);
 		}
 		current = current->next;
 	}
 	return (tokens);
 }
-
-/*
-***********OLD**********
-static void	expand_word(t_token *token)
-{
-	unsigned int	i;
-	char			*temp;
-	char			*new_temp;
-	bool			dollar;
-
-	dollar = false;
-	i = 0;
-	while (token->value && token->value[i] != '\0')
-	{
-		if (token->value[i] == '$')
-		{
-			if (dollar == false)
-				temp = ft_strndup(token->value, i);
-			else
-			{
-				new_temp = ft_strndup(temp, ft_strlen(temp));
-				free(temp);
-				temp = new_temp;
-			}
-			temp = ft_strjoin(temp, "EXPAND!");
-			dollar = true;
-		}	
-		i++;
-	}
-	if (dollar == true)
-	{
-		free(token->value);
-		token->value = temp;
-	}
-}*/

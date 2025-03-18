@@ -1,11 +1,16 @@
 NAME = minishell
 
-FILES = main.c signals.c shell.c find_cmd_path.c token.c token_utils.c \
-		parse_utils.c parse.c parse_cmd.c echo.c executioner.c syntax.c expand.c
+FILES = main.c \
+		signals.c \
+		shell.c \
+		token.c token_utils.c \
+		echo.c \
+		syntax.c \
+		expand.c expand_utils.c
 
 CC = cc
 RM = rm -rf
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g
 LINK = -lreadline -lncurses libft/libft.a
 INCLUDE = -I include
 MAKEFLAGS += --no-print-directory
