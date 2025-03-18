@@ -30,11 +30,11 @@ jobs:
 
       # Make the script executable
       - name: Make script executable
-        run: chmod +x ./check_norminette.sh
+        run: chmod +x ./check_norm.sh
 
       # Run the script
       - name: Run Norminette check
-        run: ./check_norminette.sh
+        run: ./check_norm.sh
 
       # Optionally, fail the build on errors
       - name: Fail the build on errors
