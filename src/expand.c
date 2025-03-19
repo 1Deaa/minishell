@@ -12,91 +12,103 @@
 
 #include "minishell.h"
 
-char	*expand(char *var_name, t_shell *shell)
+static char	*expand(char *name, t_shell *shell)
 {
 	char	*ret;
 
-	ret = ft_strdup(getenv(var_name));
-	if (ft_strcmp(var_name, "1") == 0)
-		ret = ft_strdup(shell->argv[1]);
-	if (ft_strcmp(var_name, "0") == 0)
-		ret = ft_strdup(shell->argv[0]);
-	if (ft_strcmp(var_name, "?") == 0)
-		ret = NULL;
+	(void)shell;
+	ret = NULL;
+	if (!ft_strcmp(name, "0") || !ft_strcmp(name, "1") || !ft_strcmp(name, "?"))
+	{
+		ret = special_expand(name, shell);
+		free(name);
+		if (!ret)
+			return (ft_strdup(""));
+		return (ret);
+	}
+	if (!ft_strcmp(name, ""))
+	{
+		free(name);
+		return (ft_strdup("$"));
+	}
+	ret = ft_strdup(getenv(name));
 	if (!ret)
-		ret = ft_strdup("");
-	free(var_name);
+	{
+		free(name);
+		return (ft_strdup(""));
+	}
+	free(name);
 	return (ret);
 }
 
-char	*exname(t_token token, int index)
+static char	*exname(char *token, int *index)
 {
-	char	*var_name;
-	int		i;
-
-	i = index;
-	while (token.value[i] && is_expandable(token.value[i])
-		&& token.value[i] != '\0')
-		i++;
-	var_name = ft_strndup((token.value) + index, i - index);
-	if (!var_name)
-		var_name = ft_strdup("");
-	return (var_name);
-}
-
-void	expand_word(t_token *token, t_shell *shell)
-{
-	int		i;
-	char	*temp;
-	bool	dollar;
-
-	dollar = false;
-	i = 0;
-	temp = NULL;
-	while (token->value && token->value[i] != '\0')
-	{
-		if (token->value[i] == '$' && token->value[i + 1] != '\0'
-			&& is_expandable(token->value[i + 1]))
-		{
-			if (!dollar)
-				temp = ft_strndup(token->value, i);
-			temp = ft_strjoin(temp, expand(exname(*token, i + 1), shell));
-			dollar = true;
-		}
-		i++;
-	}
-	if (dollar)
-	{
-		free(token->value);
-		token->value = temp;
-	}
-}
-
-void	expand_quoted(t_token *token, t_shell *shell)
-{
-	int		i;
 	char	*ret;
+	int		i;
 
 	ret = NULL;
-	i = 0;
-	while (token->value && token->value[i] != '\0')
+	i = (*index) + 1;
+	while (is_expandable(token[++(*index)]))
 	{
-		if (token->value[i] == '$' && is_expandable(token->value[i + 1])
-			&& token->value[i + 2] != '\0')
+		if (token[*index] == '?' || token[*index] == '0'
+			|| token[*index] == '1')
 		{
-			i++;
-			ret = ft_strjoin(ret, expand(exname(*token, i), shell));
-			while (token->value[i] && is_expandable(token->value[i]))
-				i++;
-		}
-		else
-		{
-			ret = ft_charjoin(ret, token->value[i]);
-			i++;
+			(*index)++;
+			break ;
 		}
 	}
+	ret = ft_strndup(token + i, (*index) - i);
+	if (!ret)
+		return (ft_strdup(""));
+	return (ret);
+}
+
+static void	expand_quoted(t_token *token, t_shell *shell)
+{
+	int		i;
+	char	*str;
+	char	*exp;
+
+	i = 0;
+	str = NULL;
+	exp = NULL;
+	while (token->value[i])
+	{
+		while (token->value[i] == '$' && token->value[i + 2] != '\0')
+		{
+			exp = expand(exname(token->value, &i), shell);
+			str = ft_strjoin(str, exp);
+			free(exp);
+		}
+		str = ft_charjoin(str, token->value[i]);
+		i++;
+	}
 	free(token->value);
-	token->value = ret;
+	token->value = str;
+}
+
+static void	expand_word(t_token *token, t_shell *shell)
+{
+	int		i;
+	char	*str;
+	char	*exp;
+
+	i = 0;
+	str = NULL;
+	exp = NULL;
+	while (token->value[i])
+	{
+		while (token->value[i] == '$' && token->value[i + 1] != '\0')
+		{
+			exp = expand(exname(token->value, &i), shell);
+			str = ft_strjoin(str, exp);
+			free(exp);
+		}
+		str = ft_charjoin(str, token->value[i]);
+		i++;
+	}
+	free(token->value);
+	token->value = str;
 }
 
 t_token	*expander(t_token *tokens, t_shell *shell)

@@ -90,13 +90,10 @@ typedef struct s_token
 
 t_token	*new_token(const char *value);
 t_token	*tokenize(const char *input);
-t_token	*expander(t_token *tokens, t_shell *shell);
 
-char	*expand_word_util(t_token *token, t_shell *shell, int *i, bool *dollar);
-void	expand_quoted(t_token *token, t_shell *shell);
-void	expand_word(t_token *token, t_shell *shell);
-char	*exname(t_token token, int index);
-char	*expand(char *var_name, t_shell *shell);
+t_token	*expander(t_token *tokens, t_shell *shell);
+char	*special_expand(char *str, t_shell *shell);
+
 
 void	add_token(t_token **head, const char *value);
 void	free_tokens(t_token	*token);

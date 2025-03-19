@@ -12,7 +12,6 @@ FILES = ft_strchr.c   \
 		ft_strjoin.c  \
 		ft_isalpha.c  \
 		ft_charjoin.c \
-		ft_itoa.c	  \
 		ft_strlcpy.c
 
 OBJS = $(FILES:.c=.o)
