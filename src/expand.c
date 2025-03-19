@@ -98,14 +98,17 @@ static void	expand_word(t_token *token, t_shell *shell)
 	exp = NULL;
 	while (token->value[i])
 	{
-		while (token->value[i] == '$' && token->value[i + 1] != '\0')
+		if (token->value[i] == '$' && token->value[i + 1] != '\0')
 		{
 			exp = expand(exname(token->value, &i), shell);
 			str = ft_strjoin(str, exp);
 			free(exp);
 		}
-		str = ft_charjoin(str, token->value[i]);
-		i++;
+		else
+		{
+			str = ft_charjoin(str, token->value[i]);
+			i++;
+		}
 	}
 	free(token->value);
 	token->value = str;
