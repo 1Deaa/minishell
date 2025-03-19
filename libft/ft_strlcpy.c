@@ -1,35 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/08 14:04:37 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/08 21:20:35 by drahwanj         ###   ########.fr       */
+/*   Created: 2025/03/19 13:17:43 by drahwanj          #+#    #+#             */
+/*   Updated: 2025/03/19 13:17:44 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strdup(const char *str)
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
-	size_t	len;
-	char	*dup;
-	size_t	i;
+	unsigned int	i;
+	size_t			size_src;
 
-	if (str == NULL)
-		return (NULL);
-	len = ft_strlen(str);
-	dup = malloc(len + 1);
-	if (dup == NULL)
-		return (NULL);
 	i = 0;
-	while (str[i])
+	if (src == NULL)
+		return (0);
+	size_src = ft_strlen(src);
+	if ((int)size < 0)
+		size = size_src + 1;
+	if (size >= 2 && size_src != 0)
 	{
-		dup[i] = str[i];
-		i++;
+		while (i < size - 1)
+		{
+			if (i < size_src)
+				dst[i] = src[i];
+			else if (i == size_src)
+				dst[i] = '\0';
+			i++;
+		}
 	}
-	dup[i] = '\0';
-	return (dup);
+	if (size != 0)
+		dst[i] = '\0';
+	return (size_src);
 }

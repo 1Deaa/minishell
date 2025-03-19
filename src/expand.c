@@ -23,6 +23,8 @@ char	*expand(char *var_name, t_shell *shell)
 		ret = ft_strdup(shell->argv[0]);
 	if (ft_strcmp(var_name, "?") == 0)
 		ret = NULL;
+	if (!ret)
+		ret = ft_strdup("");
 	free(var_name);
 	return (ret);
 }

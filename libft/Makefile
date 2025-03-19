@@ -1,17 +1,19 @@
 NAME = libft.a
 
-FILES = ft_strchr.c  \
-		ft_strlen.c  \
-		ft_calloc.c  \
-		ft_strcat.c  \
-		ft_isspace.c \
-		ft_strndup.c \
-		ft_strcmp.c  \
-		ft_strdup.c  \
-		ft_strncpy.c \
-		ft_strjoin.c \
-		ft_isalpha.c \
-		ft_charjoin.c
+FILES = ft_strchr.c   \
+		ft_strlen.c   \
+		ft_calloc.c   \
+		ft_strcat.c   \
+		ft_isspace.c  \
+		ft_strndup.c  \
+		ft_strcmp.c   \
+		ft_strdup.c   \
+		ft_strncpy.c  \
+		ft_strjoin.c  \
+		ft_isalpha.c  \
+		ft_charjoin.c \
+		ft_itoa.c	  \
+		ft_strlcpy.c
 
 OBJS = $(FILES:.c=.o)
 

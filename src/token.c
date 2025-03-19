@@ -78,8 +78,6 @@ static char	*word_token(const char **p)
 	start = *p;
 	while (**p && !ft_isspace((unsigned char)**p) && !ft_strchr("|><'\"", **p))
 	{
-		if (**p == '$' && *p != start)
-			break ;
 		(*p)++;
 	}
 	len = *p - start;

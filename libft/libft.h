@@ -66,5 +66,13 @@ bool	ft_isalpha(char c);
 Join a C with S.
 */
 char	*ft_charjoin(char *s, char c);
+/*
+Convert integer to ASCII.
+*/
+char	*ft_itoa(int n);
+/*
+Copies n - 1 bytes from a source string to a destination string.
+*/
+size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 
 #endif
