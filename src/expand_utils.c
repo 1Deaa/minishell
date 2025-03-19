@@ -12,26 +12,29 @@
 
 #include "minishell.h"
 
+char	*special_expand(char *str, t_shell *shell)
+{
+	char	*ret;
+
+	ret = NULL;
+	if (!ft_strcmp(str, "?"))
+	{
+		ret = ft_strdup("TODO");
+	}
+	else if (!ft_strcmp(str, "0"))
+	{
+		ret = ft_strdup(shell->argv[0]);
+	}
+	else if (!ft_strcmp(str, "1"))
+	{
+		ret = ft_strdup(shell->argv[1]);
+	}
+	return (ret);
+}
+
 bool	is_expandable(char c)
 {
 	if (ft_isalpha(c) || c == '_' || c == '?')
 		return (true);
 	return (false);
-}
-
-char	*expand_word_util(t_token *token, t_shell *shell, int *i, bool *dollar)
-{
-	char	*str;
-
-	str = "";
-	if (token->value[*i] == '$' && token->value[*i + 1] != '\0'
-		&& is_expandable(token->value[*i + 1]))
-	{
-		if (!(*dollar))
-			str = ft_strndup(token->value, *i);
-		str = ft_strjoin(str, expand(exname(*token, (*i) + 1), shell));
-		*dollar = true;
-	}
-	(*i)++;
-	return (str);
 }
