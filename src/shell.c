@@ -12,6 +12,12 @@
 
 #include "minishell.h"
 
+static void	shell_clean(t_shell *shell)
+{
+	free(shell->command);
+	free_tokens(shell->tokens);
+}
+
 void	shell_loop(t_shell *shell)
 {
 	shell->parse = NULL;
@@ -21,10 +27,12 @@ void	shell_loop(t_shell *shell)
 		shell->tokens = tokenize(shell->command);
 		shell->tokens = expander(shell->tokens, shell);
 		if (!is_correct_syntax(shell->tokens))
+		{
+			shell_clean(shell);
 			continue ;
+		}
 		shell_debug(shell);
-		free(shell->command);
-		free_tokens(shell->tokens);
+		shell_clean(shell);
 	}
 	rl_clear_history();
 }
