@@ -3,9 +3,9 @@ NAME = minishell
 FILES = main.c \
 		signals.c \
 		shell.c \
-		token.c token_utils.c \
 		echo.c \
-		syntax.c \
+		token.c token_utils.c \
+		syntax.c syntax_utils.c \
 		expand.c expand_utils.c
 
 CC = cc

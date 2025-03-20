@@ -12,37 +12,51 @@
 
 #include "minishell.h"
 
-static bool	is_redirection(t_token *node)
+static bool	is_first(t_token *node)
 {
-	if (node->type == TK_APPEND || node->type == TK_HEREDOC
-		|| node->type == TK_REDIR_IN || node->type == TK_REDIR_OUT)
+	if (is_special(node) && !is_redirection(node))
+	{
+		printf("minishell: syntax error unexpected token '%s'\n", node->value);
 		return (true);
+	}
 	return (false);
 }
 
-static bool	is_special(t_token *node)
+static bool	is_adjacent(t_token *prev, t_token *curr)
 {
-	if (node->type == TK_PIPE || is_redirection(node)
-		|| node->type == TK_AMPERSAND)
+	if (is_special(prev) && is_special(curr))
+	{
+		printf("minishell: syntax error unexpected token '%s'\n", curr->value);
 		return (true);
-	else
-		return (false);
+	}
+	return (false);
 }
 
 static bool	is_closed_quote(t_token *node)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	if (node->type == TK_DOUBLE_QUOTED || node->type == TK_SINGLE_QUOTED)
 	{
 		i = ft_strlen(node->value);
-		if (i == 1)
+		if (i == 1 || node->value[i - 1] != node->value[0])
+		{
+			printf("minishell: syntax error missing closing quote\n");
 			return (false);
-		if (node->value[(i - 1)] != node->value[0])
-			return (false);
+		}
 	}
 	return (true);
+}
+
+static bool	is_last(t_token *node)
+{
+	if (node->type == TK_PIPE || is_redirection(node))
+	{
+		printf("minishell: syntax error unexpected token 'newline'\n");
+		return (true);
+	}
+	return (false);
 }
 
 bool	is_correct_syntax(t_token *tokens)
@@ -53,20 +67,20 @@ bool	is_correct_syntax(t_token *tokens)
 	current = tokens;
 	if (!current)
 		return (true);
-	if (is_special(current) && !is_redirection(current))
+	if (is_first(current))
 		return (false);
 	prev = current;
 	current = current->next;
 	while (current)
 	{
-		if (is_special(prev) && is_special(current))
+		if (is_adjacent(prev, current))
 			return (false);
 		if (!is_closed_quote(current))
 			return (false);
 		prev = current;
 		current = current->next;
 	}
-	if (prev->type == TK_PIPE || is_redirection(prev))
+	if (is_last(prev))
 		return (false);
 	return (true);
 }

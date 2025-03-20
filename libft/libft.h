@@ -74,5 +74,9 @@ char	*ft_itoa(int n);
 Copies n - 1 bytes from a source string to a destination string.
 */
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
+/*
+Print a string on an fd.
+*/
+int		ft_putstr_fd(const char *str, int fd);
 
 #endif

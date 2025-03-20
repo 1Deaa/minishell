@@ -36,7 +36,7 @@ typedef struct s_token	t_token;
 /*                                 DEFINES                                    */
 /* ************************************************************************** */
 
-# define DEBUG 42
+# define DEBUG 0x1DEAA
 # define PROMPT "\033[1;34m· \033[0m\033[1;31mminishell\033[1;34m $ \033[0m"
 
 /* ************************************************************************** */
@@ -78,29 +78,33 @@ typedef enum e_token_type
 	TK_DOUBLE_QUOTED,
 	TK_APPEND,
 	TK_HEREDOC,
-}	t_type;
+}	t_token_type;
 
 typedef struct s_token
 {
 	char			*value;
-	t_type			type;
+	t_token_type	type;
 	struct s_token	*next;
 	struct s_token	*prev;
 }	t_token;
 
-t_token	*new_token(const char *value);
-t_token	*tokenize(const char *input);
-
+/*EXPAND PROTOTYPES*/
 t_token	*expander(t_token *tokens, t_shell *shell);
 char	*special_expand(char *str, t_shell *shell);
+bool	is_expandable(char c);
 
+/*TOKEN PROTOTYPES*/
+t_token	*new_token(const char *value);
+t_token	*tokenize(const char *input);
 void	add_token(t_token **head, const char *value);
 void	free_tokens(t_token	*token);
 void	print_tokens(t_token *token);
 void	assign_token_types(t_token *tokens);
 
+/*REDIRECTION PROTOTYPES*/
+bool	is_redirection(t_token *node);
+bool	is_special(t_token *node);
 bool	is_correct_syntax(t_token *tokens);
-bool	is_expandable(char c);
 
 /* ************************************************************************** */
 
