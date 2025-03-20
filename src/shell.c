@@ -12,36 +12,6 @@
 
 #include "minishell.h"
 
-static void	shell_debug(t_shell *shell)
-{
-	if (shell->command[0] != '\0' && shell->debug == true)
-	{
-		if (shell->command)
-			printf("INPUT: %s\n~·~\n", shell->command);
-		if (shell->tokens)
-			print_tokens(shell->tokens);
-		if (is_correct_syntax(shell->tokens))
-			printf("~·~\nCORRECT SYNTAX!\n");
-		else
-			printf("WRONG SYNTAX!\n");
-	}
-}
-
-static char	*shell_read(char *prompt)
-{
-	char	*input;
-
-	input = readline(prompt);
-	if (input == NULL)
-	{
-		printf("exit\n");
-		exit(0);
-	}
-	if (ft_strlen(input) > 0)
-		add_history(input);
-	return (input);
-}
-
 void	shell_loop(t_shell *shell)
 {
 	shell->parse = NULL;

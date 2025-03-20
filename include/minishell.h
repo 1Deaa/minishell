@@ -36,8 +36,8 @@ typedef struct s_token	t_token;
 /*                                 DEFINES                                    */
 /* ************************************************************************** */
 
-# define DEBUG 0x1DEAA
-# define PROMPT "\033[1;34m· \033[0m\033[1;31mminishell\033[1;34m $ \033[0m"
+# define PROMPT "\033[1;34m· \033[0m\033[1;31mstarshell\033[1;34m $ \033[0m"
+# define NAME	"starshell"
 
 /* ************************************************************************** */
 /*                                 SHELL                                      */
@@ -56,6 +56,8 @@ typedef struct s_shell
 
 void	shell_signal(void);
 void	shell_loop(t_shell *shell);
+void	shell_debug(t_shell *shell);
+char	*shell_read(char *prompt);
 
 /* ************************************************************************** */
 /*                               BUILT-IN                                     */
@@ -88,12 +90,12 @@ typedef struct s_token
 	struct s_token	*prev;
 }	t_token;
 
-/*EXPAND PROTOTYPES*/
+//EXPAND PROTOTYPES
 t_token	*expander(t_token *tokens, t_shell *shell);
 char	*special_expand(char *str, t_shell *shell);
 bool	is_expandable(char c);
 
-/*TOKEN PROTOTYPES*/
+//TOKEN PROTOTYPES
 t_token	*new_token(const char *value);
 t_token	*tokenize(const char *input);
 void	add_token(t_token **head, const char *value);
@@ -101,7 +103,7 @@ void	free_tokens(t_token	*token);
 void	print_tokens(t_token *token);
 void	assign_token_types(t_token *tokens);
 
-/*REDIRECTION PROTOTYPES*/
+//REDIRECTION PROTOTYPES
 bool	is_redirection(t_token *node);
 bool	is_special(t_token *node);
 bool	is_correct_syntax(t_token *tokens);

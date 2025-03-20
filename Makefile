@@ -1,10 +1,10 @@
 NAME = minishell
 
-FILES = main.c \
-		signals.c \
-		shell.c \
-		echo.c \
-		token.c token_utils.c \
+FILES = main.c		\
+		signals.c	\
+		echo.c		\
+		shell.c shell_utils.c	\
+		token.c token_utils.c	\
 		syntax.c syntax_utils.c \
 		expand.c expand_utils.c
 
