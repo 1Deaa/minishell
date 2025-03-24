@@ -14,6 +14,7 @@
 
 static void	shell_clean(t_shell *shell)
 {
+	(void)shell;
 	free(shell->command);
 	free_tokens(shell->tokens);
 }
@@ -26,6 +27,7 @@ void	shell_loop(t_shell *shell)
 		shell->command = shell_read(PROMPT);
 		shell->tokens = tokenize(shell->command);
 		shell->tokens = expander(shell->tokens, shell);
+		shell->parse = parser(shell->tokens);
 		if (!is_correct_syntax(shell->tokens))
 		{
 			shell_clean(shell);

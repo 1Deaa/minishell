@@ -16,18 +16,20 @@ void	shell_debug(t_shell *shell)
 {
 	if (shell->command[0] != '\0' && shell->debug == true)
 	{
-		printf("┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃\n");
-		printf("┃         DEBUG-SCREEN        ┃\n");
+		printf(BOLD"┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃\n");
+		printf("┃"YELLOW"         DEBUG-SCREEN        "RESET BOLD"┃\n");
 		printf("┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃\n");
 		if (shell->command)
 			printf("INPUT: %s\n━━━\n", shell->command);
 		if (shell->tokens)
 			print_tokens(shell->tokens);
 		if (is_correct_syntax(shell->tokens))
-			printf("━━━\nSYNTAX: correct!\n");
+			printf("━━━\nSYNTAX: "GREEN"correct ✔\n"RESET BOLD);
 		else
-			printf("SYNTAX: failure!\n");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+			printf("SYNTAX: "RED"failure!\n"RESET BOLD);
+		printf("━━━\nAST:\n");
+		print_ast_tree(shell->parse);
+		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"RESET);
 	}
 }
 

@@ -19,13 +19,13 @@ t_token	*new_token(const char *value)
 	node = malloc(sizeof(t_token));
 	if (!node)
 	{
-		perror("memory allocation error!");
+		perror(NAME": failed to allocate memory for token!");
 		return (NULL);
 	}
 	node->value = ft_strdup(value);
 	if (!node->value)
 	{
-		perror("ft_strdup allocation error!");
+		perror(NAME": ft_strdup allocation error!");
 		free(node);
 		return (NULL);
 	}

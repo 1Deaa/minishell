@@ -26,8 +26,7 @@
 # include <limits.h>
 # include <termios.h>
 # include "colors.h"
-# include "structs.h"
-# include "../libft/libft.h"
+# include "libft.h"
 
 typedef struct s_shell	t_shell;
 typedef struct s_token	t_token;
@@ -54,19 +53,14 @@ typedef struct s_shell
 	struct s_cmd	*parse;
 }	t_shell;
 
+//SHELL PROTOTYPES
 void	shell_signal(void);
 void	shell_loop(t_shell *shell);
 void	shell_debug(t_shell *shell);
 char	*shell_read(char *prompt);
 
 /* ************************************************************************** */
-/*                               BUILT-IN                                     */
-/* ************************************************************************** */
-
-void	echo(struct s_cmd *cmd);
-
-/* ************************************************************************** */
-/*                         TOKEN + EXPANDER + SYNTAX                          */
+/*                           TOKEN + EXPAND + SYNTAX                          */
 /* ************************************************************************** */
 
 typedef enum e_token_type
@@ -103,11 +97,60 @@ void	free_tokens(t_token	*token);
 void	print_tokens(t_token *token);
 void	assign_token_types(t_token *tokens);
 
-//REDIRECTION PROTOTYPES
+//SYNTAX PROTOTYPES
 bool	is_redirection(t_token *node);
 bool	is_special(t_token *node);
 bool	is_correct_syntax(t_token *tokens);
 
 /* ************************************************************************** */
+/*                                  PARSE                                     */
+/* ************************************************************************** */
+
+typedef enum e_parse
+{
+	PS_EXEC,
+	PS_PIPE,
+	PS_REDIR,
+}	t_parse;
+
+typedef struct s_cmd
+{
+	t_parse	type;
+}	t_cmd;
+
+typedef struct s_execcmd
+{
+	t_parse	type;
+	char	**argv;
+}	t_execmd;
+
+typedef struct s_pipecmd
+{
+	t_parse	type;
+	t_cmd	*left;
+	t_cmd	*right;
+}	t_pipecmd;
+
+typedef struct s_redircmd
+{
+	t_parse	type;
+	t_cmd	*cmd;
+	char	*file;
+	int		mode;
+	int		fd;
+}	t_redircmd;
+
+//PARSE PROTOTYPES
+t_cmd	*parser(t_token *tokens);
+t_cmd	*parse_exec(t_token **token);
+bool	is_exec(t_token *token);
+int		count_exec_args(t_token *token);
+void	print_ast_tree(t_cmd *ast);
+
+/* ************************************************************************** */
+/*                               BUILT-IN                                     */
+/* ************************************************************************** */
+
+void	echo(t_cmd *cmd);
 
 #endif
