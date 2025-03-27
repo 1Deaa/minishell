@@ -19,7 +19,7 @@ FILES = main.c		\
 		token.c token_utils.c	\
 		syntax.c syntax_utils.c \
 		expand.c expand_utils.c \
-		parse.c	parse_utils.c
+		parse.c	parse_utils.c parse_print.c parse_clean.c
 
 CC = cc
 RM = rm -rf

@@ -21,7 +21,7 @@ bool	is_exec(t_token *token)
 	return (false);
 }
 
-int count_exec_args(t_token *token)
+int	count_exec_args(t_token *token)
 {
 	t_token	*curr;
 	int		count;
@@ -36,43 +36,24 @@ int count_exec_args(t_token *token)
 	return (count);
 }
 
-static void print_ast(t_cmd *cmd, int depth, bool is_last, bool parent_last[])
+void	print_ast(t_cmd *cmd, int depth, bool is_last, bool parent_last[])
 {
-    if (!cmd)
-        return;
-    for (int i = 0; i < depth - 1; i++)
-        printf("%s   ", parent_last[i] ? " " : "│");
-    if (depth > 0)
-        printf("%s── ", is_last ? "└" : "├");
-    if (cmd->type == PS_EXEC)
-    {
-        t_execmd *ecmd = (t_execmd *)cmd;
-        printf("EXEC:");
-        for (int i = 0; ecmd->argv[i]; i++)
-            printf(" %s", ecmd->argv[i]);
-        printf("\n");
-    }
-    else if (cmd->type == PS_PIPE)
-    {
-        t_pipecmd *pcmd = (t_pipecmd *)cmd;
-        printf("PIPE\n");
-
-        parent_last[depth] = !pcmd->right;
-        print_ast(pcmd->left, depth + 1, false, parent_last);
-        print_ast(pcmd->right, depth + 1, true, parent_last);
-    }
-    else if (cmd->type == PS_REDIR)
-    {
-        t_redircmd *rcmd = (t_redircmd *)cmd;
-        printf("REDIR: file = %s, fd = %d, mode = %d\n", rcmd->file, rcmd->fd, rcmd->mode);
-
-        parent_last[depth] = true;
-        print_ast(rcmd->cmd, depth + 1, true, parent_last);
-    }
+	if (!cmd)
+		return ;
+	print_indent(depth, parent_last);
+	print_branch(depth, is_last);
+	if (cmd->type == PS_EXEC)
+		print_exec((t_execmd *)cmd);
+	else if (cmd->type == PS_PIPE)
+		print_pipe((t_pipecmd *)cmd, depth, parent_last);
+	else if (cmd->type == PS_REDIR)
+		print_redir((t_redircmd *)cmd, depth, parent_last);
 }
 
-void print_ast_tree(t_cmd *ast)
+void	print_ast_tree(t_cmd *ast)
 {
-    bool parent_last[100] = {false};
-    print_ast(ast, 0, true, parent_last);
+	bool	parent_last[100];
+
+	ft_memzero(parent_last, sizeof(parent_last));
+	print_ast(ast, 0, true, parent_last);
 }

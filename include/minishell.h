@@ -140,12 +140,21 @@ typedef struct s_redircmd
 	int		fd;
 }	t_redircmd;
 
-//PARSE PROTOTYPES
+/*PARSE PROTOTYPES*/
 t_cmd	*parser(t_token *tokens);
 t_cmd	*parse_exec(t_token **token);
+void	parse_clean(t_cmd *cmd);
+/*PARSE UTILS*/
 bool	is_exec(t_token *token);
 int		count_exec_args(t_token *token);
+/*PRINT ABSTRACT SYNTAX TREE*/
 void	print_ast_tree(t_cmd *ast);
+void	print_indent(int depth, bool parent_last[]);
+void	print_branch(int depth, bool is_last);
+void	print_exec(t_execmd *ecmd);
+void	print_pipe(t_pipecmd *pcmd, int depth, bool parent_last[]);
+void	print_redir(t_redircmd *rcmd, int depth, bool parent_last[]);
+void	print_ast(t_cmd *cmd, int depth, bool is_last, bool parent_last[]);
 
 /* ************************************************************************** */
 /*                               BUILT-IN                                     */

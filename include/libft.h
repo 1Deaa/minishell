@@ -78,5 +78,9 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 Print a string on an fd.
 */
 int		ft_putstr_fd(const char *str, int fd);
+/*
+s -> 0
+*/
+void	ft_memzero(void *s, size_t n);
 
 #endif

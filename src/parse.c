@@ -20,7 +20,7 @@ t_cmd	*parse_exec(t_token **token)
 	argc = 0;
 	ecmd = (t_execmd *)malloc(sizeof(t_execmd));
 	ecmd->type = PS_EXEC;
-	ecmd->argv = (char **)malloc(sizeof(char *) * (count_exec_args(*token) + 1));
+	ecmd->argv = (char **)malloc(sizeof(char *) *(count_exec_args(*token) + 1));
 	while (*token && is_exec(*token))
 	{
 		ecmd->argv[argc++] = (char *)ft_strdup((*token)->value); //TODO
