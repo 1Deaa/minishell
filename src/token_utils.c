@@ -91,8 +91,6 @@ void	assign_token_types(t_token *tokens)
 			tokens->type = TK_REDIR_IN;
 		else if (!ft_strcmp(tokens->value, ">"))
 			tokens->type = TK_REDIR_OUT;
-		else if (!ft_strcmp(tokens->value, "&"))
-			tokens->type = TK_AMPERSAND;
 		else if (!ft_strcmp(tokens->value, ">>"))
 			tokens->type = TK_APPEND;
 		else if (!ft_strcmp(tokens->value, "<<"))
