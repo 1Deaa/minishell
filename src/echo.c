@@ -12,17 +12,17 @@
 
 #include "minishell.h"
 
-void	echo(struct s_cmd *cmd)
+void	echo(t_cmd *cmd)
 {
-	struct s_execcmd	*exec;
-	int					i;
-	bool				newline;
+	t_execmd	*exec;
+	int			i;
+	bool		newline;
 
-	if (cmd->type != EXEC)
+	if (cmd->type != PS_EXEC)
 		return ;
 	i = 1;
 	newline = true;
-	exec = (struct s_execcmd *)cmd;
+	exec = (t_execmd *)cmd;
 	while (exec->argv[i] && strcmp(exec->argv[i], "-n") == 0)
 	{
 		newline = false;

@@ -14,8 +14,10 @@
 
 static void	shell_clean(t_shell *shell)
 {
+	(void)shell;
 	free(shell->command);
 	free_tokens(shell->tokens);
+	parse_clean(shell->parse);
 }
 
 void	shell_loop(t_shell *shell)
@@ -31,6 +33,7 @@ void	shell_loop(t_shell *shell)
 			shell_clean(shell);
 			continue ;
 		}
+		shell->parse = parser(shell->tokens);
 		shell_debug(shell);
 		shell_clean(shell);
 	}
