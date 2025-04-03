@@ -34,6 +34,7 @@ void	shell_loop(t_shell *shell)
 			continue ;
 		}
 		shell->parse = parser(shell->tokens);
+		execute(shell->parse);
 		shell_debug(shell);
 		shell_clean(shell);
 	}

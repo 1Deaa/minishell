@@ -1,29 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_utils.c                                     :+:      :+:    :+:   */
+/*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/19 23:20:04 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/19 23:20:05 by drahwanj         ###   ########.fr       */
+/*   Created: 2025/04/01 22:12:56 by drahwanj          #+#    #+#             */
+/*   Updated: 2025/04/01 22:12:56 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	is_redirection(t_token *node)
+static void	run_exec(t_execmd *ecmd)
 {
-	if (node->type == TK_APPEND || node->type == TK_HEREDOC
-		|| node->type == TK_REDIR_IN || node->type == TK_REDIR_OUT)
-		return (true);
-	return (false);
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid < 0)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	if (pid == 0)
+	{
+		execve(ecmd->argv[0], ecmd->argv, __environ);
+		perror("execve");
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		waitpid(pid, &status, 0);
+	}
 }
 
-bool	is_special(t_token *node)
+void	execute(t_cmd *cmd)
 {
-	if (node->type == TK_PIPE || is_redirection(node))
-		return (true);
-	else
-		return (false);
+	if (NULL == cmd)
+		return ;
+	if (cmd->type == PS_EXEC)
+	{
+		run_exec((t_execmd *)cmd);
+	}
 }

@@ -1,29 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_utils.c                                     :+:      :+:    :+:   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/19 23:20:04 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/19 23:20:05 by drahwanj         ###   ########.fr       */
+/*   Created: 2025/04/01 22:37:48 by drahwanj          #+#    #+#             */
+/*   Updated: 2025/04/01 22:37:49 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	is_redirection(t_token *node)
+char	*find_command_path(const char *command)
 {
-	if (node->type == TK_APPEND || node->type == TK_HEREDOC
-		|| node->type == TK_REDIR_IN || node->type == TK_REDIR_OUT)
-		return (true);
-	return (false);
-}
+	char	*path_env;
 
-bool	is_special(t_token *node)
-{
-	if (node->type == TK_PIPE || is_redirection(node))
-		return (true);
-	else
-		return (false);
+	path_env = getenv("PATH");
+	if (!path_env)
+		return (NULL);
 }
