@@ -31,7 +31,7 @@ static char	*expand(char *name, t_shell *shell)
 		free(name);
 		return (ft_strdup("$"));
 	}
-	ret = ft_strdup(getenv(name));
+	ret = ft_strdup(get_envp(shell->envp, name));
 	if (!ret)
 	{
 		free(name);
@@ -72,6 +72,8 @@ static void	expand_quoted(t_token *token, t_shell *shell)
 	i = 0;
 	str = NULL;
 	exp = NULL;
+	if (token->value[0] == '"')
+		i++;
 	while (token->value[i])
 	{
 		while (token->value[i] == '$' && token->value[i + 2] != '\0')
@@ -80,11 +82,14 @@ static void	expand_quoted(t_token *token, t_shell *shell)
 			str = ft_strjoin(str, exp);
 			free(exp);
 		}
+		if (token->value[i] == '"')
+			break ;
 		str = ft_charjoin(str, token->value[i]);
 		i++;
 	}
 	free(token->value);
 	token->value = str;
+	token->type = TK_WORD;
 }
 
 static void	expand_word(t_token *token, t_shell *shell)

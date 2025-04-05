@@ -14,7 +14,6 @@
 
 static void	shell_clean(t_shell *shell)
 {
-	(void)shell;
 	free(shell->command);
 	free_tokens(shell->tokens);
 	parse_clean(shell->parse);
@@ -27,15 +26,16 @@ void	shell_loop(t_shell *shell)
 	{
 		shell->command = shell_read(PROMPT);
 		shell->tokens = tokenize(shell->command);
-		shell->tokens = expander(shell->tokens, shell);
 		if (!is_correct_syntax(shell->tokens))
 		{
 			shell_clean(shell);
 			continue ;
 		}
+		shell->tokens = expander(shell->tokens, shell);
 		shell->parse = parser(shell->tokens);
 		shell_debug(shell);
 		shell_clean(shell);
 	}
+	free_envp(shell->envp, count_envp(shell->envp));
 	rl_clear_history();
 }
