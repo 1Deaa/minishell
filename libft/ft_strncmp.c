@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/13 18:42:52 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/18 15:53:54 by drahwanj         ###   ########.fr       */
+/*   Created: 2025/04/05 18:40:32 by drahwanj          #+#    #+#             */
+/*   Updated: 2025/04/05 18:40:33 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	t_shell	shell;
+	size_t	i;
 
-	(void)argc;
-	shell.argv = argv;
-	shell.envp = dup_envp(envp);
-	shell.debug = true;
-	shell_signal();
-	shell_loop(&shell);
-	return (EXIT_SUCCESS);
+	i = 0;
+	if (n == 0)
+		return (0);
+	while (i < n && s1[i] && s2[i])
+	{
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
+	}
+	if (i < n)
+		return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+	return (0);
 }
-
-/* ************************************************************************** */

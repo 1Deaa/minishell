@@ -157,6 +157,15 @@ void	print_redir(t_redircmd *rcmd, int depth, bool parent_last[]);
 void	print_ast(t_cmd *cmd, int depth, bool is_last, bool parent_last[]);
 
 /* ************************************************************************** */
+/*                                  ENVP                                      */
+/* ************************************************************************** */
+
+char	**dup_envp(char **envp);
+void	free_envp(char **envp, int count);
+int		count_envp(char **envp);
+char	*get_envp(char **envp, const char *name);
+
+/* ************************************************************************** */
 /*                               BUILT-IN                                     */
 /* ************************************************************************** */
 

@@ -26,7 +26,8 @@ FILES = ft_strchr.c    \
 		ft_charjoin.c  \
 		ft_strlcpy.c   \
 		ft_putstr_fd.c \
-		ft_memzero.c
+		ft_memzero.c   \
+		ft_strncmp.c
 
 OBJS = $(FILES:.c=.o)
 

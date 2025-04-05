@@ -22,8 +22,7 @@ bool	is_redirection(t_token *node)
 
 bool	is_special(t_token *node)
 {
-	if (node->type == TK_PIPE || is_redirection(node)
-		|| node->type == TK_AMPERSAND)
+	if (node->type == TK_PIPE || is_redirection(node))
 		return (true);
 	else
 		return (false);

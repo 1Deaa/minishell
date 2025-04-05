@@ -82,5 +82,9 @@ int		ft_putstr_fd(const char *str, int fd);
 s -> 0
 */
 void	ft_memzero(void *s, size_t n);
+/*
+Compare N bytes from S1 with S2.
+*/
+int	ft_strncmp(const char *s1, const char *s2, size_t n);
 
 #endif
