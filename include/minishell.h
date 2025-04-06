@@ -170,6 +170,7 @@ char	*get_envp(char **envp, const char *name);
 /* ************************************************************************** */
 
 void	execute(t_cmd *cmd);
+char	*find_command_path(t_shell *shell, const char *command);
 
 /* ************************************************************************** */
 /*                               BUILT-IN                                     */

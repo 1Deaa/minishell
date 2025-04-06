@@ -34,6 +34,7 @@ void	shell_loop(t_shell *shell)
 		shell->tokens = expander(shell->tokens, shell);
 		shell->parse = parser(shell->tokens);
 		execute(shell->parse);
+		printf("%s", find_command_path(shell, "ls"));
 		shell_debug(shell);
 		shell_clean(shell);
 	}

@@ -21,7 +21,7 @@ FILES = main.c		\
 		expand.c expand_utils.c \
 		parse.c	parse_utils.c parse_print.c parse_clean.c \
 		envp.c \
-		exec.c
+		exec.c exec_utils.c 
 
 
 CC = cc
