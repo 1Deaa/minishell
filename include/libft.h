@@ -85,10 +85,14 @@ void	ft_memzero(void *s, size_t n);
 /*
 Compare N bytes from S1 with S2.
 */
-int 	ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 /*
 Split S into parts with delimiter C.
 */
 char	**ft_split(char const *s, char c);
+/*
+free 2D arr
+*/
+void	free_split(char **arr);
 
 #endif

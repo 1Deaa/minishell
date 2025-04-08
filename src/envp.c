@@ -26,7 +26,7 @@ void	free_envp(char **envp, int count)
 {
 	int	i;
 	int	temp;
-	
+
 	if (!envp)
 		return ;
 	temp = count_envp(envp);

@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static void	shell_clean(t_shell *shell)
+void	shell_clean(t_shell *shell)
 {
 	free(shell->command);
 	free_tokens(shell->tokens);
@@ -24,7 +24,7 @@ void	shell_loop(t_shell *shell)
 	shell->parse = NULL;
 	while (0x1DEAA)
 	{
-		shell->command = shell_read(PROMPT);
+		shell->command = shell_read(shell, PROMPT);
 		shell->tokens = tokenize(shell->command);
 		if (!is_correct_syntax(shell->tokens))
 		{
@@ -33,11 +33,8 @@ void	shell_loop(t_shell *shell)
 		}
 		shell->tokens = expander(shell->tokens, shell);
 		shell->parse = parser(shell->tokens);
-		execute(shell->parse);
-		printf("%s", find_command_path(shell, "ls"));
+		execute(shell, shell->parse);
 		shell_debug(shell);
 		shell_clean(shell);
 	}
-	free_envp(shell->envp, count_envp(shell->envp));
-	rl_clear_history();
 }

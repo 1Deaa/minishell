@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static void	run_exec(t_execmd *ecmd)
+static void	run_exec(t_shell *shell, t_execmd *ecmd)
 {
 	pid_t	pid;
 	int		status;
@@ -25,7 +25,8 @@ static void	run_exec(t_execmd *ecmd)
 	}
 	if (pid == 0)
 	{
-		execve(ecmd->argv[0], ecmd->argv, __environ);
+		execve(find_path(shell, ecmd->argv[0]), ecmd->argv, shell->envp);
+		//TODO: fix potential memory leak
 		perror("execve");
 		exit(EXIT_FAILURE);
 	}
@@ -35,12 +36,12 @@ static void	run_exec(t_execmd *ecmd)
 	}
 }
 
-void	execute(t_cmd *cmd)
+void	execute(t_shell *shell, t_cmd *cmd)
 {
 	if (NULL == cmd)
 		return ;
 	if (cmd->type == PS_EXEC)
 	{
-		run_exec((t_execmd *)cmd);
+		run_exec(shell, (t_execmd *)cmd);
 	}
 }

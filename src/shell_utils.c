@@ -12,6 +12,23 @@
 
 #include "minishell.h"
 
+/*
+FREE ENVIRONMENT VARIABLES
+FREE READLINE HISTORY
+ *
+ * add more...
+ *
+PRINT EXIT
+EXIT
+*/
+static void	shell_exit(t_shell *shell)
+{
+	free_envp(shell->envp, count_envp(shell->envp));
+	rl_clear_history();
+	printf("exit\n");
+	exit(EXIT_SUCCESS);
+}
+
 void	shell_debug(t_shell *shell)
 {
 	if (shell->command[0] != '\0' && shell->debug == true)
@@ -33,15 +50,14 @@ void	shell_debug(t_shell *shell)
 	}
 }
 
-char	*shell_read(char *prompt)
+char	*shell_read(t_shell *shell, char *prompt)
 {
 	char	*input;
 
 	input = readline(prompt);
 	if (input == NULL)
 	{
-		printf("exit\n");
-		exit(EXIT_SUCCESS);
+		shell_exit(shell);
 	}
 	if (ft_strlen(input) > 0)
 		add_history(input);

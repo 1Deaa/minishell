@@ -56,8 +56,9 @@ typedef struct s_shell
 //SHELL PROTOTYPES
 void	shell_signal(void);
 void	shell_loop(t_shell *shell);
+void	shell_clean(t_shell *shell);
 void	shell_debug(t_shell *shell);
-char	*shell_read(char *prompt);
+char	*shell_read(t_shell *shell, char *prompt);
 
 /* ************************************************************************** */
 /*                           TOKEN + EXPAND + SYNTAX                          */
@@ -122,6 +123,7 @@ typedef struct s_execcmd
 {
 	t_parse	type;
 	char	**argv;
+	char	*path;
 }	t_execmd;
 
 typedef struct s_pipecmd
@@ -169,8 +171,8 @@ char	*get_envp(char **envp, const char *name);
 /*                                EXECUTE                                     */
 /* ************************************************************************** */
 
-void	execute(t_cmd *cmd);
-char	*find_command_path(t_shell *shell, const char *command);
+void	execute(t_shell *shell, t_cmd *cmd);
+char	*find_path(t_shell *shell, char *command);
 
 /* ************************************************************************** */
 /*                               BUILT-IN                                     */
