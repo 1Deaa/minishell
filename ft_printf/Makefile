@@ -37,19 +37,17 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@$(AR) $(NAME) $(OBJS)
-	@echo "$(GREEN)✔ $(MAGENTA)created $(CYAN)library$(MAGENTA) file!"
+	@echo "$(GREEN)✔ $(MAGENTA)created $(CYAN)$(NAME)$(MAGENTA)!$(RESET)"
 
 %.o: %.c
 	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
-	@echo "$(WHITE)· $(YELLOW)compiling file: $(BLINK)○$(RESET)"
+	@echo "· compiling ft_printf/$<"
 
 clean:
 	@$(RM) $(OBJS)
-	@echo "$(WHITE)· $(RED)all object files were deleted!"
 
 fclean: clean
 	@$(RM) $(NAME)
-	@echo "$(WHITE)·$(RED) library file was deleted!"
 
 re: fclean all
 

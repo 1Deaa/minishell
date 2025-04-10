@@ -33,6 +33,20 @@ FILES = ft_strchr.c    \
 
 OBJS = $(FILES:.c=.o)
 
+# COLORS
+
+DEF_COLOR = \e[1;39m
+RESET = \e[0m
+GRAY = \e[1;90m
+RED = \e[1;91m
+YELLOW = \e[1;93m
+GREEN = \e[1;92m
+BLUE = \e[1;94m
+MAGENTA = \e[1;95m
+CYAN = \e[1;96m
+WHITE = \e[1;97m
+BLINK = \e[5m
+
 CC = cc
 INCLUDE = -I ../include
 CFLAGS = -Wall -Werror -Wextra
@@ -41,6 +55,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@ar rcs $(NAME) $(OBJS)
+	@echo "$(GREEN)✔ $(MAGENTA)created $(YELLOW)$(NAME)$(MAGENTA)!$(RESET)"
 
 %.o: %.c
 	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
