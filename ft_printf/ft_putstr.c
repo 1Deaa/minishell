@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/13 18:42:52 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/18 15:53:54 by drahwanj         ###   ########.fr       */
+/*   Created: 2024/09/16 15:30:38 by drahwanj          #+#    #+#             */
+/*   Updated: 2024/09/18 13:42:04 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "ft_printf.h"
 
-int	main(int argc, char **argv, char **envp)
+int	ft_putstr(int fd, char *str)
 {
-	t_shell	shell;
+	int	i;
 
-	(void)argc;
-	shell.argv = argv;
-	shell.envp = dup_envp(envp);
-	shell.debug = false;
-	shell_signal();
-	shell_loop(&shell);
-	return (EXIT_SUCCESS);
+	i = 0;
+	if (!str)
+	{
+		write(fd, "(null)", 6);
+		return (6);
+	}
+	while (str[i] != '\0')
+	{
+		write(fd, &str[i], 1);
+		i++;
+	}
+	return (i);
 }
-
-/* ************************************************************************** */

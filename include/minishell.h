@@ -27,6 +27,7 @@
 # include <termios.h>
 # include "colors.h"
 # include "libft.h"
+# include "ft_printf.h"
 
 typedef struct s_shell	t_shell;
 typedef struct s_token	t_token;
@@ -171,8 +172,9 @@ char	*get_envp(char **envp, const char *name);
 /*                                EXECUTE                                     */
 /* ************************************************************************** */
 
-void	execute(t_shell *shell, t_cmd *cmd);
+void	run_exec(t_shell *shell, t_execmd *ecmd);
 char	*find_path(t_shell *shell, char *command);
+void	execute(t_shell *shell, t_cmd *cmd);
 
 /* ************************************************************************** */
 /*                               BUILT-IN                                     */

@@ -1,28 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putchar.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/13 18:42:52 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/18 15:53:54 by drahwanj         ###   ########.fr       */
+/*   Created: 2024/09/16 15:31:04 by drahwanj          #+#    #+#             */
+/*   Updated: 2024/09/16 15:31:07 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "ft_printf.h"
 
-int	main(int argc, char **argv, char **envp)
+int	ft_putchar(int fd, int c)
 {
-	t_shell	shell;
-
-	(void)argc;
-	shell.argv = argv;
-	shell.envp = dup_envp(envp);
-	shell.debug = false;
-	shell_signal();
-	shell_loop(&shell);
-	return (EXIT_SUCCESS);
+	write(fd, &c, 1);
+	return (1);
 }
-
-/* ************************************************************************** */

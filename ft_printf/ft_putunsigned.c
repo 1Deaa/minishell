@@ -1,28 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putunsigned.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/13 18:42:52 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/18 15:53:54 by drahwanj         ###   ########.fr       */
+/*   Created: 2024/09/16 15:28:59 by drahwanj          #+#    #+#             */
+/*   Updated: 2024/09/16 18:25:45 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "ft_printf.h"
 
-int	main(int argc, char **argv, char **envp)
+int	ft_putunsigned(int fd, unsigned int n)
 {
-	t_shell	shell;
+	long unsigned int	nb;
+	int					counter;
 
-	(void)argc;
-	shell.argv = argv;
-	shell.envp = dup_envp(envp);
-	shell.debug = false;
-	shell_signal();
-	shell_loop(&shell);
-	return (EXIT_SUCCESS);
+	counter = 0;
+	nb = n;
+	if (nb <= 9)
+	{
+		ft_putchar(fd, nb + '0');
+		counter += 1;
+	}
+	if (nb > 9)
+	{
+		counter += ft_putunsigned(fd, nb / 10);
+		ft_putunsigned(fd, nb % 10);
+		counter += 1;
+	}
+	return (counter);
 }
-
-/* ************************************************************************** */

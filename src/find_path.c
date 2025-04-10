@@ -68,5 +68,5 @@ char	*find_path(t_shell *shell, char *command)
 		free(ret);
 	}
 	free_split(paths);
-	return (ft_strdup(""));
+	return (NULL);
 }
