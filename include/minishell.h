@@ -56,6 +56,7 @@ typedef struct s_shell
 
 //SHELL PROTOTYPES
 void	shell_signal(void);
+void	shell_signal_reset(void);
 void	shell_loop(t_shell *shell);
 void	shell_clean(t_shell *shell);
 void	shell_debug(t_shell *shell);

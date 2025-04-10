@@ -27,8 +27,7 @@ static char *get_path(t_shell *shell, t_execmd *ecmd)
 
 static void	run_child(t_shell *shell, t_execmd *ecmd, char *path)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	shell_signal_reset();
 	execve(path, ecmd->argv, shell->envp);
 	ft_printf(2, NAME": execve error\n");
 	free(path);

@@ -32,6 +32,12 @@ static void	signal_handler(int signum)
 	}
 }
 
+void	shell_signal_reset(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+}
+
 void	shell_signal(void)
 {
 	struct sigaction	sa;
