@@ -67,14 +67,3 @@ void	run_exec(t_shell *shell, t_execmd *ecmd)
 		child_exit(shell, &status, path);
 	}
 }
-
-void	execute(t_shell *shell, t_cmd *cmd)
-{
-	if (!cmd)
-		return ;
-	
-	if (cmd->type == PS_EXEC)
-	{
-		run_exec(shell, (t_execmd *)cmd);
-	}
-}

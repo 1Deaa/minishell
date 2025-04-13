@@ -140,6 +140,7 @@ typedef struct s_redircmd
 	t_parse	type;
 	t_cmd	*cmd;
 	char	*file;
+	int		flags;
 	int		mode;
 	int		fd;
 }	t_redircmd;
@@ -148,9 +149,12 @@ typedef struct s_redircmd
 t_cmd	*parser(t_token *tokens);
 t_cmd	*parse_exec(t_token **token);
 void	parse_clean(t_cmd *cmd);
+
 /*PARSE UTILS*/
 bool	is_exec(t_token *token);
 int		count_exec_args(t_token *token);
+void	configure_redir(t_redircmd *rcmd, const char *op);
+
 /*PRINT ABSTRACT SYNTAX TREE*/
 void	print_ast_tree(t_cmd *ast);
 void	print_indent(int depth, bool parent_last[]);
@@ -173,9 +177,9 @@ char	*get_envp(char **envp, const char *name);
 /*                                EXECUTE                                     */
 /* ************************************************************************** */
 
-void	run_exec(t_shell *shell, t_execmd *ecmd);
 char	*find_path(t_shell *shell, char *command);
-void	execute(t_shell *shell, t_cmd *cmd);
+void	run_exec(t_shell *shell, t_execmd *ecmd);
+void	run_redir(t_shell *shell, t_redircmd *rcmd);
 
 /* ************************************************************************** */
 /*                               BUILT-IN                                     */

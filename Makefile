@@ -22,11 +22,12 @@ FILES = main.c		\
 		parse.c	parse_utils.c parse_print.c parse_clean.c \
 		envp.c \
 		exec.c \
-		find_path.c
+		find_path.c \
+		redir.c 
 
 CC = cc
 RM = rm -rf
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g
 LINK = -lreadline -lncurses libft/libft.a ft_printf/libftprintf.a
 INCLUDE = -I include
 MAKEFLAGS += --no-print-directory

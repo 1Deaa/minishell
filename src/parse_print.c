@@ -62,8 +62,8 @@ void	print_pipe(t_pipecmd *pcmd, int depth, bool parent_last[])
 
 void	print_redir(t_redircmd *rcmd, int depth, bool parent_last[])
 {
-	printf("REDIR: file = %s, fd = %d, mode = %d\n",
-		rcmd->file, rcmd->fd, rcmd->mode);
+	printf("REDIR: file = %s, fd = %d, flags = %d mode = %d\n",
+		rcmd->file, rcmd->fd, rcmd->flags, rcmd->mode);
 	parent_last[depth] = true;
 	print_ast(rcmd->cmd, depth + 1, true, parent_last);
 }

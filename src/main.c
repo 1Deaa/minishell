@@ -19,7 +19,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	shell.argv = argv;
 	shell.envp = dup_envp(envp);
-	shell.debug = false;
+	shell.debug = true;
 	shell_signal();
 	shell_loop(&shell);
 	return (EXIT_SUCCESS);

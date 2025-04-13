@@ -57,3 +57,30 @@ void	print_ast_tree(t_cmd *ast)
 	ft_memzero(parent_last, sizeof(parent_last));
 	print_ast(ast, 0, true, parent_last);
 }
+
+void	configure_redir(t_redircmd *rcmd, const char *op)
+{
+	if (ft_strcmp(op, "<") == 0)
+	{
+		rcmd->flags = O_RDONLY;
+		rcmd->mode = 0;
+		rcmd->fd = 0;
+	}
+	else if (ft_strcmp(op, ">") == 0)
+	{
+		rcmd->flags = O_WRONLY | O_CREAT | O_TRUNC;
+		rcmd->mode = 0644;
+		rcmd->fd = 1;
+	}
+	else if (ft_strcmp(op, ">>") == 0)
+	{
+		rcmd->flags = O_WRONLY | O_CREAT | O_APPEND;
+		rcmd->mode = 0644;
+		rcmd->fd = 1;
+	}
+	else if (ft_strcmp(op, "<<") == 0)
+	{
+		rcmd->flags = 0; //TODO
+		rcmd->fd = 0; //TODO
+	}
+}

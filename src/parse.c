@@ -83,10 +83,9 @@ t_cmd	*parse_full_command(t_token **token)
 		rcmd = (t_redircmd *)malloc(sizeof(t_redircmd)); //TODO
 		rcmd->type = PS_REDIR;
 		rcmd->cmd = cmd;
+		configure_redir(rcmd, (*token)->value);
 		*token = (*token)->next;
 		rcmd->file = (char *)ft_strdup((*token)->value); //TODO
-		rcmd->mode = O_WRONLY | O_CREAT | O_TRUNC; //TODO
-		rcmd->fd = 1; //TODO
 		*token = (*token)->next;
 		cmd = (t_cmd *)rcmd;
 	}
