@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static char *get_path(t_shell *shell, t_execmd *ecmd)
+static char	*get_path(t_shell *shell, t_execmd *ecmd)
 {
 	char	*path;
 

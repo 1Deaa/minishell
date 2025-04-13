@@ -41,6 +41,17 @@ void	free_envp(char **envp, int count)
 	free(envp);
 }
 
+void	print_envp(const char *prefix, char **envp)
+{
+	int	i;
+
+	if (!envp)
+		return ;
+	i = -1;
+	while (envp[++i])
+		ft_printf(1, "%s %s\n", prefix, envp[i]);
+}
+
 char	**dup_envp(char **envp)
 {
 	char	**env_copy;

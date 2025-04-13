@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   bn_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,39 +12,9 @@
 
 #include "minishell.h"
 
-void	echo(t_cmd *cmd)
+void	echo(int argc, char **argv, char **envp)
 {
-	t_execmd	*exec;
-	int			i;
-	bool		newline;
-
-	if (cmd->type != PS_EXEC)
-		return ;
-	i = 1;
-	newline = true;
-	exec = (t_execmd *)cmd;
-	while (exec->argv[i] && strcmp(exec->argv[i], "-n") == 0)
-	{
-		newline = false;
-		i++;
-	}
-	while (exec->argv[i])
-	{
-		printf("%s", exec->argv[i]);
-		if (exec->argv[i + 1])
-			printf(" ");
-		i++;
-	}
-	if (newline)
-		printf("\n");
+	(void)argc;
+	(void)argv;
+	(void)envp;
 }
-/*
-int	main(void)
-{
-	struct s_execcmd cmd;
-	cmd.type = EXEC;
-	char *args[] = {"echo", "Hello", NULL};
-	cmd.argv = args;
-	echo((struct s_cmd *)&cmd);
-	return (0);
-}*/

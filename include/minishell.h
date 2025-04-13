@@ -172,6 +172,7 @@ char	**dup_envp(char **envp);
 void	free_envp(char **envp, int count);
 int		count_envp(char **envp);
 char	*get_envp(char **envp, const char *name);
+void	print_envp(const char *prefix, char **envp);
 
 /* ************************************************************************** */
 /*                                EXECUTE                                     */
@@ -185,6 +186,9 @@ void	run_redir(t_shell *shell, t_redircmd *rcmd);
 /*                               BUILT-IN                                     */
 /* ************************************************************************** */
 
-void	echo(t_cmd *cmd);
+void	echo(int argc, char **argv, char **envp);
+void	env(int argc, char **argv, char **envp);
+void	export(int argc, char **argv, char **envp);
+void	pwd(int argc, char **argv, char **envp);
 
 #endif

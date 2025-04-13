@@ -14,7 +14,6 @@ NAME = minishell
 
 FILES = main.c		\
 		signals.c	\
-		echo.c		\
 		shell.c shell_utils.c	\
 		token.c token_utils.c	\
 		syntax.c syntax_utils.c \
@@ -23,7 +22,8 @@ FILES = main.c		\
 		envp.c \
 		exec.c \
 		find_path.c \
-		redir.c 
+		redir.c \
+		bn_echo.c bn_env.c bn_export.c bn_pwd.c
 
 CC = cc
 RM = rm -rf
