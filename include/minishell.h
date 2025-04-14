@@ -188,7 +188,7 @@ void	run_redir(t_shell *shell, t_redircmd *rcmd);
 
 void	echo(int argc, char **argv, char **envp);
 void	env(int argc, char **argv, char **envp);
-void	export(int argc, char **argv, char **envp);
+void	export(t_shell *shell, char **argv, char **envp);
 void	pwd(int argc, char **argv, char **envp);
 
 #endif
