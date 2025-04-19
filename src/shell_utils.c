@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+extern int	g_status;
+
 /*
 FREE ENVIRONMENT VARIABLES
 FREE READLINE HISTORY
@@ -20,13 +22,13 @@ FREE READLINE HISTORY
  *
 PRINT EXIT
 EXIT
-*/
+ */
 static void	shell_exit(t_shell *shell)
 {
 	free_envp(shell->envp, count_envp(shell->envp));
 	rl_clear_history();
 	printf("exit\n");
-	exit(EXIT_SUCCESS);
+	exit(g_status);
 }
 
 void	shell_debug(t_shell *shell)
@@ -44,17 +46,17 @@ void	shell_debug(t_shell *shell)
 			printf("━━━\nSYNTAX: "GREEN"correct ✔\n"RESET BOLD);
 		else
 			printf("SYNTAX: "RED"failure!\n"RESET BOLD);
-		printf("━━━\nAST:\n");
-		print_ast_tree(shell->parse);
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"RESET);
 	}
 }
 
-char	*shell_read(t_shell *shell, char *prompt)
+char	*shell_read(t_shell *shell)
 {
 	char	*input;
 
-	input = readline(prompt);
+	if (g_status == 0)
+		input = readline(WPROMPT);
+	else
+		input = readline(XPROMPT);
 	if (input == NULL)
 	{
 		shell_exit(shell);

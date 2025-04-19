@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+extern int	g_status;
+
 static bool	is_first(t_token *node)
 {
 	if (is_special(node) && !is_redirection(node))
@@ -24,9 +26,11 @@ static bool	is_first(t_token *node)
 
 static bool	is_adjacent(t_token *prev, t_token *curr)
 {
+	if (prev->type == TK_PIPE && is_redirection(curr))
+		return (false);
 	if (is_special(prev) && is_special(curr))
 	{
-		printf(NAME": syntax error unexpected token '%s'\n", curr->value);
+		shell_error(NEARERR, curr->value, 1);
 		return (true);
 	}
 	return (false);
@@ -42,7 +46,7 @@ static bool	is_closed_quote(t_token *node)
 		i = ft_strlen(node->value);
 		if (i == 1 || node->value[i - 1] != node->value[0])
 		{
-			printf(NAME": syntax error missing closing quote\n");
+			shell_error(QUOTE, NULL, 1);
 			return (false);
 		}
 	}
@@ -53,7 +57,7 @@ static bool	is_last(t_token *node)
 {
 	if (node->type == TK_PIPE || is_redirection(node))
 	{
-		printf(NAME": syntax error unexpected token 'newline'\n");
+		shell_error(NEARERR, "`newline'", 1);
 		return (true);
 	}
 	return (false);

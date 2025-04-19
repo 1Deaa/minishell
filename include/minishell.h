@@ -31,12 +31,16 @@
 
 typedef struct s_shell	t_shell;
 typedef struct s_token	t_token;
+typedef struct s_pak	t_pak;
 
 /* ************************************************************************** */
 /*                                 DEFINES                                    */
 /* ************************************************************************** */
 
-# define PROMPT "\033[1;34m· \033[0m\033[1;31mstarshell\033[1;34m $ \033[0m"
+# define READ_END 0
+# define WRITE_END 1
+# define WPROMPT "\033[1;33m· \033[0m\033[1;34mstarshell\033[1;32m $ \033[0m"
+# define XPROMPT "\033[1;33m· \033[0m\033[1;34mstarshell\033[1;31m $ \033[0m"
 # define NAME	"starshell"
 
 /* ************************************************************************** */
@@ -49,9 +53,8 @@ typedef struct s_shell
 	char			**argv;
 	char			**envp;
 	bool			debug;
-	int				exit;
 	t_token			*tokens;
-	struct s_cmd	*parse;
+	t_pak			*cmds;
 }	t_shell;
 
 //SHELL PROTOTYPES
@@ -60,7 +63,7 @@ void	shell_signal_reset(void);
 void	shell_loop(t_shell *shell);
 void	shell_clean(t_shell *shell);
 void	shell_debug(t_shell *shell);
-char	*shell_read(t_shell *shell, char *prompt);
+char	*shell_read(t_shell *shell);
 
 /* ************************************************************************** */
 /*                           TOKEN + EXPAND + SYNTAX                          */
@@ -72,7 +75,6 @@ typedef enum e_token_type
 	TK_WORD,
 	TK_REDIR_IN,
 	TK_REDIR_OUT,
-	//TK_AMPERSAND,
 	TK_SINGLE_QUOTED,
 	TK_DOUBLE_QUOTED,
 	TK_APPEND,
@@ -98,6 +100,7 @@ t_token	*tokenize(const char *input);
 void	add_token(t_token **head, const char *value);
 void	free_tokens(t_token	*token);
 void	print_tokens(t_token *token);
+int		count_word_tokens(t_token *token);
 void	assign_token_types(t_token *tokens);
 
 //SYNTAX PROTOTYPES
@@ -109,60 +112,43 @@ bool	is_correct_syntax(t_token *tokens);
 /*                                  PARSE                                     */
 /* ************************************************************************** */
 
-typedef enum e_parse
+typedef struct s_pak
 {
-	PS_EXEC,
-	PS_PIPE,
-	PS_REDIR,
-}	t_parse;
+	char			**full_cmd;
+	char			*full_path;
+	int				infile;
+	int				outfile;
+	struct s_pak	*next;
+	struct s_pak	*prev;
+}					t_pak;
 
-typedef struct s_cmd
+t_pak	*parse(t_shell *shell, t_token *token);
+int		parse_redir(t_pak **curr, t_token **token);
+int		parse_redir_out(t_pak **curr, t_token **token);
+int		parse_redir_in(t_pak **curr, t_token **token);
+int		parse_redir_app(t_pak **curr, t_token **token);
+void	print_paks(t_pak *head);
+
+/* ************************************************************************** */
+/*                                  ERROR                                     */
+/* ************************************************************************** */
+
+enum	e_error
 {
-	t_parse	type;
-}	t_cmd;
+	QUOTE = 1,
+	NDIR = 2,
+	NPERM = 3,
+	NCMD = 6,
+	DUPERR = 7,
+	FORKERR = 8,
+	PIPERR = 9,
+	NEARERR = 10,
+	MEM = 11,
+	IS_DIR = 12,
+	NOT_DIR = 13
+};
 
-typedef struct s_execcmd
-{
-	t_parse	type;
-	char	**argv;
-	char	*path;
-}	t_execmd;
-
-typedef struct s_pipecmd
-{
-	t_parse	type;
-	t_cmd	*left;
-	t_cmd	*right;
-}	t_pipecmd;
-
-typedef struct s_redircmd
-{
-	t_parse	type;
-	t_cmd	*cmd;
-	char	*file;
-	int		flags;
-	int		mode;
-	int		fd;
-}	t_redircmd;
-
-/*PARSE PROTOTYPES*/
-t_cmd	*parser(t_token *tokens);
-t_cmd	*parse_exec(t_token **token);
-void	parse_clean(t_cmd *cmd);
-
-/*PARSE UTILS*/
-bool	is_exec(t_token *token);
-int		count_exec_args(t_token *token);
-void	configure_redir(t_redircmd *rcmd, const char *op);
-
-/*PRINT ABSTRACT SYNTAX TREE*/
-void	print_ast_tree(t_cmd *ast);
-void	print_indent(int depth, bool parent_last[]);
-void	print_branch(int depth, bool is_last);
-void	print_exec(t_execmd *ecmd);
-void	print_pipe(t_pipecmd *pcmd, int depth, bool parent_last[]);
-void	print_redir(t_redircmd *rcmd, int depth, bool parent_last[]);
-void	print_ast(t_cmd *cmd, int depth, bool is_last, bool parent_last[]);
+void	*shell_error(int err_type, char *param, int err);
 
 /* ************************************************************************** */
 /*                                  ENVP                                      */
@@ -179,8 +165,6 @@ void	print_envp(const char *prefix, char **envp);
 /* ************************************************************************** */
 
 char	*find_path(t_shell *shell, char *command);
-void	run_exec(t_shell *shell, t_execmd *ecmd);
-void	run_redir(t_shell *shell, t_redircmd *rcmd);
 
 /* ************************************************************************** */
 /*                               BUILT-IN                                     */

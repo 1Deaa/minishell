@@ -30,6 +30,7 @@ t_token	*new_token(const char *value)
 		return (NULL);
 	}
 	node->next = NULL;
+	node->prev = NULL;
 	return (node);
 }
 

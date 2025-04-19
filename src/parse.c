@@ -1,103 +1,110 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/22 11:20:45 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/22 11:20:46 by drahwanj         ###   ########.fr       */
+/*   Created: 2025/04/17 07:47:06 by drahwanj          #+#    #+#             */
+/*   Updated: 2025/04/17 07:47:07 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_cmd	*parse_exec(t_token **token)
-{
-	t_execmd	*ecmd;
-	int			argc;
+extern int	g_status;
 
-	argc = 0;
-	ecmd = (t_execmd *)malloc(sizeof(t_execmd));
-	ecmd->type = PS_EXEC;
-	ecmd->argv = (char **)malloc(sizeof(char *) *(count_exec_args(*token) + 1));
-	while (*token && is_exec(*token))
-	{
-		ecmd->argv[argc++] = (char *)ft_strdup((*token)->value); //TODO
-		*token = (*token)->next;
-	}
-	ecmd->argv[argc] = NULL;
-	return ((t_cmd *)ecmd);
+static t_pak	*new_pak(void)
+{
+	t_pak	*pak;
+
+	pak = (t_pak *)ft_calloc(1, sizeof(t_pak));
+	if (!pak)
+		return (NULL);
+	pak->infile = STDIN_FILENO;
+	pak->outfile = STDOUT_FILENO;
+	return (pak);
 }
 
-t_cmd	*parse_simple_command(t_token **token)
+int	parse_pipe(t_pak **curr, t_token **token)
 {
-	t_cmd		*cmd;
-	t_redircmd	*rcmd;
+	t_pak	*next;
 
-	cmd = parse_exec(token);
-	while (*token && is_redirection(*token))
+	if (!curr || !*curr)
+		return (-1);
+	next = new_pak();
+	if (!next)
+		return (-1);
+	(*curr)->next = next;
+	next->prev = *curr;
+	*curr = next;
+	(*token) = (*token)->next;
+	return (0);
+}
+
+int	parse_words(t_shell *shell, t_pak **curr, t_token **token)
+{
+	char	**argv;
+	int		i;
+	int		wc;
+
+	if (!curr || !*curr)
+		return (-1);
+	wc = count_word_tokens(*token);
+	argv = (char **)malloc(sizeof(char *) * (wc + 1));
+	if (!argv)
+		return (-1);
+	i = 0;
+	while (i < wc)
 	{
-		if (!*token || !((*token)->next->next
-				&& (*token)->next->next->type == TK_PIPE))
+		argv[i] = (*token)->value;
+		(*token) = (*token)->next;
+		i++;
+	}
+	argv[i] = NULL;
+	(*curr)->full_cmd = argv;
+	(*curr)->full_path = find_path(shell, argv[0]);
+	return (0);
+}
+
+int	parse_token(t_shell *shell, t_pak **curr, t_token **token)
+{
+	if ((*token)->type == TK_PIPE)
+	{
+		if (parse_pipe(curr, token) < 0)
+			return (-1);
+		return (0);
+	}
+	else if ((*token)->type == TK_WORD)
+	{
+		if (parse_words(shell, curr, token) < 0)
+			return (-1);
+		return (0);
+	}
+	else if (is_redirection(*token))
+	{
+		if (parse_redir(curr, token) < 0)
+			return (-1);
+		return (0);
+	}
+	return (-1);
+}
+
+t_pak	*parse(t_shell *shell, t_token *token)
+{
+	t_pak	*head;
+	t_pak	*curr;
+	int		res;
+
+	curr = new_pak();
+	if (!curr)
+		return (NULL);
+	head = curr;
+	while (token)
+	{
+		res = parse_token(shell, &curr, &token);
+		if (res < 0)
 			break ;
-		rcmd = (t_redircmd *)malloc(sizeof(t_redircmd)); //TODO
-		rcmd->type = PS_REDIR;
-		rcmd->cmd = cmd;
-		*token = (*token)->next;
-		rcmd->file = (char *)ft_strdup((*token)->value); //TODO
-		*token = (*token)->next;
-		rcmd->mode = O_WRONLY | O_CREAT | O_TRUNC; //TODO
-		rcmd->fd = 1; //TODO
-		cmd = (t_cmd *)rcmd;
 	}
-	return (cmd);
-}
-
-t_cmd	*parse_pipeline(t_token **token)
-{
-	t_cmd		*cmd;
-	t_pipecmd	*pcmd;
-
-	cmd = parse_simple_command(token);
-	while (*token && (*token)->type == TK_PIPE)
-	{
-		*token = (*token)->next;
-		pcmd = (t_pipecmd *)malloc(sizeof(t_pipecmd)); //TODO
-		pcmd->type = PS_PIPE;
-		pcmd->left = cmd;
-		pcmd->right = parse_simple_command(token);
-		cmd = (t_cmd *)pcmd;
-	}
-	return (cmd);
-}
-
-t_cmd	*parse_full_command(t_token **token)
-{
-	t_cmd		*cmd;
-	t_redircmd	*rcmd;
-
-	cmd = parse_pipeline(token);
-	while (*token && is_redirection(*token))
-	{
-		rcmd = (t_redircmd *)malloc(sizeof(t_redircmd)); //TODO
-		rcmd->type = PS_REDIR;
-		rcmd->cmd = cmd;
-		configure_redir(rcmd, (*token)->value);
-		*token = (*token)->next;
-		rcmd->file = (char *)ft_strdup((*token)->value); //TODO
-		*token = (*token)->next;
-		cmd = (t_cmd *)rcmd;
-	}
-	return (cmd);
-}
-
-t_cmd	*parser(t_token *tokens)
-{
-	t_token	*current;
-	t_cmd	*ast;
-
-	current = tokens;
-	ast = parse_full_command(&current);
-	return (ast);
+	return (head);
 }

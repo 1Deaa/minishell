@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+extern int g_status;
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
@@ -20,6 +22,7 @@ int	main(int argc, char **argv, char **envp)
 	shell.argv = argv;
 	shell.envp = dup_envp(envp);
 	shell.debug = true;
+	g_status = 0;
 	shell_signal();
 	shell_loop(&shell);
 	return (EXIT_SUCCESS);

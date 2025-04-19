@@ -16,15 +16,14 @@ void	shell_clean(t_shell *shell)
 {
 	free(shell->command);
 	free_tokens(shell->tokens);
-	parse_clean(shell->parse);
 }
 
 void	shell_loop(t_shell *shell)
 {
-	shell->parse = NULL;
+	shell->cmds = NULL;
 	while (0x1DEAA)
 	{
-		shell->command = shell_read(shell, PROMPT);
+		shell->command = shell_read(shell);
 		shell->tokens = tokenize(shell->command);
 		if (!is_correct_syntax(shell->tokens))
 		{
@@ -32,7 +31,8 @@ void	shell_loop(t_shell *shell)
 			continue ;
 		}
 		shell->tokens = expander(shell->tokens, shell);
-		shell->parse = parser(shell->tokens);
+		shell->cmds = parse(shell, shell->tokens);
+		print_paks(shell->cmds);
 		shell_debug(shell);
 		shell_clean(shell);
 	}

@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+int	g_status;
+
 static void	disable_ctrl_backslash(void)
 {
 	struct termios	term;

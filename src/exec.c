@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/*
 static char	*get_path(t_shell *shell, t_execmd *ecmd)
 {
 	char	*path;
@@ -66,4 +66,4 @@ void	run_exec(t_shell *shell, t_execmd *ecmd)
 		waitpid(pid, &status, 0);
 		child_exit(shell, &status, path);
 	}
-}
+}*/
