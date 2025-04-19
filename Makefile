@@ -21,7 +21,7 @@ FILES = main.c	\
 		envp.c \
 		exec.c \
 		error.c \
-		parse.c parse_redir.c parse_utils.c parse_old.c \
+		parse.c parse_redir.c parse_utils.c parse_print.c \
 		find_path.c \
 		redir.c \
 		bn_echo.c bn_env.c bn_export.c bn_pwd.c

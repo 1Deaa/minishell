@@ -32,6 +32,28 @@ char	*special_expand(char *str, t_shell *shell)
 	return (ret);
 }
 
+char	*exname(char *token, int *index)
+{
+	char	*ret;
+	int		i;
+
+	ret = NULL;
+	i = (*index) + 1;
+	while (is_expandable(token[++(*index)]))
+	{
+		if (token[*index] == '?' || token[*index] == '0'
+			|| token[*index] == '1')
+		{
+			(*index)++;
+			break ;
+		}
+	}
+	ret = ft_strndup(token + i, (*index) - i);
+	if (!ret)
+		return (ft_strdup(""));
+	return (ret);
+}
+
 bool	is_expandable(char c)
 {
 	if (ft_isalpha(c) || c == '_' || c == '?')

@@ -93,6 +93,7 @@ typedef struct s_token
 t_token	*expander(t_token *tokens, t_shell *shell);
 char	*special_expand(char *str, t_shell *shell);
 bool	is_expandable(char c);
+char	*exname(char *token, int *index);
 
 //TOKEN PROTOTYPES
 t_token	*new_token(const char *value);

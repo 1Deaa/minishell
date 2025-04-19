@@ -32,7 +32,6 @@ void	shell_loop(t_shell *shell)
 		}
 		shell->tokens = expander(shell->tokens, shell);
 		shell->cmds = parse(shell, shell->tokens);
-		print_paks(shell->cmds);
 		shell_debug(shell);
 		shell_clean(shell);
 	}

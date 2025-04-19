@@ -46,6 +46,7 @@ void	shell_debug(t_shell *shell)
 			printf("━━━\nSYNTAX: "GREEN"correct ✔\n"RESET BOLD);
 		else
 			printf("SYNTAX: "RED"failure!\n"RESET BOLD);
+		print_paks(shell->cmds);
 	}
 }
 

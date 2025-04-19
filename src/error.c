@@ -18,7 +18,7 @@ void	*shell_error(int err_type, char *param, int err)
 {
 	g_status = err;
 	if (err_type == QUOTE)
-		ft_printf(2, "%s: error while looking for matching quote\n", NAME);
+		ft_printf(2, "%s: error while looking for matching quote!", NAME);
 	else if (err_type == NDIR)
 		ft_printf(2, "%s: No such file for directory: ", NAME);
 	else if (err_type == NPERM)

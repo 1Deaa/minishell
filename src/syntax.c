@@ -46,7 +46,7 @@ static bool	is_closed_quote(t_token *node)
 		i = ft_strlen(node->value);
 		if (i == 1 || node->value[i - 1] != node->value[0])
 		{
-			shell_error(QUOTE, NULL, 1);
+			shell_error(QUOTE, "", 1);
 			return (false);
 		}
 	}
