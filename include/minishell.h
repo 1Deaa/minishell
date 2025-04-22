@@ -25,6 +25,7 @@
 # include <fcntl.h>
 # include <limits.h>
 # include <termios.h>
+# include <dirent.h>
 # include "colors.h"
 # include "libft.h"
 # include "ft_printf.h"
@@ -60,6 +61,7 @@ typedef struct s_shell
 //SHELL PROTOTYPES
 void	shell_signal(void);
 void	shell_signal_reset(void);
+void	shell_signal_ignore(void);
 void	shell_loop(t_shell *shell);
 void	shell_clean(t_shell *shell);
 void	shell_debug(t_shell *shell);
@@ -97,7 +99,7 @@ char	*exname(char *token, int *index);
 
 //TOKEN PROTOTYPES
 t_token	*new_token(const char *value);
-t_token	*tokenize(const char *input);
+t_token	*tokenizer(const char *input);
 void	add_token(t_token **head, const char *value);
 void	free_tokens(t_token	*token);
 void	print_tokens(t_token *token);
@@ -123,12 +125,14 @@ typedef struct s_pak
 	struct s_pak	*prev;
 }					t_pak;
 
-t_pak	*parse(t_shell *shell, t_token *token);
+t_pak	*parser(t_shell *shell, t_token *token);
 int		parse_redir(t_pak **curr, t_token **token);
 int		parse_redir_out(t_pak **curr, t_token **token);
 int		parse_redir_in(t_pak **curr, t_token **token);
 int		parse_redir_app(t_pak **curr, t_token **token);
 void	print_paks(t_pak *head);
+void	free_paks(t_pak *head);
+int		count_paks(t_pak *head);
 
 /* ************************************************************************** */
 /*                                  ERROR                                     */
@@ -166,13 +170,14 @@ void	print_envp(const char *prefix, char **envp);
 /* ************************************************************************** */
 
 char	*find_path(t_shell *shell, char *command);
+int		executer(t_shell *shell, t_pak *cmd);
 
 /* ************************************************************************** */
 /*                               BUILT-IN                                     */
 /* ************************************************************************** */
 
 void	echo(int argc, char **argv, char **envp);
-void	env(int argc, char **argv, char **envp);
+void	env(char **envp);
 void	export(t_shell *shell, char **argv, char **envp);
 void	pwd(int argc, char **argv, char **envp);
 

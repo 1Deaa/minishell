@@ -26,3 +26,33 @@ int	count_word_tokens(t_token *token)
 	}
 	return (i);
 }
+
+void	free_paks(t_pak *head)
+{
+	t_pak	*tmp;
+
+	while (head)
+	{
+		tmp = head->next;
+
+		if (head->full_cmd)
+			free_split(head->full_cmd);
+		if (head->full_path)
+			free(head->full_path);
+		free(head);
+		head = tmp;
+	}
+}
+
+int	count_paks(t_pak *head)
+{
+	int	count;
+
+	count = 0;
+	while (head)
+	{
+		count ++;
+		head = head->next;
+	}
+	return (count);
+}

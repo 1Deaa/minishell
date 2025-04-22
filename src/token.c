@@ -89,7 +89,7 @@ static char	*word_token(const char **p)
 	return (token);
 }
 
-t_token	*tokenize(const char *input)
+t_token	*tokenizer(const char *input)
 {
 	t_token		*head;
 	const char	*p;

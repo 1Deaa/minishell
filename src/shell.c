@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+extern int	g_status;
+
 void	shell_clean(t_shell *shell)
 {
 	free(shell->command);
@@ -20,18 +22,20 @@ void	shell_clean(t_shell *shell)
 
 void	shell_loop(t_shell *shell)
 {
+
 	shell->cmds = NULL;
 	while (0x1DEAA)
 	{
 		shell->command = shell_read(shell);
-		shell->tokens = tokenize(shell->command);
+		shell->tokens = tokenizer(shell->command);
 		if (!is_correct_syntax(shell->tokens))
 		{
 			shell_clean(shell);
 			continue ;
 		}
 		shell->tokens = expander(shell->tokens, shell);
-		shell->cmds = parse(shell, shell->tokens);
+		shell->cmds = parser(shell, shell->tokens);
+		executer(shell, shell->cmds);
 		shell_debug(shell);
 		shell_clean(shell);
 	}

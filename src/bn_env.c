@@ -12,13 +12,10 @@
 
 #include "minishell.h"
 
-void	env(int argc, char **argv, char **envp)
+extern int	g_status;
+
+void	env(char **envp)
 {
-	if (argc != 1)
-	{
-		ft_printf(2, "env: no arguments allowed.\n");
-		return ;
-	}
-	(void)argv;
 	print_envp("", envp);
+	g_status = 0;
 }

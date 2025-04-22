@@ -21,7 +21,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	shell.argv = argv;
 	shell.envp = dup_envp(envp);
-	shell.debug = true;
+	shell.debug = false;
 	g_status = 0;
 	shell_signal();
 	shell_loop(&shell);

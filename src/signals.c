@@ -34,6 +34,12 @@ static void	signal_handler(int signum)
 	}
 }
 
+void	shell_signal_ignore(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+}
+
 void	shell_signal_reset(void)
 {
 	signal(SIGINT, SIG_DFL);

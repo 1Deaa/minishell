@@ -90,7 +90,7 @@ int	parse_token(t_shell *shell, t_pak **curr, t_token **token)
 	return (-1);
 }
 
-t_pak	*parse(t_shell *shell, t_token *token)
+t_pak	*parser(t_shell *shell, t_token *token)
 {
 	t_pak	*head;
 	t_pak	*curr;
