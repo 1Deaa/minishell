@@ -131,7 +131,7 @@ int		parse_redir_out(t_pak **curr, t_token **token);
 int		parse_redir_in(t_pak **curr, t_token **token);
 int		parse_redir_app(t_pak **curr, t_token **token);
 void	print_paks(t_pak *head);
-void	free_paks(t_pak *head);
+void	free_paks(t_shell *shell, t_pak *head);
 int		count_paks(t_pak *head);
 
 /* ************************************************************************** */
@@ -169,16 +169,31 @@ void	print_envp(const char *prefix, char **envp);
 /*                                EXECUTE                                     */
 /* ************************************************************************** */
 
-char	*find_path(t_shell *shell, char *command);
+/*
+EXEC
+*/
+void	*exec_pak(t_shell *shell, t_pak *cmd);
 int		executer(t_shell *shell, t_pak *cmd);
+void	pak_fork(t_shell *shell, t_pak *cmd, int fd[2]);
+void	*is_forkable(t_shell *shell, t_pak *cmd, int fd[2]);
+/*
+EXEC_UTILS
+*/
+bool	is_builtin(t_pak *cmd);
+void	*pak_redir(t_pak *cmd, int fd[2]);
+void	*pak_process(t_shell *shell, t_pak *cmd, int fd[2]);
+/*
+FIND_PATH
+*/
+char	*find_path(t_shell *shell, char *command);
 
 /* ************************************************************************** */
 /*                               BUILT-IN                                     */
 /* ************************************************************************** */
 
-void	echo(int argc, char **argv, char **envp);
-void	env(char **envp);
+int		echo(t_pak *cmd);
+int		env(char **envp);
 void	export(t_shell *shell, char **argv, char **envp);
-void	pwd(int argc, char **argv, char **envp);
+int		pwd(void);
 
 #endif

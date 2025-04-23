@@ -26,6 +26,7 @@ EXIT
 static void	shell_exit(t_shell *shell)
 {
 	free_envp(shell->envp, count_envp(shell->envp));
+	//free_tokens(shell->tokens);
 	rl_clear_history();
 	printf("exit\n");
 	exit(g_status);

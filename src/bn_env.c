@@ -12,10 +12,8 @@
 
 #include "minishell.h"
 
-extern int	g_status;
-
-void	env(char **envp)
+int	env(char **envp)
 {
-	print_envp("", envp);
-	g_status = 0;
+	print_envp("ST: ", envp);
+	return (0);
 }

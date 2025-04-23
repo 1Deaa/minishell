@@ -12,9 +12,17 @@
 
 #include "minishell.h"
 
-void	echo(int argc, char **argv, char **envp)
+int	echo(t_pak *cmd)
 {
-	(void)argc;
-	(void)argv;
-	(void)envp;
+	char	**argv;
+	int		i;
+
+	argv = cmd->full_cmd;
+	i = 1;
+	while (argv && argv[i])
+	{
+		ft_printf(1, "%s\n", argv[i]);
+		i++;
+	}
+	return (0);
 }

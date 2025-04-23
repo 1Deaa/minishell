@@ -12,14 +12,19 @@
 
 #include "minishell.h"
 
+extern int	g_status;
+
 char	*special_expand(char *str, t_shell *shell)
 {
 	char	*ret;
+	char	*tmp;
 
+	tmp = malloc(12);
 	ret = NULL;
 	if (!ft_strcmp(str, "?"))
 	{
-		ret = ft_strdup("TODO");
+		sprintf(tmp, "%d", g_status); //TODO
+		ret = ft_strdup(tmp);
 	}
 	else if (!ft_strcmp(str, "0"))
 	{

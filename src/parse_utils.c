@@ -27,7 +27,7 @@ int	count_word_tokens(t_token *token)
 	return (i);
 }
 
-void	free_paks(t_pak *head)
+void	free_paks(t_shell *shell, t_pak *head)
 {
 	t_pak	*tmp;
 
@@ -36,12 +36,13 @@ void	free_paks(t_pak *head)
 		tmp = head->next;
 
 		if (head->full_cmd)
-			free_split(head->full_cmd);
+			free(head->full_cmd);
 		if (head->full_path)
 			free(head->full_path);
 		free(head);
 		head = tmp;
 	}
+	free_tokens(shell->tokens);
 }
 
 int	count_paks(t_pak *head)

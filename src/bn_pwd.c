@@ -12,14 +12,12 @@
 
 #include "minishell.h"
 
-void	pwd(int argc, char **argv, char **envp)
+int	pwd(void)
 {
-	char	*env;
+	char	*pwd;
 
-	(void)argv;
-	(void)argc;
-	env = get_envp(envp, "PWD");
-	if (!env)
-		return ;
-	ft_printf(1, "%s\n", env);
+	pwd = getcwd(NULL, 0);
+	ft_printf(1, "%s\n", pwd);
+	free(pwd);
+	return (0);
 }

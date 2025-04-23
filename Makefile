@@ -12,19 +12,18 @@
 
 NAME = minishell
 
-FILES = main.c	\
-		signals.c	\
-		shell.c shell_utils.c	\
-		token.c token_utils.c	\
+FILES = main.c \
+		signals.c \
+		shell.c shell_utils.c \
+		token.c token_utils.c \
 		syntax.c syntax_utils.c \
 		expand.c expand_utils.c \
-		envp.c \
-		exec.c \
-		error.c \
 		parse.c parse_redir.c parse_utils.c parse_print.c \
+		exec.c exec_utils.c \
 		find_path.c \
-		redir.c \
-		bn_echo.c bn_env.c bn_export.c bn_pwd.c
+		bn_echo.c bn_env.c bn_export.c bn_pwd.c \
+		error.c \
+		envp.c 
 
 CC = cc
 RM = rm -rf

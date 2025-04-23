@@ -17,12 +17,11 @@ extern int	g_status;
 void	shell_clean(t_shell *shell)
 {
 	free(shell->command);
-	free_tokens(shell->tokens);
+	free_paks(shell, shell->cmds);
 }
 
 void	shell_loop(t_shell *shell)
 {
-
 	shell->cmds = NULL;
 	while (0x1DEAA)
 	{
