@@ -14,11 +14,40 @@
 
 extern int	g_status;
 
+DIR	*check_cmd(t_pak *cmd)
+{
+	DIR	*dir;
+
+	dir = NULL;
+	if (cmd && cmd->full_cmd)
+		dir = opendir(*(cmd->full_cmd));
+	if (cmd && cmd->full_cmd && ft_strchr(*(cmd->full_cmd), '/') && !dir)
+		cmd->full_path = ft_strdup(*(cmd->full_cmd));
+	return (dir);
+}
+
+void	get_cmd(t_pak *cmd)
+{
+	DIR	*dir;
+
+	dir = check_cmd(cmd);
+	if (!is_builtin(cmd) && cmd && cmd->full_cmd && dir)
+		shell_error(IS_DIR, *(cmd->full_cmd), 126);
+	else if (!is_builtin(cmd) && cmd->full_path
+		&& access(cmd->full_path, F_OK) == -1)
+		shell_error(NDIR, cmd->full_path, 127);
+	else if (!is_builtin(cmd) && cmd && cmd->full_path
+		&& access(cmd->full_path, X_OK) == -1)
+		shell_error(NPERM, cmd->full_path, 126);
+	if (dir)
+		closedir(dir);
+}
+
 void	*exec_pak(t_shell *shell, t_pak *cmd)
 {
 	int	fd[2];
 
-	//get_cmd(shell, cmd); //TODO
+	get_cmd(cmd);
 	if (pipe(fd) == -1)
 		return (shell_error(PIPERR, NULL, 1));
 	if (!is_forkable(shell, cmd, fd))

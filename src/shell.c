@@ -25,6 +25,7 @@ void	shell_loop(t_shell *shell)
 	shell->cmds = NULL;
 	while (0x1DEAA)
 	{
+		shell_signal();
 		shell->command = shell_read(shell);
 		shell->tokens = tokenizer(shell->command);
 		if (!is_correct_syntax(shell->tokens))
