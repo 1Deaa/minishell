@@ -14,6 +14,6 @@
 
 int	env(char **envp)
 {
-	print_envp("ST: ", envp);
+	print_envp("", envp);
 	return (0);
 }

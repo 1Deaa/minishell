@@ -43,6 +43,7 @@ typedef struct s_pak	t_pak;
 # define WPROMPT "\033[1;33m· \033[0m\033[1;34mstarshell\033[1;32m $ \033[0m"
 # define XPROMPT "\033[1;33m· \033[0m\033[1;34mstarshell\033[1;31m $ \033[0m"
 # define NAME	"starshell"
+# define C_NAME "\033[0m\033[1;34mstarshell\001\033[0m\002"
 
 /* ************************************************************************** */
 /*                                 SHELL                                      */
@@ -176,6 +177,7 @@ void	*exec_pak(t_shell *shell, t_pak *cmd);
 int		executer(t_shell *shell, t_pak *cmd);
 void	pak_fork(t_shell *shell, t_pak *cmd, int fd[2]);
 void	*is_forkable(t_shell *shell, t_pak *cmd, int fd[2]);
+DIR		*check_cmd(t_pak *cmd);
 /*
 EXEC_UTILS
 */

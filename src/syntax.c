@@ -18,7 +18,8 @@ static bool	is_first(t_token *node)
 {
 	if (is_special(node) && !is_redirection(node))
 	{
-		printf(NAME": syntax error unexpected token '%s'\n", node->value);
+		printf(C_NAME": syntax error unexpected token '%s'\n", node->value);
+		g_status = 2;
 		return (true);
 	}
 	return (false);

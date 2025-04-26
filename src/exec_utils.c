@@ -14,6 +14,23 @@
 
 extern int	g_status;
 
+DIR	*check_cmd(t_pak *cmd)
+{
+	DIR	*dir;
+
+	dir = NULL;
+	if (cmd && cmd->full_cmd)
+		dir = opendir(*(cmd->full_cmd));
+	if (cmd && cmd->full_cmd && ft_strchr(*(cmd->full_cmd), '/') && !dir)
+	{
+		free(cmd->full_path);
+		cmd->full_path = ft_strdup(*(cmd->full_cmd));
+	}
+	if (cmd && !cmd->full_path && cmd->full_cmd && !dir && !is_builtin(cmd))
+		shell_error(NCMD, *(cmd->full_cmd), 127);
+	return (dir);
+}
+
 bool	is_builtin(t_pak *cmd)
 {
 	char	*name;

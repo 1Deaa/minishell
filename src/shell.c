@@ -30,7 +30,8 @@ void	shell_loop(t_shell *shell)
 		shell->tokens = tokenizer(shell->command);
 		if (!is_correct_syntax(shell->tokens))
 		{
-			shell_clean(shell);
+			free(shell->command);
+			free_tokens(shell->tokens);
 			continue ;
 		}
 		shell->tokens = expander(shell->tokens, shell);

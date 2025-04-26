@@ -26,7 +26,6 @@ EXIT
 static void	shell_exit(t_shell *shell)
 {
 	free_envp(shell->envp, count_envp(shell->envp));
-	//free_tokens(shell->tokens);
 	rl_clear_history();
 	printf("exit\n");
 	exit(g_status);
@@ -60,9 +59,7 @@ char	*shell_read(t_shell *shell)
 	else
 		input = readline(XPROMPT);
 	if (input == NULL)
-	{
 		shell_exit(shell);
-	}
 	if (ft_strlen(input) > 0)
 		add_history(input);
 	return (input);

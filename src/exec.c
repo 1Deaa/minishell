@@ -14,18 +14,6 @@
 
 extern int	g_status;
 
-DIR	*check_cmd(t_pak *cmd)
-{
-	DIR	*dir;
-
-	dir = NULL;
-	if (cmd && cmd->full_cmd)
-		dir = opendir(*(cmd->full_cmd));
-	if (cmd && cmd->full_cmd && ft_strchr(*(cmd->full_cmd), '/') && !dir)
-		cmd->full_path = ft_strdup(*(cmd->full_cmd));
-	return (dir);
-}
-
 void	get_cmd(t_pak *cmd)
 {
 	DIR	*dir;
