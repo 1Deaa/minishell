@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: halmuhis <halmuhis@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 17:02:25 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/04/18 17:02:25 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/04/28 14:59:43 by halmuhis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,14 @@ int	parse_redir(t_pak **curr, t_token **token)
 	}
 	else if ((*token)->type == TK_HEREDOC)
 	{
-		//parse_redir_heredoc();//TODO
-		return (0);
+		(*token) = (*token)->next;
+		(*curr)->infile = handle_heredoc((*token)->value);
+		(*token) = (*token)->next;
+		if (!(*curr) || (*curr)->infile == -1)
+		{
+			g_status = 1;
+			return (-1);
+		}
 	}
 	return (0);
 }
