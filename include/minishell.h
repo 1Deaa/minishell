@@ -6,7 +6,7 @@
 /*   By: halmuhis <halmuhis@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:29:39 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/04/28 14:58:16 by halmuhis         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:40:47 by halmuhis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,10 +131,10 @@ int		parse_redir(t_pak **curr, t_token **token);
 int		parse_redir_out(t_pak **curr, t_token **token);
 int		parse_redir_in(t_pak **curr, t_token **token);
 int		parse_redir_app(t_pak **curr, t_token **token);
+int		parse_heredoc(t_pak **curr, t_token **token);
 void	print_paks(t_pak *head);
 void	free_paks(t_shell *shell, t_pak *head);
 int		count_paks(t_pak *head);
-int		handle_heredoc(char *delimiter);
 
 
 /* ************************************************************************** */

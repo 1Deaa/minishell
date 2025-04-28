@@ -6,7 +6,7 @@
 /*   By: halmuhis <halmuhis@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 17:02:25 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/04/28 14:59:43 by halmuhis         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:39:59 by halmuhis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,14 +98,8 @@ int	parse_redir(t_pak **curr, t_token **token)
 	}
 	else if ((*token)->type == TK_HEREDOC)
 	{
-		(*token) = (*token)->next;
-		(*curr)->infile = handle_heredoc((*token)->value);
-		(*token) = (*token)->next;
-		if (!(*curr) || (*curr)->infile == -1)
-		{
-			g_status = 1;
+		if (parse_heredoc(curr, token) < 0)
 			return (-1);
-		}
 	}
 	return (0);
 }

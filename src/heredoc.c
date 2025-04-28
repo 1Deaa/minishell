@@ -6,11 +6,13 @@
 /*   By: halmuhis <halmuhis@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 21:25:17 by halmuhis          #+#    #+#             */
-/*   Updated: 2025/04/28 17:28:16 by halmuhis         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:43:12 by halmuhis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern int	g_status;
 
 static char	*append_line_to_content(char *content, char *line)
 {
@@ -92,4 +94,17 @@ int	handle_heredoc(char *delimiter)
 	if (fd == -1)
 		perror("Error opening heredoc file for reading");
 	return (fd);
+}
+
+int	parse_heredoc(t_pak **curr, t_token **token)
+{
+	(*token) = (*token)->next;
+	(*curr)->infile = handle_heredoc((*token)->value);
+	(*token) = (*token)->next;
+	if (!(*curr) || (*curr)->infile == -1)
+	{
+		g_status = 1;
+		return (-1);
+	}
+	return (0);
 }
