@@ -36,7 +36,9 @@ void	shell_loop(t_shell *shell)
 		}
 		shell->tokens = expander(shell->tokens, shell);
 		shell->cmds = parser(shell, shell->tokens);
-		executer(shell, shell->cmds);
+		g_status = executer(shell, shell->cmds);
+		if (g_status > 255)
+			g_status = g_status / 256;
 		shell_debug(shell);
 		shell_clean(shell);
 	}
