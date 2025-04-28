@@ -6,7 +6,7 @@
 /*   By: halmuhis <halmuhis@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 21:25:17 by halmuhis          #+#    #+#             */
-/*   Updated: 2025/04/28 15:03:59 by halmuhis         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:28:16 by halmuhis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static char	*get_heredoc_input(char *delimiter)
 		line = readline("> ");
 		if (!line || !ft_strncmp(line, delimiter, ft_strlen(delimiter)))
 			break ;
+		add_history(line);
 		content = append_line_to_content(content, line);
 		if (!content)
 		{
@@ -54,6 +55,26 @@ static char	*get_heredoc_input(char *delimiter)
 	return (content);
 }
 
+static int	write_heredoc_to_file(char *content, char *heredoc_file)
+{
+	int	fd;
+
+	fd = open(heredoc_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+	{
+		perror("Error opening heredoc file");
+		return (-1);
+	}
+	if (write(fd, content, ft_strlen(content)) == -1)
+	{
+		perror("Error writing to heredoc file");
+		close(fd);
+		return (-1);
+	}
+	close(fd);
+	return (open(heredoc_file, O_RDONLY));
+}
+
 int	handle_heredoc(char *delimiter)
 {
 	char	*content;
@@ -61,29 +82,14 @@ int	handle_heredoc(char *delimiter)
 	int		fd;
 
 	if (!delimiter)
-		return (-1); // Return -1 for invalid input
+		return (-1);
 	heredoc_file = "/tmp/.minishell_heredoc";
 	content = get_heredoc_input(delimiter);
 	if (!content)
-		return (-1); // Return -1 if input retrieval fails
-	fd = open(heredoc_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
-	{
-		perror("Error opening heredoc file");
-		free(content);
 		return (-1);
-	}
-	if (write(fd, content, ft_strlen(content)) == -1)
-	{
-		perror("Error writing to heredoc file");
-		free(content);
-		close(fd);
-		return (-1);
-	}
-	close(fd);
+	fd = write_heredoc_to_file(content, heredoc_file);
 	free(content);
-	fd = open(heredoc_file, O_RDONLY);
 	if (fd == -1)
 		perror("Error opening heredoc file for reading");
-	return (fd); // Return the file descriptor
+	return (fd);
 }
