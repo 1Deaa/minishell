@@ -18,7 +18,7 @@ FILES = main.c \
 		token.c token_utils.c \
 		syntax.c syntax_utils.c \
 		expand.c expand_utils.c \
-		parse.c parse_redir.c parse_utils.c parse_print.c \
+		parse.c parse_redir.c parse_utils.c parse_print.c heredoc.c \
 		exec.c exec_utils.c \
 		find_path.c \
 		bn_echo.c bn_env.c bn_export.c bn_pwd.c \

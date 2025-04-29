@@ -1,0 +1,109 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: halmuhis <halmuhis@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/15 21:25:17 by halmuhis          #+#    #+#             */
+/*   Updated: 2025/04/28 17:43:12 by halmuhis         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+extern int	g_status;
+
+static char	*append_line_to_content(char *content, char *line)
+{
+	char	*temp;
+	size_t	len;
+
+	len = ft_strlen(content) + ft_strlen(line) + 2;
+	temp = malloc(len);
+	if (!temp)
+		return (0);
+	ft_strlcpy(temp, content, len);
+	ft_strcat(temp, line);
+	ft_strcat(temp, "\n");
+	free(content);
+	return (temp);
+}
+
+static char	*get_heredoc_input(char *delimiter)
+{
+	char	*line;
+	char	*content;
+
+	content = malloc(1);
+	if (!content)
+		return (0);
+	content[0] = '\0';
+	while (1)
+	{
+		line = readline("> ");
+		if (!line || !ft_strncmp(line, delimiter, ft_strlen(delimiter)))
+			break ;
+		content = append_line_to_content(content, line);
+		if (!content)
+		{
+			free(line);
+			return (0);
+		}
+		free(line);
+	}
+	free(line);
+	return (content);
+}
+
+static int	write_heredoc_to_file(char *content, char *heredoc_file)
+{
+	int	fd;
+
+	fd = open(heredoc_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+	{
+		perror("Error opening heredoc file");
+		return (-1);
+	}
+	if (write(fd, content, ft_strlen(content)) == -1)
+	{
+		perror("Error writing to heredoc file");
+		close(fd);
+		return (-1);
+	}
+	close(fd);
+	return (open(heredoc_file, O_RDONLY));
+}
+
+int	handle_heredoc(char *delimiter)
+{
+	char	*content;
+	char	*heredoc_file;
+	int		fd;
+
+	if (!delimiter)
+		return (-1);
+	heredoc_file = "/tmp/.minishell_heredoc";
+	content = get_heredoc_input(delimiter);
+	if (!content)
+		return (-1);
+	fd = write_heredoc_to_file(content, heredoc_file);
+	free(content);
+	if (fd == -1)
+		perror("Error opening heredoc file for reading");
+	return (fd);
+}
+
+int	parse_heredoc(t_pak **curr, t_token **token)
+{
+	(*token) = (*token)->next;
+	(*curr)->infile = handle_heredoc((*token)->value);
+	(*token) = (*token)->next;
+	if (!(*curr) || (*curr)->infile == -1)
+	{
+		g_status = 1;
+		return (-1);
+	}
+	return (0);
+}
