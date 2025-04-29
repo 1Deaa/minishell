@@ -44,7 +44,6 @@ static char	*get_heredoc_input(char *delimiter)
 		line = readline("> ");
 		if (!line || !ft_strncmp(line, delimiter, ft_strlen(delimiter)))
 			break ;
-		add_history(line);
 		content = append_line_to_content(content, line);
 		if (!content)
 		{
