@@ -39,10 +39,11 @@ static char	*get_heredoc_input(char *delimiter)
 	if (!content)
 		return (0);
 	content[0] = '\0';
-	while (1)
+	while (g_status != 130)
 	{
 		line = readline("> ");
-		if (!line || !ft_strncmp(line, delimiter, ft_strlen(delimiter)))
+		if (!line || !ft_strncmp(line, delimiter, ft_strlen(delimiter))
+			|| g_status == 130)
 			break ;
 		content = append_line_to_content(content, line);
 		if (!content)
@@ -63,12 +64,12 @@ static int	write_heredoc_to_file(char *content, char *heredoc_file)
 	fd = open(heredoc_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
-		perror("Error opening heredoc file");
+		ft_printf(2, "Error opening heredoc file");
 		return (-1);
 	}
 	if (write(fd, content, ft_strlen(content)) == -1)
 	{
-		perror("Error writing to heredoc file");
+		ft_printf(2, "Error writing to heredoc file");
 		close(fd);
 		return (-1);
 	}
@@ -91,7 +92,7 @@ int	handle_heredoc(char *delimiter)
 	fd = write_heredoc_to_file(content, heredoc_file);
 	free(content);
 	if (fd == -1)
-		perror("Error opening heredoc file for reading");
+		ft_printf(2, "Error opening heredoc file for reading");
 	return (fd);
 }
 
