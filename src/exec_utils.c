@@ -14,7 +14,7 @@
 
 extern int	g_status;
 
-DIR	*check_cmd(t_pak *cmd)
+DIR	*check_cmd(t_shell *shell, t_pak *cmd)
 {
 	DIR	*dir;
 
@@ -27,7 +27,12 @@ DIR	*check_cmd(t_pak *cmd)
 		cmd->full_path = ft_strdup(*(cmd->full_cmd));
 	}
 	if (cmd && !cmd->full_path && cmd->full_cmd && !dir && !is_builtin(cmd))
-		shell_error(NCMD, *(cmd->full_cmd), 127);
+	{
+		shell->l_status = 127;
+		shell_error(NCMD, *(cmd->full_cmd), shell->l_status);
+		if (!cmd->next)
+			shell->last_ncmd = true;
+	}
 	return (dir);
 }
 
@@ -35,9 +40,8 @@ bool	is_builtin(t_pak *cmd)
 {
 	char	*name;
 
-	if (!cmd->full_cmd || !cmd->full_cmd[0])
+	if (!cmd || !cmd->full_cmd || !cmd->full_cmd[0])
 		return (false);
-
 	name = cmd->full_cmd[0];
 	if (ft_strchr(name, '/'))
 		return (false);

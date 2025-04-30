@@ -25,7 +25,6 @@ void	shell_loop(t_shell *shell)
 	shell->cmds = NULL;
 	while (0x1DEAA)
 	{
-		shell_signal();
 		shell->command = shell_read(shell);
 		shell->tokens = tokenizer(shell->command);
 		if (!is_correct_syntax(shell->tokens))
@@ -37,9 +36,13 @@ void	shell_loop(t_shell *shell)
 		shell->tokens = expander(shell->tokens, shell);
 		shell->cmds = parser(shell, shell->tokens);
 		g_status = executer(shell, shell->cmds);
+		if (shell->last_ncmd)
+			g_status = shell->l_status;
 		if (g_status > 255)
-			g_status = g_status / 256;
+			g_status = g_status / 255;
 		shell_debug(shell);
 		shell_clean(shell);
+		if (shell->exit == true)
+			shell_exit(shell);
 	}
 }

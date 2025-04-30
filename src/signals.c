@@ -23,17 +23,6 @@ static void	disable_ctrl_backslash(void)
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-static void	signal_heredoc(int signum)
-{
-	if (signum == SIGINT)
-	{
-		g_status = 130;
-		write(STDOUT_FILENO, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-	}
-}
-
 static void	signal_handler(int signum)
 {
 	if (signum == SIGINT)
@@ -56,22 +45,6 @@ void	shell_signal_reset(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-}
-
-void	shell_signal_heredoc(void)
-{
-	struct sigaction	sa;
-
-	sa.sa_handler = signal_heredoc;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART;
-	if (sigaction(SIGINT, &sa, NULL) == -1 || sigaction(SIGQUIT,
-			&sa, NULL) == -1)
-	{
-		ft_printf(2, "Sigaction Error\n");
-		exit(EXIT_FAILURE);
-	}
-	disable_ctrl_backslash();
 }
 
 void	shell_signal(void)

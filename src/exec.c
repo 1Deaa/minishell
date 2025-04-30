@@ -14,11 +14,11 @@
 
 extern int	g_status;
 
-void	get_cmd(t_pak *cmd)
+void	get_cmd(t_shell *shell, t_pak *cmd)
 {
 	DIR	*dir;
 
-	dir = check_cmd(cmd);
+	dir = check_cmd(shell, cmd);
 	if (!is_builtin(cmd) && cmd && cmd->full_cmd && dir)
 		shell_error(IS_DIR, *(cmd->full_cmd), 126);
 	else if (!is_builtin(cmd) && cmd->full_path
@@ -35,7 +35,7 @@ void	*exec_pak(t_shell *shell, t_pak *cmd)
 {
 	int	fd[2];
 
-	get_cmd(cmd);
+	get_cmd(shell, cmd);
 	if (pipe(fd) == -1)
 		return (shell_error(PIPERR, NULL, 1));
 	if (!is_forkable(shell, cmd, fd))
@@ -62,9 +62,9 @@ int	executer(t_shell *shell, t_pak *cmd)
 	{
 		arg = cmd->full_cmd;
 		if (arg && !ft_strcmp(*arg, "exit"))
-			g_status = 0;//bn_exit(cmd); //TODO
+			g_status = bn_exit(shell, cmd); //TODO
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "cd"))
-			g_status = 0;//bn_cd(shell); //TODO
+			g_status = 0;//cd(shell); //TODO
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "export"))
 			g_status = 0;//export(); //TODO
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "unset"))

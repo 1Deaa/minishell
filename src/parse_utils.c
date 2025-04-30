@@ -34,7 +34,6 @@ void	free_paks(t_shell *shell, t_pak *head)
 	while (head)
 	{
 		tmp = head->next;
-
 		if (head->full_cmd)
 			free(head->full_cmd);
 		if (head->full_path)

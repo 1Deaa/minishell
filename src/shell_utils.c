@@ -23,7 +23,7 @@ FREE READLINE HISTORY
 PRINT EXIT
 EXIT
  */
-static void	shell_exit(t_shell *shell)
+void	shell_exit(t_shell *shell)
 {
 	free_envp(shell->envp, count_envp(shell->envp));
 	rl_clear_history();
@@ -54,6 +54,8 @@ char	*shell_read(t_shell *shell)
 {
 	char	*input;
 
+	shell->last_ncmd = false;
+	shell->l_status = 0;
 	if (g_status == 0)
 		input = readline(WPROMPT);
 	else

@@ -97,7 +97,7 @@ t_token	*tokenizer(const char *input)
 
 	head = NULL;
 	p = input;
-	while (p &&*p)
+	while (p && *p)
 	{
 		p = skip_whitespace(p);
 		if (*p == '\0')

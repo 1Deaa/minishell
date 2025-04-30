@@ -55,6 +55,9 @@ typedef struct s_shell
 	char			**argv;
 	char			**envp;
 	bool			debug;
+	bool			exit;
+	bool			last_ncmd;
+	int				l_status;
 	t_token			*tokens;
 	t_pak			*cmds;
 }	t_shell;
@@ -67,6 +70,7 @@ void	shell_loop(t_shell *shell);
 void	shell_clean(t_shell *shell);
 void	shell_debug(t_shell *shell);
 char	*shell_read(t_shell *shell);
+void	shell_exit(t_shell *shell);
 
 /* ************************************************************************** */
 /*                           TOKEN + EXPAND + SYNTAX                          */
@@ -136,7 +140,6 @@ void	print_paks(t_pak *head);
 void	free_paks(t_shell *shell, t_pak *head);
 int		count_paks(t_pak *head);
 
-
 /* ************************************************************************** */
 /*                                  ERROR                                     */
 /* ************************************************************************** */
@@ -179,7 +182,7 @@ void	*exec_pak(t_shell *shell, t_pak *cmd);
 int		executer(t_shell *shell, t_pak *cmd);
 void	pak_fork(t_shell *shell, t_pak *cmd, int fd[2]);
 void	*is_forkable(t_shell *shell, t_pak *cmd, int fd[2]);
-DIR		*check_cmd(t_pak *cmd);
+DIR		*check_cmd(t_shell *shell, t_pak *cmd);
 /*
 EXEC_UTILS
 */
@@ -199,5 +202,6 @@ int		echo(t_pak *cmd);
 int		env(char **envp);
 void	export(t_shell *shell, char **argv, char **envp);
 int		pwd(void);
+int		bn_exit(t_shell *shell, t_pak *pak);
 
 #endif
