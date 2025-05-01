@@ -44,6 +44,7 @@ typedef struct s_pak	t_pak;
 # define XPROMPT "\033[1;33m· \033[0m\033[1;34mstarshell\033[1;31m $ \033[0m"
 # define NAME	"starshell"
 # define C_NAME "\033[0m\033[1;34mstarshell\001\033[0m\002"
+# define NO_SIG 0
 
 /* ************************************************************************** */
 /*                                 SHELL                                      */
@@ -56,8 +57,9 @@ typedef struct s_shell
 	char			**envp;
 	bool			debug;
 	bool			exit;
-	bool			last_ncmd;
-	int				l_status;
+	int				e_status;
+	int				r_status;
+	bool			last_cmd;
 	t_token			*tokens;
 	t_pak			*cmds;
 }	t_shell;
@@ -66,10 +68,13 @@ typedef struct s_shell
 void	shell_signal(void);
 void	shell_signal_reset(void);
 void	shell_signal_ignore(void);
+void	shell_filter_status(t_shell *shell);
+void	enable_ctrl_backslash(void);
 void	shell_loop(t_shell *shell);
 void	shell_clean(t_shell *shell);
 void	shell_debug(t_shell *shell);
 char	*shell_read(t_shell *shell);
+void	shell_init(t_shell *shell);
 void	shell_exit(t_shell *shell);
 
 /* ************************************************************************** */
@@ -114,7 +119,7 @@ void	assign_token_types(t_token *tokens);
 //SYNTAX PROTOTYPES
 bool	is_redirection(t_token *node);
 bool	is_special(t_token *node);
-bool	is_correct_syntax(t_token *tokens);
+bool	is_correct_syntax(t_shell *shell, t_token *tokens);
 
 /* ************************************************************************** */
 /*                                  PARSE                                     */
@@ -131,11 +136,11 @@ typedef struct s_pak
 }					t_pak;
 
 t_pak	*parser(t_shell *shell, t_token *token);
-int		parse_redir(t_pak **curr, t_token **token);
-int		parse_redir_out(t_pak **curr, t_token **token);
-int		parse_redir_in(t_pak **curr, t_token **token);
-int		parse_redir_app(t_pak **curr, t_token **token);
-int		parse_heredoc(t_pak **curr, t_token **token);
+int		parse_redir(t_shell *shell, t_pak **curr, t_token **token);
+int		parse_redir_out(t_shell *shell, t_pak **curr, t_token **token);
+int		parse_redir_in(t_shell *shell, t_pak **curr, t_token **token);
+int		parse_redir_app(t_shell *shell, t_pak **curr, t_token **token);
+int		parse_heredoc(t_shell *shell, t_pak **curr, t_token **token);
 void	print_paks(t_pak *head);
 void	free_paks(t_shell *shell, t_pak *head);
 int		count_paks(t_pak *head);
@@ -159,7 +164,7 @@ enum	e_error
 	NOT_DIR = 13
 };
 
-void	*shell_error(int err_type, char *param, int err);
+void	*shell_error(t_shell *shell, int err_type, char *param, int err);
 
 /* ************************************************************************** */
 /*                                  ENVP                                      */
@@ -187,7 +192,7 @@ DIR		*check_cmd(t_shell *shell, t_pak *cmd);
 EXEC_UTILS
 */
 bool	is_builtin(t_pak *cmd);
-void	*pak_redir(t_pak *cmd, int fd[2]);
+void	*pak_redir(t_shell *shell, t_pak *cmd, int fd[2]);
 void	*pak_process(t_shell *shell, t_pak *cmd, int fd[2]);
 /*
 FIND_PATH

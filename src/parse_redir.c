@@ -12,9 +12,7 @@
 
 #include "minishell.h"
 
-extern int	g_status;
-
-int	get_fd(int oldfd, char *file, int type)
+int	get_fd(t_shell *shell, int oldfd, char *file, int type)
 {
 	int	fd;
 
@@ -23,12 +21,12 @@ int	get_fd(int oldfd, char *file, int type)
 	if (!file)
 		return (-1);
 	if (access(file, F_OK) == -1 && type == TK_REDIR_IN)
-		shell_error(NDIR, file, 127);
+		shell_error(shell, NDIR, file, 127);
 	else if (access(file, R_OK) == -1 && type == TK_REDIR_IN)
-		shell_error(NPERM, file, 126);
+		shell_error(shell, NPERM, file, 126);
 	else if (access(file, W_OK) == -1 && access(file, F_OK) == 0 && \
 		(type == TK_REDIR_OUT || type == TK_APPEND))
-		shell_error(NPERM, file, 126);
+		shell_error(shell, NPERM, file, 126);
 	if (TK_APPEND == type)
 		fd = open(file, O_CREAT | O_WRONLY | O_APPEND, 0666);
 	else if (TK_REDIR_OUT == type)
@@ -40,65 +38,68 @@ int	get_fd(int oldfd, char *file, int type)
 	return (fd);
 }
 
-int	parse_redir_out(t_pak **curr, t_token **token)
+int	parse_redir_out(t_shell *shell, t_pak **curr, t_token **token)
 {
 	(*token) = (*token)->next;
-	(*curr)->outfile = get_fd((*curr)->outfile, (*token)->value, TK_REDIR_OUT);
+	(*curr)->outfile = get_fd(shell, (*curr)->outfile, \
+		(*token)->value, TK_REDIR_OUT);
 	(*token) = (*token)->next;
 	if (!(*curr) || (*curr)->outfile == -1)
 	{
-		g_status = 1;
+		shell->e_status = 1;
 		return (-1);
 	}
 	return (0);
 }
 
-int	parse_redir_app(t_pak **curr, t_token **token)
+int	parse_redir_app(t_shell *shell, t_pak **curr, t_token **token)
 {
 	(*token) = (*token)->next;
-	(*curr)->outfile = get_fd((*curr)->outfile, (*token)->value, TK_APPEND);
+	(*curr)->outfile = get_fd(shell, (*curr)->outfile, \
+		(*token)->value, TK_APPEND);
 	(*token) = (*token)->next;
 	if (!(*curr) || (*curr)->outfile == -1)
 	{
-		g_status = 1;
+		shell->e_status = 1;
 		return (-1);
 	}
 	return (0);
 }
 
-int	parse_redir_in(t_pak **curr, t_token **token)
+int	parse_redir_in(t_shell *shell, t_pak **curr, t_token **token)
 {
 	(*token) = (*token)->next;
-	(*curr)->infile = get_fd((*curr)->infile, (*token)->value, TK_REDIR_IN);
+	(*curr)->infile = get_fd(shell, (*curr)->infile, \
+		(*token)->value, TK_REDIR_IN);
 	(*token) = (*token)->next;
 	if (!(*curr) || (*curr)->outfile == -1)
 	{
-		g_status = 1;
+		shell->e_status = 1;
 		return (-1);
 	}
 	return (0);
 }
 
-int	parse_redir(t_pak **curr, t_token **token)
+int	parse_redir(t_shell *shell, t_pak **curr, t_token **token)
 {
 	if ((*token)->type == TK_REDIR_OUT)
 	{
-		if (parse_redir_out(curr, token) < 0)
+		if (parse_redir_out(shell, curr, token) < 0)
 			return (-1);
 	}
 	else if ((*token)->type == TK_REDIR_IN)
 	{
-		if (parse_redir_in(curr, token) < 0)
+		if (parse_redir_in(shell, curr, token) < 0)
 			return (-1);
 	}
 	else if ((*token)->type == TK_APPEND)
 	{
-		if (parse_redir_app(curr, token) < 0)
+		if (parse_redir_app(shell, curr, token) < 0)
 			return (-1);
 	}
 	else if ((*token)->type == TK_HEREDOC)
 	{
-		if (parse_heredoc(curr, token) < 0)
+		if (parse_heredoc(shell, curr, token) < 0)
 			return (-1);
 	}
 	return (0);

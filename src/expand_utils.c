@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-extern int	g_status;
-
 char	*special_expand(char *str, t_shell *shell)
 {
 	char	*ret;
@@ -23,7 +21,7 @@ char	*special_expand(char *str, t_shell *shell)
 	ret = NULL;
 	if (!ft_strcmp(str, "?"))
 	{
-		sprintf(tmp, "%d", g_status); //TODO
+		sprintf(tmp, "%d", shell->e_status); //TODO
 		ret = ft_strdup(tmp);
 	}
 	else if (!ft_strcmp(str, "0"))

@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-extern int	g_status;
-
 int	count_word_tokens(t_token *token)
 {
 	int	i;

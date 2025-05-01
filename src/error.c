@@ -12,11 +12,9 @@
 
 #include "minishell.h"
 
-extern int	g_status;
-
-void	*shell_error(int err_type, char *param, int err)
+void	*shell_error(t_shell *shell, int err_type, char *param, int err)
 {
-	g_status = err;
+	shell->e_status = err;
 	if (err_type == QUOTE)
 		ft_printf(2, "%s: error while looking for matching quote!", C_NAME);
 	else if (err_type == NDIR)

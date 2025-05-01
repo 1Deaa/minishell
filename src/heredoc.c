@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-extern int	g_status;
-
 static char	*append_line_to_content(char *content, char *line)
 {
 	char	*temp;
@@ -39,11 +37,10 @@ static char	*get_heredoc_input(char *delimiter)
 	if (!content)
 		return (0);
 	content[0] = '\0';
-	while (g_status != 130)
+	while (true)
 	{
 		line = readline("> ");
-		if (!line || !ft_strncmp(line, delimiter, ft_strlen(delimiter))
-			|| g_status == 130)
+		if (!line || !ft_strncmp(line, delimiter, ft_strlen(delimiter)))
 			break ;
 		content = append_line_to_content(content, line);
 		if (!content)
@@ -61,7 +58,7 @@ static int	write_heredoc_to_file(char *content, char *heredoc_file)
 {
 	int	fd;
 
-	fd = open(heredoc_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd = open(heredoc_file, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (fd == -1)
 	{
 		ft_printf(2, "Error opening heredoc file");
@@ -96,14 +93,14 @@ int	handle_heredoc(char *delimiter)
 	return (fd);
 }
 
-int	parse_heredoc(t_pak **curr, t_token **token)
+int	parse_heredoc(t_shell *shell, t_pak **curr, t_token **token)
 {
 	(*token) = (*token)->next;
 	(*curr)->infile = handle_heredoc((*token)->value);
 	(*token) = (*token)->next;
 	if (!(*curr) || (*curr)->infile == -1)
 	{
-		g_status = 1;
+		shell->e_status = 1;
 		return (-1);
 	}
 	return (0);

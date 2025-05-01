@@ -12,7 +12,16 @@
 
 #include "minishell.h"
 
-extern int	g_status;
+extern int	g_signal;
+
+void	shell_init(t_shell *shell)
+{
+	shell->debug = false;
+	shell->exit = false;
+	shell->e_status = 0;
+	shell->r_status = 0;
+	shell->last_cmd = false;
+}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -21,14 +30,10 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	shell.argv = argv;
 	shell.envp = dup_envp(envp);
-	shell.debug = false;
-	shell.exit = false;
-	shell.last_ncmd = false;
-	shell.l_status = 0;
-	g_status = 0;
+	shell_init(&shell);
 	shell_signal();
 	shell_loop(&shell);
-	return (g_status);
+	return (EXIT_SUCCESS);
 }
 
 /* ************************************************************************** */

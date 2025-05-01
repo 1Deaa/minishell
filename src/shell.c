@@ -12,12 +12,24 @@
 
 #include "minishell.h"
 
-extern int	g_status;
+extern int	g_signal;
 
 void	shell_clean(t_shell *shell)
 {
 	free(shell->command);
 	free_paks(shell, shell->cmds);
+}
+
+void	shell_filter_status(t_shell *shell)
+{
+	if (shell->e_status > 255)
+		shell->e_status /= 255;
+	if (WIFSIGNALED(shell->e_status))
+		shell->e_status = 128 + WTERMSIG(shell->e_status);
+	else if (WIFEXITED(shell->e_status))
+		shell->e_status = WEXITSTATUS(shell->e_status);
+	if (shell->last_cmd)
+		shell->e_status = shell->r_status;
 }
 
 void	shell_loop(t_shell *shell)
@@ -27,19 +39,17 @@ void	shell_loop(t_shell *shell)
 	{
 		shell->command = shell_read(shell);
 		shell->tokens = tokenizer(shell->command);
-		if (!is_correct_syntax(shell->tokens))
+		if (!is_correct_syntax(shell, shell->tokens))
 		{
 			free(shell->command);
 			free_tokens(shell->tokens);
 			continue ;
 		}
+		g_signal = NO_SIG;
 		shell->tokens = expander(shell->tokens, shell);
 		shell->cmds = parser(shell, shell->tokens);
-		g_status = executer(shell, shell->cmds);
-		if (shell->last_ncmd)
-			g_status = shell->l_status;
-		if (g_status > 255)
-			g_status = g_status / 255;
+		shell->e_status = executer(shell, shell->cmds);
+		shell_filter_status(shell);
 		shell_debug(shell);
 		shell_clean(shell);
 		if (shell->exit == true)

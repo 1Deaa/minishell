@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-extern int	g_status;
-
 static t_pak	*new_pak(void)
 {
 	t_pak	*pak;
@@ -83,7 +81,7 @@ int	parse_token(t_shell *shell, t_pak **curr, t_token **token)
 	}
 	else if (is_redirection(*token))
 	{
-		if (parse_redir(curr, token) < 0)
+		if (parse_redir(shell, curr, token) < 0)
 			return (-1);
 		return (0);
 	}

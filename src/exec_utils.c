@@ -12,8 +12,6 @@
 
 #include <minishell.h>
 
-extern int	g_status;
-
 DIR	*check_cmd(t_shell *shell, t_pak *cmd)
 {
 	DIR	*dir;
@@ -28,10 +26,12 @@ DIR	*check_cmd(t_shell *shell, t_pak *cmd)
 	}
 	if (cmd && !cmd->full_path && cmd->full_cmd && !dir && !is_builtin(cmd))
 	{
-		shell->l_status = 127;
-		shell_error(NCMD, *(cmd->full_cmd), shell->l_status);
+		shell_error(shell, NCMD, *(cmd->full_cmd), 127);
 		if (!cmd->next)
-			shell->last_ncmd = true;
+		{
+			shell->last_cmd = true;
+			shell->r_status = 127;
+		}
 	}
 	return (dir);
 }
@@ -56,42 +56,42 @@ bool	is_builtin(t_pak *cmd)
 	return (false);
 }
 
-void	*pak_redir(t_pak *cmd, int fd[2])
+void	*pak_redir(t_shell *shell, t_pak *cmd, int fd[2])
 {
 	if (cmd->infile != STDIN_FILENO)
 	{
 		if (dup2(cmd->infile, STDIN_FILENO) == -1)
-			return (shell_error(DUPERR, NULL, 1));
+			return (shell_error(shell, DUPERR, NULL, 1));
 		close(cmd->infile);
 	}
 	if (cmd->outfile != STDOUT_FILENO)
 	{
 		if (dup2(cmd->outfile, STDOUT_FILENO) == -1)
-			return (shell_error(DUPERR, NULL, 1));
+			return (shell_error(shell, DUPERR, NULL, 1));
 		close(cmd->outfile);
 	}
 	else if (cmd->next && dup2(fd[WRITE_END], STDOUT_FILENO) == -1)
-		return (shell_error(DUPERR, NULL, 1));
+		return (shell_error(shell, DUPERR, NULL, 1));
 	close(fd[WRITE_END]);
 	return ("STAR");
 }
 
 void	*pak_process(t_shell *shell, t_pak *cmd, int fd[2])
 {
-	pak_redir(cmd, fd);
+	pak_redir(shell, cmd, fd);
 	close(fd[READ_END]);
 	shell_signal_reset();
 	if (!is_builtin(cmd) && cmd->full_cmd)
 		execve(cmd->full_path, cmd->full_cmd, shell->envp);
 	else if (is_builtin(cmd) && cmd->full_cmd && \
 		!ft_strcmp(*(cmd->full_cmd), "pwd"))
-		g_status = pwd();
+		shell->e_status = pwd();
 	else if (is_builtin(cmd) && cmd->full_cmd && \
 		!ft_strcmp(*(cmd->full_cmd), "echo"))
-		g_status = echo(cmd);
+		shell->e_status = echo(cmd);
 	else if (is_builtin(cmd) && cmd->full_cmd && \
 		!ft_strcmp(*(cmd->full_cmd), "env"))
-		g_status = env(shell->envp);
+		shell->e_status = env(shell->envp);
 	free_paks(shell, cmd);
-	exit(g_status);
+	exit(shell->e_status);
 }

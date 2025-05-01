@@ -13,7 +13,7 @@
 NAME = minishell
 
 FILES = main.c \
-		signals.c \
+		signals.c signals_utils.c \
 		shell.c shell_utils.c \
 		token.c token_utils.c \
 		syntax.c syntax_utils.c \

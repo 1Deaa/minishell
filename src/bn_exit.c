@@ -12,16 +12,14 @@
 
 #include "minishell.h"
 
-extern int	g_status;
-
 static int	many_args(t_shell *shell, t_pak *pak)
 {
 	shell->exit = false;
 	ft_printf(2, "%s: %s: too many arguments\n", NAME, "exit");
 	if (!pak->next)
 	{
-		shell->last_ncmd = true;
-		shell->l_status = 1;
+		shell->r_status = 1;
+		shell->last_cmd = true;
 	}
 	return (1);
 }
@@ -29,7 +27,12 @@ static int	many_args(t_shell *shell, t_pak *pak)
 int	bn_exit(t_shell *shell, t_pak *pak)
 {
 	if (!pak->next)
-		shell->exit = true;
+	{
+		if (!pak->prev)
+			shell->exit = true;
+		shell->last_cmd = true;
+		shell->r_status = 0;
+	}
 	if (!pak->full_cmd || !pak->full_cmd[1])
 		return (0);
 	if (pak->full_cmd[2])

@@ -12,21 +12,21 @@
 
 #include "minishell.h"
 
-extern int	g_status;
+extern int	g_signal;
 
-void	get_cmd(t_shell *shell, t_pak *cmd)
+static void	get_cmd(t_shell *shell, t_pak *cmd)
 {
 	DIR	*dir;
 
 	dir = check_cmd(shell, cmd);
 	if (!is_builtin(cmd) && cmd && cmd->full_cmd && dir)
-		shell_error(IS_DIR, *(cmd->full_cmd), 126);
+		shell_error(shell, IS_DIR, *(cmd->full_cmd), 126);
 	else if (!is_builtin(cmd) && cmd->full_path
 		&& access(cmd->full_path, F_OK) == -1)
-		shell_error(NDIR, cmd->full_path, 127);
+		shell_error(shell, NDIR, cmd->full_path, 127);
 	else if (!is_builtin(cmd) && cmd && cmd->full_path
 		&& access(cmd->full_path, X_OK) == -1)
-		shell_error(NPERM, cmd->full_path, 126);
+		shell_error(shell, NPERM, cmd->full_path, 126);
 	if (dir)
 		closedir(dir);
 }
@@ -37,7 +37,7 @@ void	*exec_pak(t_shell *shell, t_pak *cmd)
 
 	get_cmd(shell, cmd);
 	if (pipe(fd) == -1)
-		return (shell_error(PIPERR, NULL, 1));
+		return (shell_error(shell, PIPERR, NULL, 1));
 	if (!is_forkable(shell, cmd, fd))
 		return (NULL);
 	close(fd[WRITE_END]);
@@ -62,13 +62,13 @@ int	executer(t_shell *shell, t_pak *cmd)
 	{
 		arg = cmd->full_cmd;
 		if (arg && !ft_strcmp(*arg, "exit"))
-			g_status = bn_exit(shell, cmd); //TODO
+			shell->e_status = bn_exit(shell, cmd); //TODO
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "cd"))
-			g_status = 0;//cd(shell); //TODO
+			shell->e_status = 0;//cd(shell); //TODO
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "export"))
-			g_status = 0;//export(); //TODO
+			shell->e_status = 0;//export(); //TODO
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "unset"))
-			g_status = 0;//unset(); //TODO
+			shell->e_status = 0;//unset(); //TODO
 		else
 		{
 			shell_signal_ignore();
@@ -77,8 +77,8 @@ int	executer(t_shell *shell, t_pak *cmd)
 		cmd = cmd->next;
 	}
 	while (0 < paks--)
-		waitpid(-1, &g_status, 0);
-	return (g_status);
+		waitpid(-1, &(shell->e_status), 0);
+	return (shell->e_status);
 }
 
 void	pak_fork(t_shell *shell, t_pak *cmd, int fd[2])
@@ -90,10 +90,12 @@ void	pak_fork(t_shell *shell, t_pak *cmd, int fd[2])
 	{
 		close(fd[WRITE_END]);
 		close(fd[READ_END]);
-		shell_error(FORKERR, NULL, 1);
+		shell_error(shell, FORKERR, NULL, 1);
 	}
 	else if (pid == 0)
+	{
 		pak_process(shell, cmd, fd);
+	}
 }
 
 void	*is_forkable(t_shell *shell, t_pak *cmd, int fd[2])
@@ -105,13 +107,14 @@ void	*is_forkable(t_shell *shell, t_pak *cmd, int fd[2])
 		dir = opendir(*(cmd->full_cmd));
 	if (cmd->infile == -1 || cmd->outfile == -1)
 		return (NULL);
-	if ((cmd->full_path && access(cmd->full_path, X_OK) == 0) || is_builtin(cmd))
+	if ((cmd->full_path && access(cmd->full_path, X_OK) == 0) || \
+		is_builtin(cmd))
 		pak_fork(shell, cmd, fd);
-	else if (!is_builtin(cmd) && ((cmd->full_path
-		&& !access(cmd->full_path, F_OK)) || dir))
-		g_status = 126;
+	else if (!is_builtin(cmd) && ((cmd->full_path && \
+		!access(cmd->full_path, F_OK)) || dir))
+		shell->e_status = 126;
 	else if (!is_builtin(cmd) && cmd->full_cmd)
-		g_status = 127;
+		shell->e_status = 127;
 	if (dir)
 		closedir(dir);
 	return ("STAR");

@@ -12,32 +12,30 @@
 
 #include "minishell.h"
 
-extern int	g_status;
-
-static bool	is_first(t_token *node)
+static bool	is_first(t_shell *shell, t_token *node)
 {
 	if (is_special(node) && !is_redirection(node))
 	{
 		printf(C_NAME": syntax error unexpected token '%s'\n", node->value);
-		g_status = 2;
+		shell->e_status = 2;
 		return (true);
 	}
 	return (false);
 }
 
-static bool	is_adjacent(t_token *prev, t_token *curr)
+static bool	is_adjacent(t_shell *shell, t_token *prev, t_token *curr)
 {
 	if (prev->type == TK_PIPE && is_redirection(curr))
 		return (false);
 	if (is_special(prev) && is_special(curr))
 	{
-		shell_error(NEARERR, curr->value, 1);
+		shell_error(shell, NEARERR, curr->value, 1);
 		return (true);
 	}
 	return (false);
 }
 
-static bool	is_closed_quote(t_token *node)
+static bool	is_closed_quote(t_shell *shell, t_token *node)
 {
 	int	i;
 
@@ -47,24 +45,24 @@ static bool	is_closed_quote(t_token *node)
 		i = ft_strlen(node->value);
 		if (i == 1 || node->value[i - 1] != node->value[0])
 		{
-			shell_error(QUOTE, "", 1);
+			shell_error(shell, QUOTE, "", 1);
 			return (false);
 		}
 	}
 	return (true);
 }
 
-static bool	is_last(t_token *node)
+static bool	is_last(t_shell *shell, t_token *node)
 {
 	if (node->type == TK_PIPE || is_redirection(node))
 	{
-		shell_error(NEARERR, "`newline'", 1);
+		shell_error(shell, NEARERR, "`newline'", 2);
 		return (true);
 	}
 	return (false);
 }
 
-bool	is_correct_syntax(t_token *tokens)
+bool	is_correct_syntax(t_shell *shell, t_token *tokens)
 {
 	t_token	*current;
 	t_token	*prev;
@@ -72,20 +70,20 @@ bool	is_correct_syntax(t_token *tokens)
 	current = tokens;
 	if (!current)
 		return (true);
-	if (is_first(current))
+	if (is_first(shell, current))
 		return (false);
 	prev = current;
 	current = current->next;
 	while (current)
 	{
-		if (is_adjacent(prev, current))
+		if (is_adjacent(shell, prev, current))
 			return (false);
-		if (!is_closed_quote(current))
+		if (!is_closed_quote(shell, current))
 			return (false);
 		prev = current;
 		current = current->next;
 	}
-	if (is_last(prev))
+	if (is_last(shell, prev))
 		return (false);
 	return (true);
 }
