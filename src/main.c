@@ -19,8 +19,7 @@ void	shell_init(t_shell *shell)
 	shell->debug = false;
 	shell->exit = false;
 	shell->e_status = 0;
-	shell->r_status = 0;
-	shell->last_cmd = false;
+	shell->last_pid = 0;
 }
 
 int	main(int argc, char **argv, char **envp)

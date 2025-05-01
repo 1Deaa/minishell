@@ -76,8 +76,7 @@ int	executer(t_shell *shell, t_pak *cmd)
 		}
 		cmd = cmd->next;
 	}
-	while (0 < paks--)
-		waitpid(-1, &(shell->e_status), 0);
+	wait_processes(shell, paks);
 	return (shell->e_status);
 }
 
@@ -95,6 +94,11 @@ void	pak_fork(t_shell *shell, t_pak *cmd, int fd[2])
 	else if (pid == 0)
 	{
 		pak_process(shell, cmd, fd);
+	}
+	else if (pid > 0)
+	{
+		if (!cmd->next)
+			shell->last_pid = pid;
 	}
 }
 

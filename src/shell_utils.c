@@ -54,8 +54,6 @@ char	*shell_read(t_shell *shell)
 {
 	char	*input;
 
-	shell->last_cmd = false;
-	shell->r_status = 0;
 	shell_signal();
 	if (shell->e_status == 0)
 		input = readline(WPROMPT);

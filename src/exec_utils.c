@@ -27,11 +27,6 @@ DIR	*check_cmd(t_shell *shell, t_pak *cmd)
 	if (cmd && !cmd->full_path && cmd->full_cmd && !dir && !is_builtin(cmd))
 	{
 		shell_error(shell, NCMD, *(cmd->full_cmd), 127);
-		if (!cmd->next)
-		{
-			shell->last_cmd = true;
-			shell->r_status = 127;
-		}
 	}
 	return (dir);
 }
@@ -94,4 +89,25 @@ void	*pak_process(t_shell *shell, t_pak *cmd, int fd[2])
 		shell->e_status = env(shell->envp);
 	free_paks(shell, cmd);
 	exit(shell->e_status);
+}
+
+void	wait_processes(t_shell *shell, int count)
+{
+	pid_t	pid;
+	int		status;
+
+	while (0 < count)
+	{
+		pid = waitpid(-1, &status, 0);
+		if (pid == shell->last_pid)
+		{
+			if (WIFEXITED(status))
+				shell->e_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				shell->e_status = 128 + WTERMSIG(status);
+			else
+				shell->e_status = status;
+		}
+		count--;
+	}
 }

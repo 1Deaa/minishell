@@ -20,18 +20,6 @@ void	shell_clean(t_shell *shell)
 	free_paks(shell, shell->cmds);
 }
 
-void	shell_filter_status(t_shell *shell)
-{
-	if (shell->e_status > 255)
-		shell->e_status /= 255;
-	if (WIFSIGNALED(shell->e_status))
-		shell->e_status = 128 + WTERMSIG(shell->e_status);
-	else if (WIFEXITED(shell->e_status))
-		shell->e_status = WEXITSTATUS(shell->e_status);
-	if (shell->last_cmd)
-		shell->e_status = shell->r_status;
-}
-
 void	shell_loop(t_shell *shell)
 {
 	shell->cmds = NULL;
@@ -49,7 +37,8 @@ void	shell_loop(t_shell *shell)
 		shell->tokens = expander(shell->tokens, shell);
 		shell->cmds = parser(shell, shell->tokens);
 		shell->e_status = executer(shell, shell->cmds);
-		shell_filter_status(shell);
+		if (shell->e_status > 255)
+			shell->e_status /= 256;
 		shell_debug(shell);
 		shell_clean(shell);
 		if (shell->exit == true)

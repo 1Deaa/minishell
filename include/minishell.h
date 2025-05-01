@@ -58,8 +58,7 @@ typedef struct s_shell
 	bool			debug;
 	bool			exit;
 	int				e_status;
-	int				r_status;
-	bool			last_cmd;
+	pid_t			last_pid;
 	t_token			*tokens;
 	t_pak			*cmds;
 }	t_shell;
@@ -68,7 +67,6 @@ typedef struct s_shell
 void	shell_signal(void);
 void	shell_signal_reset(void);
 void	shell_signal_ignore(void);
-void	shell_filter_status(t_shell *shell);
 void	enable_ctrl_backslash(void);
 void	shell_loop(t_shell *shell);
 void	shell_clean(t_shell *shell);
@@ -186,6 +184,7 @@ EXEC
 void	*exec_pak(t_shell *shell, t_pak *cmd);
 int		executer(t_shell *shell, t_pak *cmd);
 void	pak_fork(t_shell *shell, t_pak *cmd, int fd[2]);
+void	wait_processes(t_shell *shell, int count);
 void	*is_forkable(t_shell *shell, t_pak *cmd, int fd[2]);
 DIR		*check_cmd(t_shell *shell, t_pak *cmd);
 /*
