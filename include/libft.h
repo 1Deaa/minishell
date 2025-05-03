@@ -67,9 +67,9 @@ Join a C with S.
 */
 char	*ft_charjoin(char *s, char c);
 /*
-Convert integer to ASCII.
+Check if C is a digit.
 */
-char	*ft_itoa(int n);
+int		ft_isdigit(int c);
 /*
 Copies n - 1 bytes from a source string to a destination string.
 */
