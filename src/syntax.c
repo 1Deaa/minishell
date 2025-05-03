@@ -14,9 +14,15 @@
 
 static bool	is_first(t_shell *shell, t_token *node)
 {
+	if (!ft_strcmp(node->value, "'") || !ft_strcmp(node->value, "\""))
+	{
+		shell_error(shell, QUOTE, "", 1);
+		return (true);
+	}
 	if (is_special(node) && !is_redirection(node))
 	{
-		printf(C_NAME": syntax error unexpected token '%s'\n", node->value);
+		ft_printf(2, C_NAME": syntax error unexpected token '%s'\n", \
+			node->value);
 		shell->e_status = 2;
 		return (true);
 	}

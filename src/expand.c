@@ -126,10 +126,14 @@ t_token	*expander(t_token *tokens, t_shell *shell)
 		else if (current->type == TK_DOUBLE_QUOTED)
 		{
 			expand_quoted(current, shell);
+			if (!current->value)
+				current->value = ft_strdup("");
 		}
 		else if (current->type == TK_SINGLE_QUOTED)
 		{
 			expand_single_quoted(current);
+			if (!current->value)
+				current->value = ft_strdup("");
 		}
 		current = current->next;
 	}
