@@ -95,7 +95,7 @@ static char	*word_token(const char **p, bool *combine)
 
 t_token	*tokenizer(const char *input)
 {
-	struct ex_tokenizer	ex;
+	struct s_tokenizer	ex;
 
 	ex.head = NULL;
 	ex.p = input;

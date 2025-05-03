@@ -62,7 +62,7 @@ int	executer(t_shell *shell, t_pak *cmd)
 	{
 		arg = cmd->full_cmd;
 		if (arg && !ft_strcmp(*arg, "exit"))
-			shell->e_status = bn_exit(shell, cmd); //TODO
+			shell->e_status = bn_exit(shell, cmd);
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "cd"))
 			shell->e_status = 0;//cd(shell); //TODO
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "export"))

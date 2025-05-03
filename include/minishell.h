@@ -79,7 +79,7 @@ void	shell_exit(t_shell *shell);
 /*                           TOKEN + EXPAND + SYNTAX                          */
 /* ************************************************************************** */
 
-struct	ex_tokenizer
+struct	s_tokenizer
 {
 	t_token		*head;
 	const char	*p;
