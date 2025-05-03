@@ -53,7 +53,6 @@ void	print_one_pak(t_pak *pak, int idx)
 		printf(" full_path: (null)\n");
 	print_fd_info(pak->infile, pak->outfile);
 	print_link_info(pak->prev, pak->next);
-	printf("\n");
 }
 
 void	print_paks(t_pak *head)

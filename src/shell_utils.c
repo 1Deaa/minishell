@@ -46,6 +46,10 @@ void	shell_debug(t_shell *shell)
 			printf("━━━\nSYNTAX: "GREEN"correct ✔\n"RESET BOLD);
 		else
 			printf("SYNTAX: "RED"failure!\n"RESET BOLD);
+		if (shell->e_status == 0)
+			printf("━━━\nEXIT STATUS: "GREEN"%d ✔\n"RESET, shell->e_status);
+		else
+			printf("━━━\nEXIT STATUS: "RED"%d\n"RESET, shell->e_status);
 		print_paks(shell->cmds);
 	}
 }
