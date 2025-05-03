@@ -79,6 +79,14 @@ void	shell_exit(t_shell *shell);
 /*                           TOKEN + EXPAND + SYNTAX                          */
 /* ************************************************************************** */
 
+struct	ex_tokenizer
+{
+	t_token		*head;
+	const char	*p;
+	char		*token;
+	bool		combine;
+};
+
 typedef enum e_token_type
 {
 	TK_PIPE,
@@ -94,6 +102,7 @@ typedef enum e_token_type
 typedef struct s_token
 {
 	char			*value;
+	bool			combine;
 	t_token_type	type;
 	struct s_token	*next;
 	struct s_token	*prev;
@@ -108,7 +117,8 @@ char	*exname(char *token, int *index);
 //TOKEN PROTOTYPES
 t_token	*new_token(const char *value);
 t_token	*tokenizer(const char *input);
-void	add_token(t_token **head, const char *value);
+t_token	*retokenize(t_token *head);
+void	add_token(t_token **head, const char *value, bool *combine);
 void	free_tokens(t_token	*token);
 void	print_tokens(t_token *token);
 int		count_word_tokens(t_token *token);

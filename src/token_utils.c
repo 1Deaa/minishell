@@ -29,12 +29,13 @@ t_token	*new_token(const char *value)
 		free(node);
 		return (NULL);
 	}
+	node->combine = false;
 	node->next = NULL;
 	node->prev = NULL;
 	return (node);
 }
 
-void	add_token(t_token **head, const char *value)
+void	add_token(t_token **head, const char *value, bool *combine)
 {
 	t_token	*node;
 	t_token	*current;
@@ -42,6 +43,7 @@ void	add_token(t_token **head, const char *value)
 	node = new_token(value);
 	if (!node)
 		return ;
+	node->combine = *combine;
 	if (*head == NULL)
 	{
 		*head = node;
@@ -77,7 +79,8 @@ void	print_tokens(t_token *token)
 	current = token;
 	while (current)
 	{
-		printf("TOKEN: %s\tTYPE: %d\n", current->value, current->type);
+		printf("TOKEN: %s\tTYPE: %d\tCOMBINE: %d\n", \
+			current->value, current->type, current->combine);
 		current = current->next;
 	}
 }

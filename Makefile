@@ -15,7 +15,7 @@ NAME = minishell
 FILES = main.c \
 		signals.c signals_utils.c \
 		shell.c shell_utils.c \
-		token.c token_utils.c \
+		token.c token_utils.c token_re.c \
 		syntax.c syntax_utils.c \
 		expand.c expand_utils.c \
 		parse.c parse_redir.c parse_utils.c parse_print.c heredoc.c \
