@@ -94,5 +94,9 @@ char	**ft_split(char const *s, char c);
 free 2D arr
 */
 void	free_split(char **arr);
+/*
+convert N into a null terminated string
+*/
+char	*ft_itoa(int n);
 
 #endif

@@ -15,14 +15,11 @@
 char	*special_expand(char *str, t_shell *shell)
 {
 	char	*ret;
-	char	*tmp;
 
-	tmp = malloc(12);
 	ret = NULL;
 	if (!ft_strcmp(str, "?"))
 	{
-		sprintf(tmp, "%d", shell->e_status); //TODO
-		ret = ft_strdup(tmp);
+		ret = ft_itoa(shell->e_status);
 	}
 	else if (!ft_strcmp(str, "0"))
 	{
