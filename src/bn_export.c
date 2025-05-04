@@ -3,43 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   bn_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: halmuhis <halmuhis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 22:45:02 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/04/13 22:45:03 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/05/04 12:58:55 by halmuhis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	export(t_shell *shell, char **argv, char **envp)
+static	int	chek_var(char *str)
 {
-	int		size;
-	char	**exp;
-	int		i;
+	int	i;
 
-	i = -1;
-	size = count_envp(envp);
-	exp = (char **)malloc(sizeof(char *) * (size + 2));
-	if (!envp)
-		return ;
-	if (!argv[1])
+	i = 0;
+	if (!str || ft_isdigit(str[0]))
+		return (0);
+	while (str[i] && str[i] != '=')
 	{
-		print_envp("declare -x", envp);
-		return ;
+		if (str[i] < 33)
+			return (0);
+		i++;
 	}
-	while (++i < size)
+	return (1);
+}
+
+int	export(t_pak *cmd)
+{
+	int	i;
+	char	*var;
+	char	*value;
+
+	i = 0;
+	var = NULL;
+	value = NULL;
+	while (cmd->full_cmd && cmd->full_cmd[i])
 	{
-		exp[i] = ft_strdup(envp[i]);
-		if (!exp[i])
+		if (ft_strchr(cmd->full_cmd[i], '='))
 		{
-			free_envp(exp, i);
-			return ;
+			if (!chek_var(cmd->full_cmd[i]))
+			{
+				printf("export: `%s': not a valid identifier\n", cmd->full_cmd[i]);
+				return (1);
+			}
+			printf("export: %s\n", cmd->full_cmd[i]);
 		}
+		i++;
 	}
-	exp[size] = ft_strdup(argv[1]);
-	exp[size + 1] = NULL;
-	free_envp(shell->envp, count_envp(envp));
-	shell->envp = dup_envp(exp);
-	free_envp(exp, count_envp(exp));
+	return (1);
 }

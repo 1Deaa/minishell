@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: halmuhis <halmuhis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 22:12:56 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/04/01 22:12:56 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/05/04 08:33:25 by halmuhis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	executer(t_shell *shell, t_pak *cmd)
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "cd"))
 			shell->e_status = 0;//cd(shell); //TODO
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "export"))
-			shell->e_status = 0;//export(); //TODO
+			shell->e_status = export(cmd);//export(); //TODO
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "unset"))
 			shell->e_status = 0;//unset(); //TODO
 		else
