@@ -191,6 +191,12 @@ void	print_envp(const char *prefix, char **envp);
 /*                                EXECUTE                                     */
 /* ************************************************************************** */
 
+typedef struct s_proc
+{
+	int		status;
+	pid_t	pid;
+}			t_proc;
+
 /*
 EXEC
 */

@@ -93,20 +93,19 @@ void	*pak_process(t_shell *shell, t_pak *cmd, int fd[2])
 
 void	wait_processes(t_shell *shell, int count)
 {
-	pid_t	pid;
-	int		status;
+	t_proc	process;
 
 	while (0 < count)
 	{
-		pid = waitpid(-1, &status, 0);
-		if (pid == shell->last_pid)
+		process.pid = waitpid(-1, &(process.status), 0);
+		if (process.pid == shell->last_pid)
 		{
-			if (WIFEXITED(status))
-				shell->e_status = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status))
-				shell->e_status = 128 + WTERMSIG(status);
+			if (WIFEXITED(process.status))
+				shell->e_status = WEXITSTATUS(process.status);
+			else if (WIFSIGNALED(process.status))
+				shell->e_status = 128 + WTERMSIG(process.status);
 			else
-				shell->e_status = status;
+				shell->e_status = process.status;
 		}
 		count--;
 	}

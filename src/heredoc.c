@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+extern int	g_signal;
+
 static char	*append_line_to_content(char *content, char *line)
 {
 	char	*temp;
@@ -113,13 +115,12 @@ void	heredoc_child(char *delimiter)
 
 int	handle_heredoc(char *delimiter)
 {
-	pid_t	pid;
-	int		status;
+	t_proc	process;
 	
-	pid = fork();
-	if (pid < 0)
+	process.pid = fork();
+	if (process.pid < 0)
 		return (-1);
-	if (pid == 0)
+	if (process.pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
 		heredoc_child(delimiter);
@@ -127,11 +128,14 @@ int	handle_heredoc(char *delimiter)
 	else
 	{
 		shell_signal_ignore();
-		waitpid(pid, &status, 0);
+		waitpid(process.pid, &(process.status), 0);
 		shell_signal();
-		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-			return (-2);
-		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+		if (WIFSIGNALED(process.status) && WTERMSIG(process.status) == SIGINT)
+		{
+			g_signal = SIGINT;
+			return (-1);
+		}
+		if (WIFEXITED(process.status) && WEXITSTATUS(process.status) != 0)
 			return (-1);
 		return (open(HEREDOC_FILE, O_RDONLY));
 	}
