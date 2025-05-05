@@ -116,7 +116,7 @@ void	heredoc_child(char *delimiter)
 int	handle_heredoc(char *delimiter)
 {
 	t_proc	process;
-	
+
 	process.pid = fork();
 	if (process.pid < 0)
 		return (-1);
