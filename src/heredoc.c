@@ -74,7 +74,7 @@ static int	write_heredoc_to_file(char *content, char *heredoc_file)
 	return (open(heredoc_file, O_RDONLY));
 }
 
-int	handle_heredoc(char *delimiter)
+/*int	handle_heredoc(char *delimiter)
 {
 	char	*content;
 	char	*heredoc_file;
@@ -91,17 +91,49 @@ int	handle_heredoc(char *delimiter)
 	if (fd == -1)
 		ft_printf(2, "Error opening heredoc file for reading");
 	return (fd);
+}*/
+
+void	heredoc_child(char *delimiter)
+{
+	char	*content;
+	int		fd;
+
+	if (!delimiter)
+		return ;
+	content = get_heredoc_input(delimiter);
+	if (!content)
+		return ;
+	fd = write_heredoc_to_file(content, HEREDOC_FILE);
+	free(content);
+	if (fd == -1)
+		exit(1);
+	close(fd);
+	exit(0);
 }
 
-int	parse_heredoc(t_shell *shell, t_pak **curr, t_token **token)
+int	handle_heredoc(char *delimiter)
 {
-	(*token) = (*token)->next;
-	(*curr)->infile = handle_heredoc((*token)->value);
-	(*token) = (*token)->next;
-	if (!(*curr) || (*curr)->infile == -1)
-	{
-		shell->e_status = 1;
+	pid_t	pid;
+	int		status;
+	
+	pid = fork();
+	if (pid < 0)
 		return (-1);
+	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		heredoc_child(delimiter);
 	}
-	return (0);
+	else
+	{
+		shell_signal_ignore();
+		waitpid(pid, &status, 0);
+		shell_signal();
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+			return (-1);
+		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+			return (-1);
+		return (open(HEREDOC_FILE, O_RDONLY));
+	}
+	return (-1);
 }

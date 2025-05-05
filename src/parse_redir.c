@@ -12,32 +12,6 @@
 
 #include "minishell.h"
 
-int	get_fd(t_shell *shell, int oldfd, char *file, int type)
-{
-	int	fd;
-
-	if (oldfd > 2)
-		close(oldfd);
-	if (!file)
-		return (-1);
-	if (access(file, F_OK) == -1 && type == TK_REDIR_IN)
-		shell_error(shell, NDIR, file, 127);
-	else if (access(file, R_OK) == -1 && type == TK_REDIR_IN)
-		shell_error(shell, NPERM, file, 126);
-	else if (access(file, W_OK) == -1 && access(file, F_OK) == 0 && \
-		(type == TK_REDIR_OUT || type == TK_APPEND))
-		shell_error(shell, NPERM, file, 126);
-	if (TK_APPEND == type)
-		fd = open(file, O_CREAT | O_WRONLY | O_APPEND, 0666);
-	else if (TK_REDIR_OUT == type)
-		fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
-	else if (TK_REDIR_IN == type && oldfd != -1)
-		fd = open(file, O_RDONLY);
-	else
-		fd = oldfd;
-	return (fd);
-}
-
 int	parse_redir_out(t_shell *shell, t_pak **curr, t_token **token)
 {
 	(*token) = (*token)->next;
@@ -101,6 +75,19 @@ int	parse_redir(t_shell *shell, t_pak **curr, t_token **token)
 	{
 		if (parse_heredoc(shell, curr, token) < 0)
 			return (-1);
+	}
+	return (0);
+}
+
+int	parse_heredoc(t_shell *shell, t_pak **curr, t_token **token)
+{
+	(*token) = (*token)->next;
+	(*curr)->infile = handle_heredoc((*token)->value);
+	(*token) = (*token)->next;
+	if (!(*curr) || (*curr)->infile == -1)
+	{
+		shell->e_status = 1;
+		return (-1);
 	}
 	return (0);
 }

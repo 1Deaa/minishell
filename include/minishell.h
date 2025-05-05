@@ -45,6 +45,7 @@ typedef struct s_pak	t_pak;
 # define NAME	"starshell"
 # define C_NAME "\033[0m\033[1;34mstarshell\001\033[0m\002"
 # define NO_SIG 0
+# define HEREDOC_FILE "/tmp/.minishell_heredoc"
 
 /* ************************************************************************** */
 /*                                 SHELL                                      */
@@ -144,11 +145,13 @@ typedef struct s_pak
 }					t_pak;
 
 t_pak	*parser(t_shell *shell, t_token *token);
+int		get_fd(t_shell *shell, int oldfd, char *file, int type);
 int		parse_redir(t_shell *shell, t_pak **curr, t_token **token);
 int		parse_redir_out(t_shell *shell, t_pak **curr, t_token **token);
 int		parse_redir_in(t_shell *shell, t_pak **curr, t_token **token);
 int		parse_redir_app(t_shell *shell, t_pak **curr, t_token **token);
 int		parse_heredoc(t_shell *shell, t_pak **curr, t_token **token);
+int		handle_heredoc(char *delimiter);
 void	print_paks(t_pak *head);
 void	free_paks(t_shell *shell, t_pak *head);
 int		count_paks(t_pak *head);
