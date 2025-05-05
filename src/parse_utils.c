@@ -17,7 +17,8 @@ int	count_word_tokens(t_token *token)
 	int	i;
 
 	i = 0;
-	while (token && token->type == TK_WORD)
+	while (token && (token->type == TK_WORD || token->type == TK_DOUBLE_QUOTED
+			|| token->type == TK_SINGLE_QUOTED))
 	{
 		i++;
 		token = token->next;

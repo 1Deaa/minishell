@@ -50,7 +50,7 @@ char	*exname(char *token, int *index)
 	}
 	ret = ft_strndup(token + i, (*index) - i);
 	if (!ret)
-		return (ft_strdup(""));
+		return (NULL);
 	return (ret);
 }
 

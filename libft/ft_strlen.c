@@ -17,7 +17,7 @@ int	ft_strlen(const char *s)
 	int	i;
 
 	i = -1;
-	if (!s)
+	if (!s || s[0] == '\0')
 		return (0);
 	while (s[++i])
 		;

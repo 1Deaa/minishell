@@ -35,7 +35,7 @@ static bool	is_adjacent(t_shell *shell, t_token *prev, t_token *curr)
 		return (false);
 	if (is_special(prev) && is_special(curr))
 	{
-		shell_error(shell, NEARERR, curr->value, 1);
+		shell_error(shell, NEARERR, curr->value, 2);
 		return (true);
 	}
 	return (false);

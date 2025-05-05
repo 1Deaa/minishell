@@ -42,10 +42,6 @@ void	shell_debug(t_shell *shell)
 			printf("INPUT: %s\n━━━\n", shell->command);
 		if (shell->tokens)
 			print_tokens(shell->tokens);
-		if (is_correct_syntax(shell, shell->tokens))
-			printf("━━━\nSYNTAX: "GREEN"correct ✔\n"RESET BOLD);
-		else
-			printf("SYNTAX: "RED"failure!\n"RESET BOLD);
 		if (shell->e_status == 0)
 			printf("━━━\nEXIT STATUS: "GREEN"%d ✔\n"RESET, shell->e_status);
 		else

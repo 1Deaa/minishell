@@ -73,7 +73,8 @@ int	parse_token(t_shell *shell, t_pak **curr, t_token **token)
 			return (-1);
 		return (0);
 	}
-	else if ((*token)->type == TK_WORD)
+	else if ((*token)->type == TK_WORD || (*token)->type == TK_DOUBLE_QUOTED
+		|| (*token)->type == TK_SINGLE_QUOTED)
 	{
 		if (parse_words(shell, curr, token) < 0)
 			return (-1);

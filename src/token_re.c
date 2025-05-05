@@ -12,29 +12,53 @@
 
 #include "minishell.h"
 
+static void	combine_tokens(t_token *curr, t_token *next)
+{
+	char	*value;
+
+	value = ft_strjoin(curr->value, next->value);
+	if (!value)
+		return ;
+	free(next->value);
+	curr->value = value;
+	curr->combine = next->combine;
+	curr->next = next->next;
+	if (next->next)
+		(next->next)->prev = curr;
+	free(next);
+}
+
+static void	delete_empty_token(t_token **head, t_token *prev, t_token *target)
+{
+	if (prev)
+		prev->next = target->next;
+	else
+		*head = target->next;
+	free(target->value);
+	free(target);
+}
+
 t_token	*retokenize(t_token *head)
 {
 	t_token	*curr;
-	t_token	*next;
-	char	*value;
+	t_token	*prev;
 
+	prev = NULL;
+	curr = head;
+	while (curr)
+	{
+		if ((curr->value == NULL || curr->value[0] == '\0')
+			&& curr->type == TK_WORD)
+			delete_empty_token(&head, prev, curr);
+		else
+			prev = curr;
+		curr = curr->next;
+	}
 	curr = head;
 	while (curr)
 	{
 		if (true == curr->combine && curr->next)
-		{
-			next = curr->next;
-			value = ft_strjoin(curr->value, next->value);
-			if (!value)
-				break ;
-			free(next->value);
-			curr->value = value;
-			curr->combine = next->combine;
-			curr->next = next->next;
-			if (next->next)
-				(next->next)->prev = curr;
-			free(next);
-		}
+			combine_tokens(curr, curr->next);
 		else
 			curr = curr->next;
 	}
