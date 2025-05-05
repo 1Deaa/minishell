@@ -16,7 +16,7 @@ extern int	g_signal;
 
 void	shell_init(t_shell *shell)
 {
-	shell->debug = true;
+	shell->debug = false;
 	shell->exit = false;
 	shell->e_status = 0;
 	shell->last_pid = 0;

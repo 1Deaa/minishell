@@ -35,6 +35,7 @@ void	shell_loop(t_shell *shell)
 		}
 		g_signal = NO_SIG;
 		shell->tokens = expander(shell->tokens, shell);
+		shell->tokens = filter_tokens(shell->tokens);
 		shell->tokens = retokenize(shell->tokens);
 		shell->cmds = parser(shell, shell->tokens);
 		shell->e_status = executer(shell, shell->cmds);

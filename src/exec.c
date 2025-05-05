@@ -23,7 +23,7 @@ static void	get_cmd(t_shell *shell, t_pak *cmd)
 		shell_error(shell, IS_DIR, *(cmd->full_cmd), 126);
 	else if (!is_builtin(cmd) && cmd->full_path
 		&& access(cmd->full_path, F_OK) == -1)
-		shell_error(shell, NDIR, cmd->full_path, 127);
+		shell_error(shell, NDIR, cmd->full_path, 1);
 	else if (!is_builtin(cmd) && cmd && cmd->full_path
 		&& access(cmd->full_path, X_OK) == -1)
 		shell_error(shell, NPERM, cmd->full_path, 126);

@@ -118,6 +118,7 @@ char	*exname(char *token, int *index);
 //TOKEN PROTOTYPES
 t_token	*new_token(const char *value);
 t_token	*tokenizer(const char *input);
+t_token	*filter_tokens(t_token *head);
 t_token	*retokenize(t_token *head);
 void	add_token(t_token **head, const char *value, bool *combine);
 void	free_tokens(t_token	*token);
