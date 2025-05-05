@@ -89,5 +89,10 @@ int	parse_heredoc(t_shell *shell, t_pak **curr, t_token **token)
 		shell->e_status = 1;
 		return (-1);
 	}
+	if (!(*curr) || (*curr)->infile == -2)
+	{
+		shell->e_status = 130;
+		return (-1);
+	}
 	return (0);
 }

@@ -130,7 +130,7 @@ int	handle_heredoc(char *delimiter)
 		waitpid(pid, &status, 0);
 		shell_signal();
 		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-			return (-1);
+			return (-2);
 		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
 			return (-1);
 		return (open(HEREDOC_FILE, O_RDONLY));
