@@ -41,9 +41,38 @@ void	*shell_error(t_shell *shell, int err_type, char *param, int err)
 	return (NULL);
 }
 
-void	*ambiguous_redirect(t_shell *shell, char *name, int err)
+int	ambiguous_redirect(t_shell *shell, char *name, int err)
 {
 	shell->e_status = err;
 	ft_printf(2, "%s: %s: ambiguous redirect\n", C_NAME, name);
-	return (NULL);
+	return (-1);
+}
+
+void	*pak_redir_util(t_shell *shell, t_pak *cmd, int fd[2])
+{
+	if (cmd->infile != STDIN_FILENO)
+	{
+		if (dup2(cmd->infile, STDIN_FILENO) == -1)
+			return (shell_error(shell, DUPERR, NULL, 1));
+		close(cmd->infile);
+	}
+	else if (cmd->prev)
+	{
+		if (dup2(fd[READ_END], STDIN_FILENO) == -1)
+			return (shell_error(shell, DUPERR, NULL, 1));
+		close(fd[READ_END]);
+	}
+	if (cmd->outfile != STDOUT_FILENO)
+	{
+		if (dup2(cmd->outfile, STDOUT_FILENO) == -1)
+			return (shell_error(shell, DUPERR, NULL, 1));
+		close(cmd->outfile);
+	}
+	else if (cmd->next)
+	{
+		if (dup2(fd[WRITE_END], STDOUT_FILENO) == -1)
+			return (shell_error(shell, DUPERR, NULL, 1));
+		close(fd[WRITE_END]);
+	}
+	return ("STAR");
 }

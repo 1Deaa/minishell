@@ -16,12 +16,13 @@ int	parse_redir_out(t_shell *shell, t_pak **curr, t_token **token)
 {
 	(*token) = (*token)->next;
 	(*curr)->outfile = get_fd(shell, (*curr)->outfile, *token, TK_REDIR_OUT);
-	(*token) = (*token)->next;
+	if (*token)
+		(*token) = (*token)->next;
 	if (!(*curr) || (*curr)->outfile == -1)
 	{
 		shell->e_status = 1;
 		if (*curr)
-			(*curr)->outfile = STDOUT_FILENO;
+			(*curr)->outfile = -1;
 	}
 	else
 		shell->e_status = 0;
@@ -32,12 +33,13 @@ int	parse_redir_app(t_shell *shell, t_pak **curr, t_token **token)
 {
 	(*token) = (*token)->next;
 	(*curr)->outfile = get_fd(shell, (*curr)->outfile, *token, TK_APPEND);
-	(*token) = (*token)->next;
+	if (*token)
+		(*token) = (*token)->next;
 	if (!(*curr) || (*curr)->outfile == -1)
 	{
 		shell->e_status = 1;
 		if (*curr)
-			(*curr)->outfile = STDOUT_FILENO;
+			(*curr)->outfile = -1;
 	}
 	else
 		shell->e_status = 0;
@@ -48,12 +50,13 @@ int	parse_redir_in(t_shell *shell, t_pak **curr, t_token **token)
 {
 	(*token) = (*token)->next;
 	(*curr)->infile = get_fd(shell, (*curr)->infile, *token, TK_REDIR_IN);
-	(*token) = (*token)->next;
+	if (*token)
+		(*token) = (*token)->next;
 	if (!(*curr) || (*curr)->infile == -1)
 	{
 		shell->e_status = 1;
 		if (*curr)
-			(*curr)->infile = STDIN_FILENO;
+			(*curr)->infile = -1;
 	}
 	else
 		shell->e_status = 0;
@@ -85,7 +88,8 @@ int	parse_heredoc(t_shell *shell, t_pak **curr, t_token **token)
 {
 	(*token) = (*token)->next;
 	(*curr)->infile = handle_heredoc((*token)->value);
-	(*token) = (*token)->next;
+	if (*token)
+		(*token) = (*token)->next;
 	if (!(*curr) || (*curr)->infile == -1)
 	{
 		shell->e_status = 1;

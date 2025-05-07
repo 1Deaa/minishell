@@ -161,8 +161,9 @@ typedef struct s_pak
 
 t_pak	*parser(t_shell *shell, t_token *token);
 int		get_fd(t_shell *shell, int oldfd, t_token *token, int type);
-void	*ambiguous_redirect(t_shell *shell, char *name, int err);
+int		ambiguous_redirect(t_shell *shell, char *name, int err);
 int		parse_redir(t_shell *shell, t_pak **curr, t_token **token);
+void	*pak_redir_util(t_shell *shell, t_pak *cmd, int fd[2]);
 int		parse_redir_out(t_shell *shell, t_pak **curr, t_token **token);
 int		parse_redir_in(t_shell *shell, t_pak **curr, t_token **token);
 int		parse_redir_app(t_shell *shell, t_pak **curr, t_token **token);

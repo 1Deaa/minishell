@@ -26,7 +26,8 @@ int	count_args_tokens(t_token *token)
 			break ;
 		else if (is_redirection(token))
 			token = token->next;
-		token = token->next;
+		if (token)
+			token = token->next;
 	}
 	return (i);
 }
@@ -91,8 +92,8 @@ int	get_fd(t_shell *shell, int oldfd, t_token *token, int type)
 
 	if (oldfd > 2)
 		close(oldfd);
-	if (!token->value)
-		return (-1);
+	if (!token || !token->value)
+		return (ambiguous_redirect(shell, "", 1));
 	if (type == TK_REDIR_IN && ft_strchr(token->value, ' ') && \
 		token->type == TK_WORD)
 		ambiguous_redirect(shell, token->value, 1);

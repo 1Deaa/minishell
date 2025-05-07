@@ -53,28 +53,30 @@ bool	is_builtin(t_pak *cmd)
 
 void	*pak_redir(t_shell *shell, t_pak *cmd, int fd[2])
 {
-	if (cmd->infile != STDIN_FILENO)
+	if (cmd->infile == -1 || cmd->outfile == -1)
 	{
-		if (dup2(cmd->infile, STDIN_FILENO) == -1)
-			return (shell_error(shell, DUPERR, NULL, 1));
-		close(cmd->infile);
+		if (cmd->next)
+			close(fd[WRITE_END]);
+		if (cmd->prev)
+			close(fd[READ_END]);
+		return (NULL);
 	}
-	if (cmd->outfile != STDOUT_FILENO)
-	{
-		if (dup2(cmd->outfile, STDOUT_FILENO) == -1)
-			return (shell_error(shell, DUPERR, NULL, 1));
-		close(cmd->outfile);
-	}
-	else if (cmd->next && dup2(fd[WRITE_END], STDOUT_FILENO) == -1)
-		return (shell_error(shell, DUPERR, NULL, 1));
-	close(fd[WRITE_END]);
+	if (pak_redir_util(shell, cmd, fd) == NULL)
+		return (NULL);
+	if (!cmd->prev)
+		close(fd[READ_END]);
+	if (!cmd->next)
+		close(fd[WRITE_END]);
 	return ("STAR");
 }
 
 void	*pak_process(t_shell *shell, t_pak *cmd, int fd[2])
 {
-	pak_redir(shell, cmd, fd);
-	close(fd[READ_END]);
+	if (pak_redir(shell, cmd, fd) == NULL)
+	{
+		free_paks(shell, cmd);
+		exit(shell->e_status);
+	}
 	shell_signal_reset();
 	if (!is_builtin(cmd) && cmd->full_cmd)
 		execve(cmd->full_path, cmd->full_cmd, shell->envp);
