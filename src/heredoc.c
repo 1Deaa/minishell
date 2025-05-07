@@ -43,7 +43,10 @@ static char	*get_heredoc_input(char *delimiter)
 	{
 		line = readline("> ");
 		if (!line || !ft_strncmp(line, delimiter, ft_strlen(delimiter)))
+		{
+			print_heredoc_warning(line, delimiter);
 			break ;
+		}
 		content = append_line_to_content(content, line);
 		if (!content)
 		{
@@ -75,25 +78,6 @@ static int	write_heredoc_to_file(char *content, char *heredoc_file)
 	close(fd);
 	return (open(heredoc_file, O_RDONLY));
 }
-
-/*int	handle_heredoc(char *delimiter)
-{
-	char	*content;
-	char	*heredoc_file;
-	int		fd;
-
-	if (!delimiter)
-		return (-1);
-	heredoc_file = "/tmp/.minishell_heredoc";
-	content = get_heredoc_input(delimiter);
-	if (!content)
-		return (-1);
-	fd = write_heredoc_to_file(content, heredoc_file);
-	free(content);
-	if (fd == -1)
-		ft_printf(2, "Error opening heredoc file for reading");
-	return (fd);
-}*/
 
 void	heredoc_child(char *delimiter)
 {

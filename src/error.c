@@ -41,6 +41,13 @@ void	*shell_error(t_shell *shell, int err_type, char *param, int err)
 	return (NULL);
 }
 
+void	print_heredoc_warning(char *line, char *delimiter)
+{
+	if (!line)
+		ft_printf(2, "%s: %s: here-document delimited by end-of-file \
+(wanted `%s')\n", C_NAME, "warning", delimiter);
+}
+
 int	ambiguous_redirect(t_shell *shell, char *name, int err)
 {
 	shell->e_status = err;
