@@ -78,6 +78,10 @@ void	*pak_process(t_shell *shell, t_pak *cmd, int fd[2])
 		exit(shell->e_status);
 	}
 	shell_signal_reset();
+	if (fd[READ_END] > STDERR_FILENO)
+		close(fd[READ_END]);
+	if (fd[WRITE_END] > STDERR_FILENO)
+		close(fd[WRITE_END]);
 	if (!is_builtin(cmd) && cmd->full_cmd)
 		execve(cmd->full_path, cmd->full_cmd, shell->envp);
 	else if (is_builtin(cmd) && cmd->full_cmd && \

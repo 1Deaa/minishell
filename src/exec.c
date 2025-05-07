@@ -39,9 +39,7 @@ void	*exec_pak(t_shell *shell, t_pak *cmd)
 	if (pipe(fd) == -1)
 		return (shell_error(shell, PIPERR, NULL, 1));
 	if (!is_forkable(shell, cmd, fd))
-	{
 		return (NULL);
-	}
 	if (cmd->next)
 	{
 		cmd->next->infile = fd[READ_END];
