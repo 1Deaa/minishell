@@ -16,6 +16,7 @@ void	shell_signal_ignore(void)
 {
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
+	signal(SIGPIPE, SIG_IGN);
 }
 
 void	shell_signal_reset(void)
