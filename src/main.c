@@ -17,6 +17,8 @@ extern int	g_signal;
 void	shell_init(t_shell *shell)
 {
 	shell->debug = false;
+	if (shell->argv[1] && !ft_strcmp(shell->argv[1], "debug"))
+		shell->debug = true;
 	shell->exit = false;
 	shell->e_status = 0;
 	shell->last_pid = 0;
