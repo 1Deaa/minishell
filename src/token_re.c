@@ -64,14 +64,16 @@ t_token	*filter_tokens(t_token *head)
 	return (head);
 }
 
- static void free_token_node(t_token *node) {
-	 if (!node)
-		 return;
-	 free(node->value);
-	 free(node);
- }
- 
-  t_token *retokenize(t_token *head) {
+static void	free_token_node(t_token *node)
+{
+	if (!node)
+		return;
+	free(node->value);
+	free(node);
+}
+
+t_token *retokenize(t_token *head)
+{
 	 t_token *curr = head;
 	 t_token *new_head = head;
  
@@ -80,7 +82,7 @@ t_token	*filter_tokens(t_token *head)
 		 t_token *next_orig = curr->next;
  
 		 // Generate a new sublist for curr->value
-		 t_token *sub = tokenizer(curr->value);
+		 t_token *sub = tokenizer(curr->value, REMAKE);
  
 		 if (sub) {
 			 // Find tail of new sublist
@@ -120,5 +122,5 @@ t_token	*filter_tokens(t_token *head)
 	 }
  
 	 return new_head;
- }
+}
  

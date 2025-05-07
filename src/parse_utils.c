@@ -12,18 +12,44 @@
 
 #include "minishell.h"
 
-int	count_word_tokens(t_token *token)
+int	count_args_tokens(t_token *token)
 {
 	int	i;
 
 	i = 0;
-	while (token && (token->type == TK_WORD || token->type == TK_DOUBLE_QUOTED
-			|| token->type == TK_SINGLE_QUOTED))
+	while (token)
 	{
-		i++;
+		if (token->type == TK_WORD || token->type == TK_DOUBLE_QUOTED
+			|| token->type == TK_SINGLE_QUOTED)
+			i++;
+		else if (token->type == TK_PIPE)
+			break ;
+		else if (is_redirection(token))
+			token = token->next;
 		token = token->next;
 	}
 	return (i);
+}
+
+void	fill_args_tokens(t_shell *shell, t_args *args, t_pak **cur, \
+	t_token **token)
+{
+	int		i;
+
+	i = 0;
+	while (token && *token && i < args->argc)
+	{
+		if ((*token)->type == TK_PIPE)
+			break ;
+		if (is_redirection(*token))
+			parse_redir(shell, cur, token);
+		if (*token)
+		{
+			args->argv[i++] = (*token)->value;
+			*token = (*token)->next;
+		}
+	}
+	args->argv[i] = NULL;
 }
 
 void	free_paks(t_shell *shell, t_pak *head)
@@ -40,7 +66,10 @@ void	free_paks(t_shell *shell, t_pak *head)
 		free(head);
 		head = tmp;
 	}
-	free_tokens(shell->tokens);
+	shell->cmds = NULL;
+	if (shell->tokens)
+		free_tokens(shell->tokens);
+	shell->tokens = NULL;
 }
 
 int	count_paks(t_pak *head)
@@ -56,27 +85,30 @@ int	count_paks(t_pak *head)
 	return (count);
 }
 
-int	get_fd(t_shell *shell, int oldfd, char *file, int type)
+int	get_fd(t_shell *shell, int oldfd, t_token *token, int type)
 {
 	int	fd;
 
 	if (oldfd > 2)
 		close(oldfd);
-	if (!file)
+	if (!token->value)
 		return (-1);
-	if (access(file, F_OK) == -1 && type == TK_REDIR_IN)
-		shell_error(shell, NDIR, file, 127);
-	else if (access(file, R_OK) == -1 && type == TK_REDIR_IN)
-		shell_error(shell, NPERM, file, 126);
-	else if (access(file, W_OK) == -1 && access(file, F_OK) == 0 && \
-		(type == TK_REDIR_OUT || type == TK_APPEND))
-		shell_error(shell, NPERM, file, 126);
+	if (type == TK_REDIR_IN && ft_strchr(token->value, ' ') && \
+		token->type == TK_WORD)
+		ambiguous_redirect(shell, token->value, 1);
+	else if (access(token->value, F_OK) == -1 && type == TK_REDIR_IN)
+		shell_error(shell, NDIR, token->value, 127);
+	else if (access(token->value, R_OK) == -1 && type == TK_REDIR_IN)
+		shell_error(shell, NPERM, token->value, 126);
+	else if (access(token->value, W_OK) == -1 && access(token->value, F_OK) == 0
+		&& (type == TK_REDIR_OUT || type == TK_APPEND))
+		shell_error(shell, NPERM, token->value, 126);
 	if (TK_APPEND == type)
-		fd = open(file, O_CREAT | O_WRONLY | O_APPEND, 0666);
+		fd = open(token->value, O_CREAT | O_WRONLY | O_APPEND, 0666);
 	else if (TK_REDIR_OUT == type)
-		fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
+		fd = open(token->value, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	else if (TK_REDIR_IN == type && oldfd != -1)
-		fd = open(file, O_RDONLY);
+		fd = open(token->value, O_RDONLY);
 	else
 		fd = oldfd;
 	return (fd);

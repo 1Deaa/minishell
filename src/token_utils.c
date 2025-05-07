@@ -84,23 +84,23 @@ void	print_tokens(t_token *token)
 	}
 }
 
-void	assign_token_types(t_token *tokens)
+void	assign_token_types(t_token *tokens, t_tokenization type)
 {
 	while (tokens)
 	{
-		if (!ft_strcmp(tokens->value, "|"))
+		if (!ft_strcmp(tokens->value, "|") && type == DEFAULT)
 			tokens->type = TK_PIPE;
-		else if (!ft_strcmp(tokens->value, "<"))
+		else if (!ft_strcmp(tokens->value, "<") && type == DEFAULT)
 			tokens->type = TK_REDIR_IN;
-		else if (!ft_strcmp(tokens->value, ">"))
+		else if (!ft_strcmp(tokens->value, ">") && type == DEFAULT)
 			tokens->type = TK_REDIR_OUT;
-		else if (!ft_strcmp(tokens->value, ">>"))
+		else if (!ft_strcmp(tokens->value, ">>") && type == DEFAULT)
 			tokens->type = TK_APPEND;
-		else if (!ft_strcmp(tokens->value, "<<"))
+		else if (!ft_strcmp(tokens->value, "<<") && type == DEFAULT)
 			tokens->type = TK_HEREDOC;
-		else if (tokens->value[0] == '\'')
+		else if (tokens->value[0] == '\'' && type == DEFAULT)
 			tokens->type = TK_SINGLE_QUOTED;
-		else if (tokens->value[0] == '"')
+		else if (tokens->value[0] == '"' && type == DEFAULT)
 			tokens->type = TK_DOUBLE_QUOTED;
 		else
 			tokens->type = TK_WORD;

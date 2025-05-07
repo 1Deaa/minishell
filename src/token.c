@@ -93,7 +93,7 @@ static char	*word_token(const char **p, bool *combine)
 	return (token);
 }
 
-t_token	*tokenizer(const char *input)
+t_token	*tokenizer(const char *input, t_tokenization type)
 {
 	struct s_tokenizer	ex;
 
@@ -118,6 +118,6 @@ t_token	*tokenizer(const char *input)
 		}
 		ex.combine = false;
 	}
-	assign_token_types(ex.head);
+	assign_token_types(ex.head, type);
 	return (ex.head);
 }

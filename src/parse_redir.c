@@ -15,42 +15,48 @@
 int	parse_redir_out(t_shell *shell, t_pak **curr, t_token **token)
 {
 	(*token) = (*token)->next;
-	(*curr)->outfile = get_fd(shell, (*curr)->outfile, \
-		(*token)->value, TK_REDIR_OUT);
+	(*curr)->outfile = get_fd(shell, (*curr)->outfile, *token, TK_REDIR_OUT);
 	(*token) = (*token)->next;
 	if (!(*curr) || (*curr)->outfile == -1)
 	{
 		shell->e_status = 1;
-		return (-1);
+		if (*curr)
+			(*curr)->outfile = STDOUT_FILENO;
 	}
+	else
+		shell->e_status = 0;
 	return (0);
 }
 
 int	parse_redir_app(t_shell *shell, t_pak **curr, t_token **token)
 {
 	(*token) = (*token)->next;
-	(*curr)->outfile = get_fd(shell, (*curr)->outfile, \
-		(*token)->value, TK_APPEND);
+	(*curr)->outfile = get_fd(shell, (*curr)->outfile, *token, TK_APPEND);
 	(*token) = (*token)->next;
 	if (!(*curr) || (*curr)->outfile == -1)
 	{
 		shell->e_status = 1;
-		return (-1);
+		if (*curr)
+			(*curr)->outfile = STDOUT_FILENO;
 	}
+	else
+		shell->e_status = 0;
 	return (0);
 }
 
 int	parse_redir_in(t_shell *shell, t_pak **curr, t_token **token)
 {
 	(*token) = (*token)->next;
-	(*curr)->infile = get_fd(shell, (*curr)->infile, \
-		(*token)->value, TK_REDIR_IN);
+	(*curr)->infile = get_fd(shell, (*curr)->infile, *token, TK_REDIR_IN);
 	(*token) = (*token)->next;
-	if (!(*curr) || (*curr)->outfile == -1)
+	if (!(*curr) || (*curr)->infile == -1)
 	{
 		shell->e_status = 1;
-		return (-1);
+		if (*curr)
+			(*curr)->infile = STDIN_FILENO;
 	}
+	else
+		shell->e_status = 0;
 	return (0);
 }
 
@@ -58,23 +64,19 @@ int	parse_redir(t_shell *shell, t_pak **curr, t_token **token)
 {
 	if ((*token)->type == TK_REDIR_OUT)
 	{
-		if (parse_redir_out(shell, curr, token) < 0)
-			return (-1);
+		parse_redir_out(shell, curr, token);
 	}
 	else if ((*token)->type == TK_REDIR_IN)
 	{
-		if (parse_redir_in(shell, curr, token) < 0)
-			return (-1);
+		parse_redir_in(shell, curr, token);
 	}
 	else if ((*token)->type == TK_APPEND)
 	{
-		if (parse_redir_app(shell, curr, token) < 0)
-			return (-1);
+		parse_redir_app(shell, curr, token);
 	}
 	else if ((*token)->type == TK_HEREDOC)
 	{
-		if (parse_heredoc(shell, curr, token) < 0)
-			return (-1);
+		parse_heredoc(shell, curr, token);
 	}
 	return (0);
 }
@@ -87,7 +89,10 @@ int	parse_heredoc(t_shell *shell, t_pak **curr, t_token **token)
 	if (!(*curr) || (*curr)->infile == -1)
 	{
 		shell->e_status = 1;
-		return (-1);
+		if (*curr)
+			(*curr)->infile = STDIN_FILENO;
 	}
+	else
+		shell->e_status = 0;
 	return (0);
 }

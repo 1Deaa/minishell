@@ -53,7 +53,6 @@ static void	expand_single_quoted(t_token *token)
 	exp = ft_strndup((token->value) + 1, i - 1);
 	free(token->value);
 	token->value = exp;
-	//token->type = TK_WORD;
 }
 
 static void	expand_quoted(t_token *token, t_shell *shell)
@@ -82,7 +81,6 @@ static void	expand_quoted(t_token *token, t_shell *shell)
 	}
 	free(token->value);
 	token->value = str;
-	//token->type = TK_WORD;
 }
 
 static void	expand_word(t_token *token, t_shell *shell)

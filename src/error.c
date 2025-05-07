@@ -40,3 +40,10 @@ void	*shell_error(t_shell *shell, int err_type, char *param, int err)
 	ft_printf(2, "%s\n", param);
 	return (NULL);
 }
+
+void	*ambiguous_redirect(t_shell *shell, char *name, int err)
+{
+	shell->e_status = err;
+	ft_printf(2, "%s: %s: ambiguous redirect\n", C_NAME, name);
+	return (NULL);
+}

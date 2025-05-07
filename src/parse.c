@@ -24,7 +24,7 @@ static t_pak	*new_pak(void)
 	return (pak);
 }
 
-int	parse_pipe(t_pak **curr, t_token **token)
+int	parse_pipe(t_shell *shell, t_pak **curr, t_token **token)
 {
 	t_pak	*next;
 
@@ -32,7 +32,10 @@ int	parse_pipe(t_pak **curr, t_token **token)
 		return (-1);
 	next = new_pak();
 	if (!next)
+	{
+		shell_error(shell, MEM, NULL, 1);
 		return (-1);
+	}
 	(*curr)->next = next;
 	next->prev = *curr;
 	*curr = next;
@@ -42,26 +45,22 @@ int	parse_pipe(t_pak **curr, t_token **token)
 
 int	parse_words(t_shell *shell, t_pak **curr, t_token **token)
 {
-	char	**argv;
-	int		i;
-	int		wc;
+	t_args	args;
 
 	if (!curr || !*curr)
 		return (-1);
-	wc = count_word_tokens(*token);
-	argv = (char **)malloc(sizeof(char *) * (wc + 1));
-	if (!argv)
-		return (-1);
-	i = 0;
-	while (i < wc)
+	(*curr)->full_cmd = NULL;
+	(*curr)->full_path = NULL;
+	args.argc = count_args_tokens(*token);
+	args.argv = (char **)malloc(sizeof(char *) * (args.argc + 1));
+	if (!args.argv)
 	{
-		argv[i] = (*token)->value;
-		(*token) = (*token)->next;
-		i++;
+		shell_error(shell, MEM, NULL, 1);
+		return (-1);
 	}
-	argv[i] = NULL;
-	(*curr)->full_cmd = argv;
-	(*curr)->full_path = find_path(shell, argv[0]);
+	fill_args_tokens(shell, &args, curr, token);
+	(*curr)->full_cmd = args.argv;
+	(*curr)->full_path = find_path(shell, args.argv[0]);
 	return (0);
 }
 
@@ -69,20 +68,18 @@ int	parse_token(t_shell *shell, t_pak **curr, t_token **token)
 {
 	if ((*token)->type == TK_PIPE)
 	{
-		if (parse_pipe(curr, token) < 0)
-			return (-1);
-		return (0);
-	}
-	else if ((*token)->type == TK_WORD || (*token)->type == TK_DOUBLE_QUOTED
-		|| (*token)->type == TK_SINGLE_QUOTED)
-	{
-		if (parse_words(shell, curr, token) < 0)
+		if (parse_pipe(shell, curr, token) < 0)
 			return (-1);
 		return (0);
 	}
 	else if (is_redirection(*token))
 	{
-		if (parse_redir(shell, curr, token) < 0)
+		return (parse_redir(shell, curr, token));
+	}
+	else if ((*token)->type == TK_WORD || (*token)->type == TK_DOUBLE_QUOTED
+		|| (*token)->type == TK_SINGLE_QUOTED)
+	{
+		if (parse_words(shell, curr, token) < 0)
 			return (-1);
 		return (0);
 	}
@@ -103,7 +100,10 @@ t_pak	*parser(t_shell *shell, t_token *token)
 	{
 		res = parse_token(shell, &curr, &token);
 		if (res < 0)
-			break ;
+		{
+			free_paks(shell, head);
+			return (NULL);
+		}
 	}
 	return (head);
 }

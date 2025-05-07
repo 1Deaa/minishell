@@ -88,6 +88,12 @@ struct	s_tokenizer
 	bool		combine;
 };
 
+typedef enum e_tokenization_type
+{
+	DEFAULT,
+	REMAKE,
+}	t_tokenization;
+
 typedef enum e_token_type
 {
 	TK_PIPE,
@@ -99,6 +105,12 @@ typedef enum e_token_type
 	TK_APPEND,
 	TK_HEREDOC,
 }	t_token_type;
+
+typedef struct s_args
+{
+	int		argc;
+	char	**argv;
+}			t_args;
 
 typedef struct s_token
 {
@@ -117,14 +129,16 @@ char	*exname(char *token, int *index);
 
 //TOKEN PROTOTYPES
 t_token	*new_token(const char *value);
-t_token	*tokenizer(const char *input);
+t_token	*tokenizer(const char *input, t_tokenization type);
 t_token	*filter_tokens(t_token *head);
 t_token	*retokenize(t_token *head);
 void	add_token(t_token **head, const char *value, bool *combine);
 void	free_tokens(t_token	*token);
 void	print_tokens(t_token *token);
-int		count_word_tokens(t_token *token);
-void	assign_token_types(t_token *tokens);
+int		count_args_tokens(t_token *token);
+void	fill_args_tokens(t_shell *shell, t_args *args, t_pak **cur, \
+	t_token **token);
+void	assign_token_types(t_token *tokens, t_tokenization type);
 
 //SYNTAX PROTOTYPES
 bool	is_redirection(t_token *node);
@@ -146,7 +160,8 @@ typedef struct s_pak
 }					t_pak;
 
 t_pak	*parser(t_shell *shell, t_token *token);
-int		get_fd(t_shell *shell, int oldfd, char *file, int type);
+int		get_fd(t_shell *shell, int oldfd, t_token *token, int type);
+void	*ambiguous_redirect(t_shell *shell, char *name, int err);
 int		parse_redir(t_shell *shell, t_pak **curr, t_token **token);
 int		parse_redir_out(t_shell *shell, t_pak **curr, t_token **token);
 int		parse_redir_in(t_shell *shell, t_pak **curr, t_token **token);

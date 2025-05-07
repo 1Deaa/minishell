@@ -17,7 +17,8 @@ extern int	g_signal;
 void	shell_clean(t_shell *shell)
 {
 	free(shell->command);
-	free_paks(shell, shell->cmds);
+	if (shell->cmds)
+		free_paks(shell, shell->cmds);
 }
 
 void	shell_loop(t_shell *shell)
@@ -26,7 +27,7 @@ void	shell_loop(t_shell *shell)
 	while (0x1DEAA)
 	{
 		shell->command = shell_read(shell);
-		shell->tokens = tokenizer(shell->command);
+		shell->tokens = tokenizer(shell->command, DEFAULT);
 		if (!is_correct_syntax(shell, shell->tokens))
 		{
 			free(shell->command);
