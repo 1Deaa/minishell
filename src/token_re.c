@@ -42,16 +42,18 @@ t_token	*filter_tokens(t_token *head)
 {
 	t_token	*curr;
 	t_token	*prev;
+	t_token	*next;
 
 	prev = NULL;
 	curr = head;
 	while (curr)
 	{
+		next = curr->next;
 		if ((!curr->value || !(curr->value[0])) && curr->type == TK_WORD)
 			delete_empty_token(&head, prev, curr);
 		else
 			prev = curr;
-		curr = curr->next;
+		curr = next;
 	}
 	curr = head;
 	while (curr)
