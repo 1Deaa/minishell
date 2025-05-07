@@ -39,15 +39,22 @@ void	*exec_pak(t_shell *shell, t_pak *cmd)
 	if (pipe(fd) == -1)
 		return (shell_error(shell, PIPERR, NULL, 1));
 	if (!is_forkable(shell, cmd, fd))
+	{
 		return (NULL);
-	close(fd[WRITE_END]);
-	if (cmd->next && cmd->next->infile == 0)
+	}
+	if (cmd->next)
+	{
 		cmd->next->infile = fd[READ_END];
+		close(fd[WRITE_END]);
+	}
 	else
+	{
+		close(fd[WRITE_END]);
 		close(fd[READ_END]);
-	if (cmd->infile > 2)
+	}
+	if (cmd->infile > STDERR_FILENO)
 		close(cmd->infile);
-	if (cmd->outfile > 2)
+	if (cmd->outfile > STDERR_FILENO)
 		close(cmd->outfile);
 	return (NULL);
 }

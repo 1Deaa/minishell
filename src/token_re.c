@@ -34,6 +34,8 @@ static void	delete_empty_token(t_token **head, t_token *prev, t_token *target)
 		prev->next = target->next;
 	else
 		*head = target->next;
+	if (target->next)
+		(target->next)->prev = prev;
 	free(target->value);
 	free(target);
 }
@@ -76,6 +78,64 @@ static void	free_token_node(t_token *node)
 
 t_token *retokenize(t_token *head)
 {
+    t_token *curr = head;
+    t_token *new_head = head;
+
+    while (curr && curr->type == TK_WORD) {
+        // Save next pointer before we modify curr
+        t_token *next_orig = curr->next;
+
+        // Generate a new sublist for curr->value
+        t_token *sub = tokenizer(curr->value, REMAKE);
+
+        if (sub) {
+            // Find tail of new sublist
+            t_token *sub_tail = sub;
+            while (sub_tail->next)
+                sub_tail = sub_tail->next;
+
+            // Splice sublist into main list in place of curr
+            if (curr->prev) {
+                curr->prev->next = sub;
+                sub->prev = curr->prev;
+            } else {
+                new_head = sub;
+                sub->prev = NULL;
+            }
+            if (next_orig) {
+                next_orig->prev = sub_tail;
+                sub_tail->next = next_orig;
+            } else {
+                sub_tail->next = NULL;
+            }
+
+            // Free the old token node
+            free_token_node(curr);
+            
+            // Advance curr to the node after the inserted sublist
+            curr = sub_tail->next;
+        } else {
+            // tokenizer returned NULL: remove curr from list
+            t_token *prev = curr->prev;
+            // unlink curr
+            if (prev)
+                prev->next = next_orig;
+            else
+                new_head = next_orig;
+            if (next_orig)
+                next_orig->prev = prev;
+            // free curr node
+            free_token_node(curr);
+            // advance
+            curr = next_orig;
+        }
+    }
+
+    return new_head;
+}
+
+/*t_token *retokenize(t_token *head)
+{
 	 t_token *curr = head;
 	 t_token *new_head = head;
  
@@ -117,12 +177,14 @@ t_token *retokenize(t_token *head)
  
 			 // Advance curr to the node after the inserted sublist
 			 curr = sub_tail->next;
-		 } else {
+		 }
+		 else
+		 {
 			 // If tokenizer returned NULL, skip replacement
 			 curr = next_orig;
 		 }
 	 }
  
 	 return new_head;
-}
+}*/
  
