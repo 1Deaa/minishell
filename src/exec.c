@@ -121,7 +121,13 @@ void	*is_forkable(t_shell *shell, t_pak *cmd, int fd[2])
 	if (cmd->full_cmd)
 		dir = opendir(*(cmd->full_cmd));
 	if (cmd->infile == -1 || cmd->outfile == -1)
+	{
+		if (dir)
+			closedir(dir);
 		return (NULL);
+	}
+	if (dir)
+		closedir(dir);
 	if ((cmd->full_path && access(cmd->full_path, X_OK) == 0) || \
 		is_builtin(cmd))
 		pak_fork(shell, cmd, fd);
@@ -130,7 +136,5 @@ void	*is_forkable(t_shell *shell, t_pak *cmd, int fd[2])
 		shell->e_status = 126;
 	else if (!is_builtin(cmd) && cmd->full_cmd)
 		shell->e_status = 127;
-	if (dir)
-		closedir(dir);
 	return ("STAR");
 }
