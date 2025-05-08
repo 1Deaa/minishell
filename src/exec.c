@@ -44,6 +44,10 @@ void	*exec_pak(t_shell *shell, t_pak *cmd)
 			close(fd[READ_END]);
 		if (fd[WRITE_END] > STDERR_FILENO)
 			close(fd[WRITE_END]);
+		if (cmd->infile > STDERR_FILENO)
+			close(cmd->infile);
+		if (cmd->outfile > STDERR_FILENO)
+			close(cmd->outfile);
 		return (NULL);
 	}
 	if (cmd->next)

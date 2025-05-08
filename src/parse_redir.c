@@ -25,7 +25,10 @@ int	parse_redir_out(t_shell *shell, t_pak **curr, t_token **token)
 			(*curr)->outfile = -1;
 	}
 	else
-		shell->e_status = 0;
+	{
+		if ((*curr)->infile > 0)
+			shell->e_status = 0;
+	}
 	return (0);
 }
 
@@ -42,7 +45,10 @@ int	parse_redir_app(t_shell *shell, t_pak **curr, t_token **token)
 			(*curr)->outfile = -1;
 	}
 	else
-		shell->e_status = 0;
+	{
+		if ((*curr)->infile > 0)
+			shell->e_status = 0;
+	}
 	return (0);
 }
 
@@ -59,7 +65,10 @@ int	parse_redir_in(t_shell *shell, t_pak **curr, t_token **token)
 			(*curr)->infile = -1;
 	}
 	else
-		shell->e_status = 0;
+	{
+		if ((*curr)->outfile > 0)
+			shell->e_status = 0;
+	}
 	return (0);
 }
 
@@ -87,6 +96,8 @@ int	parse_redir(t_shell *shell, t_pak **curr, t_token **token)
 int	parse_heredoc(t_shell *shell, t_pak **curr, t_token **token)
 {
 	(*token) = (*token)->next;
+	if ((*curr)->infile > STDERR_FILENO)
+		close((*curr)->infile);
 	(*curr)->infile = handle_heredoc((*token)->value);
 	if (*token)
 		(*token) = (*token)->next;
@@ -97,6 +108,9 @@ int	parse_heredoc(t_shell *shell, t_pak **curr, t_token **token)
 			(*curr)->infile = STDIN_FILENO;
 	}
 	else
-		shell->e_status = 0;
+	{
+		if ((*curr)->outfile > 0)
+			shell->e_status = 0;
+	}
 	return (0);
 }

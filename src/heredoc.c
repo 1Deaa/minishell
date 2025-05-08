@@ -91,7 +91,7 @@ void	heredoc_child(char *delimiter)
 		return ;
 	fd = write_heredoc_to_file(content, HEREDOC_FILE);
 	free(content);
-	if (fd == -1)
+	if (fd < 0)
 		exit(1);
 	close(fd);
 	exit(0);
