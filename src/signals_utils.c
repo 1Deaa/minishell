@@ -24,4 +24,5 @@ void	shell_signal_reset(void)
 	enable_ctrl_backslash();
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
+	signal(SIGPIPE, SIG_DFL);
 }

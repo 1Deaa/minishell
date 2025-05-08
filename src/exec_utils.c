@@ -74,7 +74,7 @@ void	*pak_process(t_shell *shell, t_pak *cmd, int fd[2])
 {
 	if (pak_redir(shell, cmd, fd) == NULL)
 	{
-		free_paks(shell, cmd);
+		free_paks(shell, shell->cmds);
 		exit(shell->e_status);
 	}
 	shell_signal_reset();
@@ -93,7 +93,7 @@ void	*pak_process(t_shell *shell, t_pak *cmd, int fd[2])
 	else if (is_builtin(cmd) && cmd->full_cmd && \
 		!ft_strcmp(*(cmd->full_cmd), "env"))
 		shell->e_status = env(shell->envp);
-	free_paks(shell, cmd);
+	free_paks(shell, shell->cmds);
 	exit(shell->e_status);
 }
 
