@@ -12,13 +12,26 @@
 
 #include "minishell.h"
 
+int	redir_error(t_shell *shell, int err_type, char *param, int err)
+{
+	shell->e_status = err;
+	if (err_type == NDIR)
+		ft_printf(2, "%s: No such file or directory: ", C_NAME);
+	else if (err_type == IS_DIR)
+		ft_printf(2, "%s: Is a directory: ", C_NAME);
+	else if (err_type == NOT_DIR)
+		ft_printf(2, "%s: Not a directory: ", C_NAME);
+	else if (err_type == NPERM)
+		ft_printf(2, "%s: permission denied: ", C_NAME);
+	ft_printf(2, "%s\n", param);
+	return (-1);
+}
+
 void	*shell_error(t_shell *shell, int err_type, char *param, int err)
 {
 	shell->e_status = err;
 	if (err_type == QUOTE)
 		ft_printf(2, "%s: error while looking for matching quote!", C_NAME);
-	else if (err_type == NDIR)
-		ft_printf(2, "%s: No such file or directory: ", C_NAME);
 	else if (err_type == NPERM)
 		ft_printf(2, "%s: permission denied: ", C_NAME);
 	else if (err_type == NCMD)
@@ -33,10 +46,6 @@ void	*shell_error(t_shell *shell, int err_type, char *param, int err)
 		ft_printf(2, "%s: syntax error near unexpected token: ", C_NAME);
 	else if (err_type == MEM)
 		ft_printf(2, "%s: no memory left on device\n", C_NAME);
-	else if (err_type == IS_DIR)
-		ft_printf(2, "%s: Is a directory: ", C_NAME);
-	else if (err_type == NOT_DIR)
-		ft_printf(2, "%s: Not a directory: ", C_NAME);
 	ft_printf(2, "%s\n", param);
 	return (NULL);
 }

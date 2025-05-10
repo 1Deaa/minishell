@@ -193,6 +193,7 @@ enum	e_error
 };
 
 void	*shell_error(t_shell *shell, int err_type, char *param, int err);
+int		redir_error(t_shell *shell, int err_type, char *param, int err);
 void	print_heredoc_warning(char *line, char *delimiter);
 
 /* ************************************************************************** */
