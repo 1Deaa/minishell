@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-extern int	g_signal;
+extern volatile sig_atomic_t	g_signal;
 
 void	shell_clean(t_shell *shell)
 {

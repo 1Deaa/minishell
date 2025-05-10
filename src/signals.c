@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	g_signal;
+volatile sig_atomic_t	g_signal;
 
 void	enable_ctrl_backslash(void)
 {

@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-extern int	g_signal;
+extern volatile sig_atomic_t	g_signal;
 
 static char	*append_line_to_content(char *content, char *line)
 {
