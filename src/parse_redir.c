@@ -15,7 +15,7 @@
 int	parse_redir_out(t_shell *shell, t_pak **curr, t_token **token)
 {
 	(*token) = (*token)->next;
-	if ((*curr)->infile != -1)
+	if ((*curr)->infile != -1 && (*curr)->outfile != -1)
 		(*curr)->outfile = get_fd(shell, (*curr)->outfile, *token, TK_REDIR_OUT);
 	if (*token)
 		(*token) = (*token)->next;
@@ -36,7 +36,7 @@ int	parse_redir_out(t_shell *shell, t_pak **curr, t_token **token)
 int	parse_redir_app(t_shell *shell, t_pak **curr, t_token **token)
 {
 	(*token) = (*token)->next;
-	if ((*curr)->infile != -1)
+	if ((*curr)->infile != -1 && (*curr)->outfile != -1)
 		(*curr)->outfile = get_fd(shell, (*curr)->outfile, *token, TK_APPEND);
 	if (*token)
 		(*token) = (*token)->next;
@@ -57,7 +57,7 @@ int	parse_redir_app(t_shell *shell, t_pak **curr, t_token **token)
 int	parse_redir_in(t_shell *shell, t_pak **curr, t_token **token)
 {
 	(*token) = (*token)->next;
-	if ((*curr)->outfile != -1)
+	if ((*curr)->infile != -1 && (*curr)->outfile != -1)
 		(*curr)->infile = get_fd(shell, (*curr)->infile, *token, TK_REDIR_IN);
 	if (*token)
 		(*token) = (*token)->next;

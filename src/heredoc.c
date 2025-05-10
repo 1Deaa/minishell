@@ -42,7 +42,7 @@ static char	*get_heredoc_input(char *delimiter)
 	while (true)
 	{
 		line = readline("> ");
-		if (!line || !ft_strncmp(line, delimiter, ft_strlen(delimiter)))
+		if (!line || !ft_strcmp(line, delimiter))
 		{
 			print_heredoc_warning(line, delimiter);
 			break ;

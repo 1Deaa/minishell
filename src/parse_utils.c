@@ -94,11 +94,14 @@ int	get_fd(t_shell *shell, int oldfd, t_token *token, int type)
 		close(oldfd);
 	if (!token || !token->value)
 		return (ambiguous_redirect(shell, "", 1));
-	if (type == TK_REDIR_IN && ft_strchr(token->value, ' ') && \
+	if (is_redirection(token->prev) && ft_strchr(token->value, ' ') && \
 		token->type == TK_WORD)
-		ambiguous_redirect(shell, token->value, 1);
+		return (ambiguous_redirect(shell, token->value, 1));
 	else if (access(token->value, F_OK) == -1 && type == TK_REDIR_IN)
+	{
 		shell_error(shell, NDIR, token->value, 127);
+		return (-1);
+	}
 	else if (access(token->value, R_OK) == -1 && type == TK_REDIR_IN)
 		shell_error(shell, NPERM, token->value, 126);
 	else if (access(token->value, W_OK) == -1 && access(token->value, F_OK) == 0
