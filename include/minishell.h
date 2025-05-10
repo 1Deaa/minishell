@@ -224,6 +224,7 @@ int		executer(t_shell *shell, t_pak *cmd);
 void	pak_fork(t_shell *shell, t_pak *cmd, int fd[2]);
 void	wait_processes(t_shell *shell, int count);
 void	*is_forkable(t_shell *shell, t_pak *cmd, int fd[2]);
+void	handle_fork(int infile, int outfile, int fd[2]);
 DIR		*check_cmd(t_shell *shell, t_pak *cmd);
 /*
 EXEC_UTILS

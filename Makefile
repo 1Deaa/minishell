@@ -15,11 +15,11 @@ NAME = minishell
 FILES = main.c \
 		signals.c signals_utils.c \
 		shell.c shell_utils.c \
-		token.c token_utils.c token_re.c \
+		token.c token_utils.c token_re.c token_filter.c \
 		syntax.c syntax_utils.c \
 		expand.c expand_utils.c \
 		parse.c parse_redir.c parse_utils.c parse_print.c heredoc.c \
-		exec.c exec_utils.c \
+		exec.c exec_utils.c exec_utils2.c \
 		find_path.c \
 		bn_echo.c bn_env.c bn_export.c bn_pwd.c bn_cd.c bn_exit.c \
 		error.c \

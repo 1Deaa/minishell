@@ -12,125 +12,81 @@
 
 #include "minishell.h"
 
-static void	combine_tokens(t_token *curr, t_token *next)
-{
-	char	*value;
-
-	value = ft_strjoin(curr->value, next->value);
-	if (!value)
-		return ;
-	free(next->value);
-	curr->value = value;
-	curr->combine = next->combine;
-	curr->next = next->next;
-	if (next->next)
-		(next->next)->prev = curr;
-	free(next);
-}
-
-static void	delete_empty_token(t_token **head, t_token *prev, t_token *target)
-{
-	if (prev)
-		prev->next = target->next;
-	else
-		*head = target->next;
-	if (target->next)
-		(target->next)->prev = prev;
-	free(target->value);
-	free(target);
-}
-
-t_token	*filter_tokens(t_token *head)
-{
-	t_token	*curr;
-	t_token	*prev;
-	t_token	*next;
-
-	prev = NULL;
-	curr = head;
-	while (curr)
-	{
-		next = curr->next;
-		if ((!curr->value || !(curr->value[0])) && curr->type == TK_WORD)
-			delete_empty_token(&head, prev, curr);
-		else
-			prev = curr;
-		curr = next;
-	}
-	curr = head;
-	while (curr)
-	{
-		if (true == curr->combine && curr->next)
-			combine_tokens(curr, curr->next);
-		else
-			curr = curr->next;
-	}
-	return (head);
-}
-
 static void	free_token_node(t_token *node)
 {
 	if (!node)
-		return;
+		return ;
 	free(node->value);
 	free(node);
 }
 
-t_token *retokenize(t_token *head)
+t_token	*splice_in_sublist(t_token *old_token, t_token *sub)
 {
-    t_token *curr = head;
-    t_token *new_head = head;
+	t_token	*next_orig;
+	t_token	*tail;
 
-    while (curr && curr->type == TK_WORD) {
-        // Save next pointer before we modify curr
-        t_token *next_orig = curr->next;
-
-        // Generate a new sublist for curr->value
-        t_token *sub = tokenizer(curr->value, REMAKE);
-
-        if (sub) {
-            // Find tail of new sublist
-            t_token *sub_tail = sub;
-            while (sub_tail->next)
-                sub_tail = sub_tail->next;
-
-            // Splice sublist into main list in place of curr
-            if (curr->prev) {
-                curr->prev->next = sub;
-                sub->prev = curr->prev;
-            } else {
-                new_head = sub;
-                sub->prev = NULL;
-            }
-            if (next_orig) {
-                next_orig->prev = sub_tail;
-                sub_tail->next = next_orig;
-            } else {
-                sub_tail->next = NULL;
-            }
-
-            // Free the old token node
-            free_token_node(curr);
-            
-            // Advance curr to the node after the inserted sublist
-            curr = sub_tail->next;
-        } else {
-            // tokenizer returned NULL: remove curr from list
-            t_token *prev = curr->prev;
-            // unlink curr
-            if (prev)
-                prev->next = next_orig;
-            else
-                new_head = next_orig;
-            if (next_orig)
-                next_orig->prev = prev;
-            // free curr node
-            free_token_node(curr);
-            // advance
-            curr = next_orig;
-        }
-    }
-
-    return new_head;
+	next_orig = old_token->next;
+	tail = sub;
+	while (tail->next)
+		tail = tail->next;
+	if (old_token->prev)
+	{
+		old_token->prev->next = sub;
+		sub->prev = old_token->prev;
+	}
+	else
+		sub->prev = NULL;
+	if (next_orig)
+	{
+		next_orig->prev = tail;
+		tail->next = next_orig;
+	}
+	else
+		tail->next = NULL;
+	free_token_node(old_token);
+	return (tail->next);
 }
- 
+
+t_token	*remove_and_free_token(t_token *token)
+{
+	t_token	*prev;
+	t_token	*next;
+
+	prev = token->prev;
+	next = token->next;
+	if (prev)
+		prev->next = next;
+	if (next)
+		next->prev = prev;
+	free_token_node(token);
+	return (next);
+}
+
+t_token	*retokenize(t_token *head)
+{
+	t_token	*curr;
+	t_token	*new_head;
+	t_token	*sublist;
+	t_token	*next;
+
+	curr = head;
+	new_head = head;
+	while (curr && curr->type == TK_WORD)
+	{
+		sublist = tokenizer(curr->value, REMAKE);
+		if (sublist)
+		{
+			next = splice_in_sublist(curr, sublist);
+			if (curr == new_head)
+				new_head = sublist;
+		}
+		else
+		{
+			next = remove_and_free_token(curr);
+			if (curr == new_head)
+				new_head = next;
+		}
+		curr = next;
+	}
+	return (new_head);
+}

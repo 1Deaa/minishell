@@ -14,15 +14,6 @@
 
 extern int	g_signal;
 
-/*
-FREE ENVIRONMENT VARIABLES
-FREE READLINE HISTORY
- *
- * add more...
- *
-PRINT EXIT
-EXIT
- */
 void	shell_exit(t_shell *shell)
 {
 	free_envp(shell->envp, count_envp(shell->envp));

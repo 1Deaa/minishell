@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-extern int	g_signal;
-
 void	shell_init(t_shell *shell)
 {
 	shell->debug = false;

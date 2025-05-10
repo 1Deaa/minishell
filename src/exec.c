@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-extern int	g_signal;
-
 static void	get_cmd(t_shell *shell, t_pak *cmd)
 {
 	DIR	*dir;
@@ -40,14 +38,7 @@ void	*exec_pak(t_shell *shell, t_pak *cmd)
 		return (shell_error(shell, PIPERR, NULL, 1));
 	if (!is_forkable(shell, cmd, fd))
 	{
-		if (fd[READ_END] > STDERR_FILENO)
-			close(fd[READ_END]);
-		if (fd[WRITE_END] > STDERR_FILENO)
-			close(fd[WRITE_END]);
-		if (cmd->infile > STDERR_FILENO)
-			close(cmd->infile);
-		if (cmd->outfile > STDERR_FILENO)
-			close(cmd->outfile);
+		handle_fork(cmd->infile, cmd->outfile, fd);
 		return (NULL);
 	}
 	if (cmd->next)
@@ -79,11 +70,11 @@ int	executer(t_shell *shell, t_pak *cmd)
 		if (arg && !ft_strcmp(*arg, "exit"))
 			shell->e_status = bn_exit(shell, cmd);
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "cd"))
-			shell->e_status = 0;//cd(shell); //TODO
+			shell->e_status = 0;
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "export"))
 			shell->e_status = export(cmd, &shell->envp);
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "unset"))
-			shell->e_status = 0;//unset(); //TODO
+			shell->e_status = 0;
 		else
 		{
 			shell_signal_ignore();
