@@ -52,10 +52,9 @@ int	bn_exit(t_shell *shell, t_pak *pak)
 	{
 		if (!pak->prev)
 			shell->exit = true;
-		shell->e_status = 0;
 	}
 	if (!pak->full_cmd || !pak->full_cmd[1])
-		return (0);
+		return (shell->e_status);
 	if (pak->full_cmd[2])
 		return (many_args(shell));
 	num[1] = check_num(pak->full_cmd[1], &num[0]);
