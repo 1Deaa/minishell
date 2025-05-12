@@ -100,19 +100,6 @@ static int	update_pwd_vars(t_shell *shell, char *oldpwd)
 	return (0);
 }
 
-char	*get_home(t_shell *shell)
-{
-	char	*home;
-
-	home = get_envp(shell->envp, "HOME");
-	if (!home)
-	{
-		ft_printf(2, "%s: %s: HOME not set\n", C_NAME, "cd");
-		return (NULL);
-	}
-	return (home);
-}
-
 int	cd(t_shell *shell, t_pak *cmd)
 {
 	char	*oldpwd;

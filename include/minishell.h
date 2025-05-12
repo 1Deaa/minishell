@@ -204,6 +204,7 @@ char	**dup_envp(char **envp);
 void	free_envp(char **envp, int count);
 int		count_envp(char **envp);
 char	*get_envp(char **envp, const char *name);
+char	*get_home(t_shell *shell);
 void	print_envp(const char *prefix, char **envp);
 
 /* ************************************************************************** */
