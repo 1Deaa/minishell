@@ -17,3 +17,16 @@ int	env(char **envp)
 	print_envp("", envp);
 	return (0);
 }
+
+char	*get_home(t_shell *shell)
+{
+	char	*home;
+
+	home = get_envp(shell->envp, "HOME");
+	if (!home)
+	{
+		ft_printf(2, "%s: %s: HOME not set\n", C_NAME, "cd");
+		return (NULL);
+	}
+	return (home);
+}
