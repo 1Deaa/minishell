@@ -100,16 +100,16 @@ int	parse_redir(t_shell *shell, t_pak **curr, t_token **token)
 int	parse_heredoc(t_shell *shell, t_pak **curr, t_token **token)
 {
 	int	old_infile;
+
 	(*token) = (*token)->next;
 	if ((*curr)->infile > STDERR_FILENO)
 		close((*curr)->infile);
 	old_infile = (*curr)->infile;
 	(*curr)->infile = handle_heredoc((*token)->value);
 	if (old_infile == -1)
-	{
 		close((*curr)->infile);
+	if (old_infile == -1)
 		(*curr)->infile = old_infile;
-	}
 	if (*token)
 		(*token) = (*token)->next;
 	if (!(*curr) || (*curr)->infile == -1)
