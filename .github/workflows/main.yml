@@ -3,10 +3,12 @@ name: Check Norminette
 on:
   push:
     branches:
-      - main  # Change to the branch you want this to run on
+      - main
+      - pak
   pull_request:
     branches:
-      - main  # Change to the branch you want this to run on
+      - main
+      - pak
 
 jobs:
   norminette-check:
