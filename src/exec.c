@@ -123,11 +123,11 @@ void	*is_forkable(t_shell *shell, t_pak *cmd, int fd[2])
 	}
 	if (dir)
 		closedir(dir);
-	if ((cmd->full_path && access(cmd->full_path, X_OK) == 0) || \
-		is_builtin(cmd))
+	if ((cmd->full_path && access(cmd->full_path, X_OK) == 0)
+		|| is_builtin(cmd))
 		pak_fork(shell, cmd, fd);
-	else if (!is_builtin(cmd) && ((cmd->full_path && \
-		!access(cmd->full_path, F_OK)) || dir))
+	else if (!is_builtin(cmd) && ((cmd->full_path
+				&& !access(cmd->full_path, F_OK)) || dir))
 		shell->e_status = 126;
 	else if (!is_builtin(cmd) && cmd->full_cmd)
 		shell->e_status = 127;

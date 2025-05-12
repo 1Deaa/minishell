@@ -41,8 +41,8 @@ int	echo(t_pak *cmd)
 	argv = cmd->full_cmd;
 	while (argv && argv[++i[0]])
 	{
-		if (!i[1] && !ft_strncmp(argv[i[0]], "-n", 2) && \
-			(count_cmp(argv[i[0]], 'n') == (ft_strlen(argv[i[0]]) - 1)))
+		if (!i[1] && !ft_strncmp(argv[i[0]], "-n", 2)
+			&& (count_cmp(argv[i[0]], 'n') == (ft_strlen(argv[i[0]]) - 1)))
 			newline = false;
 		else
 		{

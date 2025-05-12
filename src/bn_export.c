@@ -111,11 +111,11 @@ int	export(t_pak *cmd, char ***envp)
 		if (check_var(cmd->full_cmd[i]))
 		{
 			if (ft_strchr(cmd->full_cmd[i], '='))
-				add_env_var(cmd->full_cmd[i], find_env_var(cmd->full_cmd[i], \
-					*envp), envp);
+				add_env_var(cmd->full_cmd[i], find_env_var(cmd->full_cmd[i],
+						*envp), envp);
 		}
 		else
-			ft_printf(2, "export: `%s': not a valid identifier\n", \
+			ft_printf(2, "export: `%s': not a valid identifier\n",
 				cmd->full_cmd[i]);
 		i++;
 	}

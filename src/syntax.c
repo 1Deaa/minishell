@@ -21,7 +21,7 @@ static bool	is_first(t_shell *shell, t_token *node)
 	}
 	if (is_special(node) && !is_redirection(node))
 	{
-		ft_printf(2, C_NAME": syntax error unexpected token '%s'\n", \
+		ft_printf(2, C_NAME": syntax error unexpected token '%s'\n",
 			node->value);
 		shell->e_status = 2;
 		return (true);

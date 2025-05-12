@@ -84,14 +84,14 @@ void	*pak_process(t_shell *shell, t_pak *cmd, int fd[2])
 		close(fd[WRITE_END]);
 	if (!is_builtin(cmd) && cmd->full_cmd)
 		execve(cmd->full_path, cmd->full_cmd, shell->envp);
-	else if (is_builtin(cmd) && cmd->full_cmd && \
-		!ft_strcmp(*(cmd->full_cmd), "pwd"))
+	else if (is_builtin(cmd) && cmd->full_cmd
+		&& !ft_strcmp(*(cmd->full_cmd), "pwd"))
 		shell->e_status = pwd();
-	else if (is_builtin(cmd) && cmd->full_cmd && \
-		!ft_strcmp(*(cmd->full_cmd), "echo"))
+	else if (is_builtin(cmd) && cmd->full_cmd
+		&& !ft_strcmp(*(cmd->full_cmd), "echo"))
 		shell->e_status = echo(cmd);
-	else if (is_builtin(cmd) && cmd->full_cmd && \
-		!ft_strcmp(*(cmd->full_cmd), "env"))
+	else if (is_builtin(cmd) && cmd->full_cmd
+		&& !ft_strcmp(*(cmd->full_cmd), "env"))
 		shell->e_status = env(shell->envp);
 	free_paks(shell, shell->cmds);
 	exit(shell->e_status);

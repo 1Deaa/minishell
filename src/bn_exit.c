@@ -60,7 +60,7 @@ int	bn_exit(t_shell *shell, t_pak *pak)
 	num[1] = check_num(pak->full_cmd[1], &num[0]);
 	if (-1 == num[1])
 	{
-		ft_printf(2, "%s: %s: %s: numeric argument required\n", C_NAME, \
+		ft_printf(2, "%s: %s: %s: numeric argument required\n", C_NAME,
 			"exit", pak->full_cmd[1]);
 		return (2);
 	}
