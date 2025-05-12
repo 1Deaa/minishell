@@ -6,7 +6,7 @@
 /*   By: halmuhis <halmuhis@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 22:12:56 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/05/06 15:36:54 by halmuhis         ###   ########.fr       */
+/*   Updated: 2025/05/12 10:41:16 by halmuhis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	executer(t_shell *shell, t_pak *cmd)
 		if (arg && !ft_strcmp(*arg, "exit"))
 			shell->e_status = bn_exit(shell, cmd);
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "cd"))
-			shell->e_status = 0;
+			shell->e_status = cd(shell, cmd);
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "export"))
 			shell->e_status = export(cmd, &shell->envp);
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "unset"))

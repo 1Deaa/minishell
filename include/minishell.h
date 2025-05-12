@@ -6,7 +6,7 @@
 /*   By: halmuhis <halmuhis@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:29:39 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/05/06 15:36:37 by halmuhis         ###   ########.fr       */
+/*   Updated: 2025/05/12 10:37:49 by halmuhis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,5 +246,6 @@ int		env(char **envp);
 int		export(t_pak *cmd, char ***envp); // Changed from char **envp
 int		pwd(void);
 int		bn_exit(t_shell *shell, t_pak *pak);
+int		cd(t_shell *shell, t_pak *cmd);
 
 #endif
