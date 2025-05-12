@@ -19,14 +19,14 @@ static int	handle_cd_errors(t_pak *cmd)
 	i = 0;
 	while (cmd->full_cmd && cmd->full_cmd[i])
 		i++;
-	if (i < 2)
+	if (i < 1)
 	{
-		ft_printf(2, "cd: path required\n");
+		ft_printf(2, "%s: cd: path required\n", C_NAME);
 		return (1);
 	}
 	if (i > 2)
 	{
-		ft_printf(2, "cd: too many arguments\n");
+		ft_printf(2, "%s: cd: too many arguments\n", C_NAME);
 		return (1);
 	}
 	return (0);
@@ -100,9 +100,23 @@ static int	update_pwd_vars(t_shell *shell, char *oldpwd)
 	return (0);
 }
 
+char	*get_home(t_shell *shell)
+{
+	char	*home;
+
+	home = get_envp(shell->envp, "HOME");
+	if (!home)
+	{
+		ft_printf(2, "%s: %s: HOME not set\n", C_NAME, "cd");
+		return (NULL);
+	}
+	return (home);
+}
+
 int	cd(t_shell *shell, t_pak *cmd)
 {
 	char	*oldpwd;
+	char	*home;
 	int		ret;
 
 	if (handle_cd_errors(cmd))
@@ -110,7 +124,14 @@ int	cd(t_shell *shell, t_pak *cmd)
 	oldpwd = get_curr_dir();
 	if (!oldpwd)
 		return (1);
-	ret = chdir(cmd->full_cmd[1]);
+	if (!cmd->full_cmd[1])
+	{
+		home = get_home(shell);
+		if (!home)
+			return (1);
+	}
+	else
+		ret = chdir(cmd->full_cmd[1]);
 	if (ret == -1)
 	{
 		perror("cd");
