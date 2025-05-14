@@ -17,7 +17,7 @@ FILES = main.c \
 		shell.c shell_utils.c \
 		token.c token_utils.c token_re.c token_filter.c \
 		syntax.c syntax_utils.c \
-		expand.c expand_utils.c \
+		expand.c expand_utils.c expand_utils2.c \
 		parse.c parse_redir.c parse_utils.c parse_print.c heredoc.c \
 		exec.c exec_utils.c exec_utils2.c \
 		find_path.c \

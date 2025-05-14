@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   expand_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/16 19:28:42 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/02/16 19:28:43 by drahwanj         ###   ########.fr       */
+/*   Created: 2025/05/14 13:58:10 by drahwanj          #+#    #+#             */
+/*   Updated: 2025/05/14 13:58:11 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_strcmp(const char *s1, const char *s2)
+void	expand_heredoc_quoted(t_token *token)
 {
-	if (!s1 || !s2)
-		return (1);
-	while (*s1 && (*s1 == *s2))
-	{
-		s1++;
-		s2++;
-	}
-	return ((unsigned char)*s1 - (unsigned char)*s2);
+	int		i;
+	char	*exp;
+
+	i = 0;
+	i++;
+	while (token->value[i] && token->value[i] != '"')
+		i++;
+	exp = ft_strndup((token->value) + 1, i - 1);
+	free(token->value);
+	token->value = exp;
 }

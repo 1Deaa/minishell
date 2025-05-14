@@ -126,6 +126,12 @@ t_token	*expander(t_token *tokens, t_shell *shell);
 char	*special_expand(char *str, t_shell *shell);
 bool	is_expandable(char c);
 char	*exname(char *token, int *index);
+bool	check_heredoc_filename(t_token *token);
+void	expand_single_quoted(t_token *token);
+void	expand_quoted(t_token *token, t_shell *shell);
+void	expand_word(t_token *token, t_shell *shell);
+void	expand_heredoc(t_token *current);
+void	expand_heredoc_quoted(t_token *token);
 
 //TOKEN PROTOTYPES
 t_token	*new_token(const char *value);

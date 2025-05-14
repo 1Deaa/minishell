@@ -41,7 +41,7 @@ static char	*expand(char *name, t_shell *shell)
 	return (ret);
 }
 
-static void	expand_single_quoted(t_token *token)
+void	expand_single_quoted(t_token *token)
 {
 	int		i;
 	char	*exp;
@@ -55,7 +55,7 @@ static void	expand_single_quoted(t_token *token)
 	token->value = exp;
 }
 
-static void	expand_quoted(t_token *token, t_shell *shell)
+void	expand_quoted(t_token *token, t_shell *shell)
 {
 	int		i;
 	char	*str;
@@ -83,7 +83,7 @@ static void	expand_quoted(t_token *token, t_shell *shell)
 	token->value = str;
 }
 
-static void	expand_word(t_token *token, t_shell *shell)
+void	expand_word(t_token *token, t_shell *shell)
 {
 	int		i;
 	char	*str;
@@ -117,10 +117,10 @@ t_token	*expander(t_token *tokens, t_shell *shell)
 	current = tokens;
 	while (current)
 	{
-		if (current->type == TK_WORD)
-		{
+		if (check_heredoc_filename(current))
+			expand_heredoc(current, shell);
+		else if (current->type == TK_WORD)
 			expand_word(current, shell);
-		}
 		else if (current->type == TK_DOUBLE_QUOTED)
 		{
 			expand_quoted(current, shell);
