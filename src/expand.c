@@ -118,7 +118,7 @@ t_token	*expander(t_token *tokens, t_shell *shell)
 	while (current)
 	{
 		if (check_heredoc_filename(current))
-			expand_heredoc(current, shell);
+			expand_heredoc(current);
 		else if (current->type == TK_WORD)
 			expand_word(current, shell);
 		else if (current->type == TK_DOUBLE_QUOTED)
