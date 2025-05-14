@@ -106,6 +106,7 @@ int	cd(t_shell *shell, t_pak *cmd)
 	char	*home;
 	int		ret;
 
+	ret = 0;
 	if (handle_cd_errors(cmd))
 		return (1);
 	oldpwd = get_curr_dir();
