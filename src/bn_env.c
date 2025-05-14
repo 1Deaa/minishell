@@ -12,8 +12,9 @@
 
 #include "minishell.h"
 
-int	env(char **envp)
+int	env(char **envp, t_pak *pak)
 {
+	close_pak_infile(pak);
 	print_envp("", envp);
 	return (0);
 }

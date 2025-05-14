@@ -101,6 +101,8 @@ int	export(t_pak *cmd, char ***envp)
 	int	i;
 
 	i = 1;
+	if (cmd->infile > STDERR_FILENO)
+		close(cmd->infile);
 	if (!cmd->full_cmd[1])
 	{
 		print_envp("", *envp);

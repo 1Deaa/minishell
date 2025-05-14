@@ -12,10 +12,12 @@
 
 #include "minishell.h"
 
-int	pwd(void)
+int	pwd(t_pak *cmd)
 {
 	char	*pwd;
 
+	if (cmd->infile > STDERR_FILENO)
+		close(cmd->infile);
 	pwd = getcwd(NULL, 0);
 	ft_printf(1, "%s\n", pwd);
 	free(pwd);

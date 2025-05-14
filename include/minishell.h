@@ -239,6 +239,7 @@ EXEC_UTILS
 bool	is_builtin(t_pak *cmd);
 void	*pak_redir(t_shell *shell, t_pak *cmd, int fd[2]);
 void	*pak_process(t_shell *shell, t_pak *cmd, int fd[2]);
+void	close_pak_infile(t_pak *pak);
 /*
 FIND_PATH
 */
@@ -249,9 +250,9 @@ char	*find_path(t_shell *shell, char *command);
 /* ************************************************************************** */
 
 int		echo(t_pak *cmd);
-int		env(char **envp);
+int		env(char **envp, t_pak *pak);
 int		export(t_pak *cmd, char ***envp); // Changed from char **envp
-int		pwd(void);
+int		pwd(t_pak *cmd);
 int		bn_exit(t_shell *shell, t_pak *pak);
 int		cd(t_shell *shell, t_pak *cmd);
 

@@ -48,6 +48,8 @@ int	bn_exit(t_shell *shell, t_pak *pak)
 {
 	long	num[2];
 
+	if (pak->infile > STDERR_FILENO)
+		close(pak->infile);
 	if (!pak->next)
 	{
 		if (!pak->prev)
