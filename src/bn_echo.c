@@ -39,6 +39,7 @@ int	echo(t_pak *cmd)
 	i[1] = 0;
 	newline = true;
 	argv = cmd->full_cmd;
+	close_pak_infile(cmd);
 	while (argv && argv[++i[0]])
 	{
 		if (!i[1] && !ft_strncmp(argv[i[0]], "-n", 2)

@@ -18,13 +18,13 @@ static void	get_cmd(t_shell *shell, t_pak *cmd)
 
 	dir = check_cmd(shell, cmd);
 	if (!is_builtin(cmd) && cmd && cmd->full_cmd && dir)
-		shell_error(shell, IS_DIR, *(cmd->full_cmd), 126);
+		redir_error(shell, IS_DIR, *(cmd->full_cmd), 126);
 	else if (!is_builtin(cmd) && cmd->full_path
 		&& access(cmd->full_path, F_OK) == -1)
-		shell_error(shell, NDIR, cmd->full_path, 1);
+		redir_error(shell, NDIR, cmd->full_path, 1);
 	else if (!is_builtin(cmd) && cmd && cmd->full_path
 		&& access(cmd->full_path, X_OK) == -1)
-		shell_error(shell, NPERM, cmd->full_path, 126);
+		redir_error(shell, NPERM, cmd->full_path, 126);
 	if (dir)
 		closedir(dir);
 }
@@ -72,7 +72,7 @@ int	executer(t_shell *shell, t_pak *cmd)
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "cd"))
 			shell->e_status = cd(shell, cmd);
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "export"))
-			shell->e_status = export(cmd, &shell->envp);
+			shell->e_status = export(cmd, &shell->envp, true);
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "unset"))
 			shell->e_status = 0;
 		else

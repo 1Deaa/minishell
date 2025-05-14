@@ -26,6 +26,6 @@ void	handle_fork(int infile, int outfile, int fd[2])
 
 void	close_pak_infile(t_pak *pak)
 {
-	if (pak->infile > STDERR_FILENO)
+	if (pak && pak->infile > STDERR_FILENO && pak->infile != -1)
 		close(pak->infile);
 }

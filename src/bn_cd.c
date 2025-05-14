@@ -91,7 +91,7 @@ static int	update_pwd_vars(t_shell *shell, char *oldpwd)
 		return (1);
 	}
 	tmp_cmd.full_cmd = cmd;
-	export(&tmp_cmd, &shell->envp);
+	export(&tmp_cmd, &shell->envp, false);
 	free(cmd[1]);
 	free(cmd[2]);
 	free(cmd);
@@ -106,6 +106,7 @@ int	cd(t_shell *shell, t_pak *cmd)
 	int		ret;
 
 	ret = 0;
+	close_pak_infile(cmd);
 	if (handle_cd_errors(cmd))
 		return (1);
 	oldpwd = get_curr_dir();

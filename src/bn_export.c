@@ -96,17 +96,17 @@ static int	check_var(char *str)
 	return (1);
 }
 
-int	export(t_pak *cmd, char ***envp)
+int	export(t_pak *cmd, char ***envp, bool flag)
 {
 	int	i;
 
 	i = 1;
-	if (cmd->infile > STDERR_FILENO)
-		close(cmd->infile);
+	if (flag)
+		close_pak_infile(cmd);
 	if (!cmd->full_cmd[1])
 	{
 		print_envp("", *envp);
-		return (1);
+		return (0);
 	}
 	while (cmd->full_cmd[i])
 	{
