@@ -18,15 +18,17 @@ int	env(char **envp)
 	return (0);
 }
 
-char	*get_home(t_shell *shell)
+int	chdir_home(t_shell *shell)
 {
 	char	*home;
+	int		ret;
 
 	home = get_envp(shell->envp, "HOME");
+	ret = chdir(home);
 	if (!home)
 	{
 		ft_printf(2, "%s: %s: HOME not set\n", C_NAME, "cd");
-		return (NULL);
+		return (1);
 	}
-	return (home);
+	return (ret);
 }

@@ -103,7 +103,6 @@ static int	update_pwd_vars(t_shell *shell, char *oldpwd)
 int	cd(t_shell *shell, t_pak *cmd)
 {
 	char	*oldpwd;
-	char	*home;
 	int		ret;
 
 	ret = 0;
@@ -113,11 +112,7 @@ int	cd(t_shell *shell, t_pak *cmd)
 	if (!oldpwd)
 		return (1);
 	if (!cmd->full_cmd[1])
-	{
-		home = get_home(shell);
-		if (!home)
-			return (1);
-	}
+		ret = chdir_home(shell);
 	else
 		ret = chdir(cmd->full_cmd[1]);
 	if (ret == -1)
