@@ -12,21 +12,14 @@
 
 #include "minishell.h"
 
-/*
-FREE ENVIRONMENT VARIABLES
-FREE READLINE HISTORY
- *
- * add more...
- *
-PRINT EXIT
-EXIT
-*/
-static void	shell_exit(t_shell *shell)
+extern int	g_signal;
+
+void	shell_exit(t_shell *shell)
 {
 	free_envp(shell->envp, count_envp(shell->envp));
 	rl_clear_history();
 	printf("exit\n");
-	exit(EXIT_SUCCESS);
+	exit(shell->e_status);
 }
 
 void	shell_debug(t_shell *shell)
@@ -40,25 +33,27 @@ void	shell_debug(t_shell *shell)
 			printf("INPUT: %s\n━━━\n", shell->command);
 		if (shell->tokens)
 			print_tokens(shell->tokens);
-		if (is_correct_syntax(shell->tokens))
-			printf("━━━\nSYNTAX: "GREEN"correct ✔\n"RESET BOLD);
+		if (shell->e_status == 0)
+			printf("━━━\nEXIT STATUS: "GREEN"%d ✔\n"RESET, shell->e_status);
 		else
-			printf("SYNTAX: "RED"failure!\n"RESET BOLD);
-		printf("━━━\nAST:\n");
-		print_ast_tree(shell->parse);
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"RESET);
+			printf("━━━\nEXIT STATUS: "RED"%d\n"RESET, shell->e_status);
+		print_paks(shell->cmds);
 	}
 }
 
-char	*shell_read(t_shell *shell, char *prompt)
+char	*shell_read(t_shell *shell)
 {
 	char	*input;
 
-	input = readline(prompt);
+	shell_signal();
+	if (shell->e_status == 0)
+		input = readline(WPROMPT);
+	else
+		input = readline(XPROMPT);
+	if (g_signal == SIGINT)
+		shell->e_status = 130;
 	if (input == NULL)
-	{
 		shell_exit(shell);
-	}
 	if (ft_strlen(input) > 0)
 		add_history(input);
 	return (input);

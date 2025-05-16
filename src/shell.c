@@ -12,28 +12,39 @@
 
 #include "minishell.h"
 
+extern volatile sig_atomic_t	g_signal;
+
 void	shell_clean(t_shell *shell)
 {
 	free(shell->command);
-	free_tokens(shell->tokens);
-	parse_clean(shell->parse);
+	if (shell->cmds)
+		free_paks(shell, shell->cmds);
 }
 
 void	shell_loop(t_shell *shell)
 {
-	shell->parse = NULL;
+	shell->cmds = NULL;
 	while (0x1DEAA)
 	{
-		shell->command = shell_read(shell, PROMPT);
-		shell->tokens = tokenize(shell->command);
-		if (!is_correct_syntax(shell->tokens))
+		shell->command = shell_read(shell);
+		shell->tokens = tokenizer(shell->command, DEFAULT);
+		if (!is_correct_syntax(shell, shell->tokens))
 		{
-			shell_clean(shell);
+			free(shell->command);
+			free_tokens(shell->tokens);
 			continue ;
 		}
+		g_signal = NO_SIG;
 		shell->tokens = expander(shell->tokens, shell);
-		shell->parse = parser(shell->tokens);
+		shell->tokens = filter_tokens(shell->tokens);
+		shell->tokens = retokenize(shell->tokens);
+		shell->cmds = parser(shell, shell->tokens);
+		shell->e_status = executer(shell, shell->cmds);
+		if (shell->e_status > 255)
+			shell->e_status /= 256;
 		shell_debug(shell);
 		shell_clean(shell);
+		if (shell->exit == true)
+			shell_exit(shell);
 	}
 }

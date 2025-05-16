@@ -23,7 +23,7 @@ static char	*expand(char *name, t_shell *shell)
 		ret = special_expand(name, shell);
 		free(name);
 		if (!ret)
-			return (ft_strdup(""));
+			ret = ft_strdup("");
 		return (ret);
 	}
 	if (!ft_strcmp(name, ""))
@@ -41,29 +41,21 @@ static char	*expand(char *name, t_shell *shell)
 	return (ret);
 }
 
-static char	*exname(char *token, int *index)
+void	expand_single_quoted(t_token *token)
 {
-	char	*ret;
 	int		i;
+	char	*exp;
 
-	ret = NULL;
-	i = (*index) + 1;
-	while (is_expandable(token[++(*index)]))
-	{
-		if (token[*index] == '?' || token[*index] == '0'
-			|| token[*index] == '1')
-		{
-			(*index)++;
-			break ;
-		}
-	}
-	ret = ft_strndup(token + i, (*index) - i);
-	if (!ret)
-		return (ft_strdup(""));
-	return (ret);
+	i = 0;
+	i++;
+	while (token->value[i] && token->value[i] != '\'')
+		i++;
+	exp = ft_strndup((token->value) + 1, i - 1);
+	free(token->value);
+	token->value = exp;
 }
 
-static void	expand_quoted(t_token *token, t_shell *shell)
+void	expand_quoted(t_token *token, t_shell *shell)
 {
 	int		i;
 	char	*str;
@@ -89,10 +81,9 @@ static void	expand_quoted(t_token *token, t_shell *shell)
 	}
 	free(token->value);
 	token->value = str;
-	token->type = TK_WORD;
 }
 
-static void	expand_word(t_token *token, t_shell *shell)
+void	expand_word(t_token *token, t_shell *shell)
 {
 	int		i;
 	char	*str;
@@ -126,13 +117,21 @@ t_token	*expander(t_token *tokens, t_shell *shell)
 	current = tokens;
 	while (current)
 	{
-		if (current->type == TK_WORD)
-		{
+		if (check_heredoc_filename(current))
+			expand_heredoc(current);
+		else if (current->type == TK_WORD)
 			expand_word(current, shell);
-		}
 		else if (current->type == TK_DOUBLE_QUOTED)
 		{
 			expand_quoted(current, shell);
+			if (!current->value)
+				current->value = ft_strdup("");
+		}
+		else if (current->type == TK_SINGLE_QUOTED)
+		{
+			expand_single_quoted(current);
+			if (!current->value)
+				current->value = ft_strdup("");
 		}
 		current = current->next;
 	}

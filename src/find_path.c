@@ -24,6 +24,8 @@ static char	*create_command_path(char *path, char *command)
 {
 	char	*ret;
 
+	if (!ft_strcmp(command, ""))
+		return (NULL);
 	ret = ft_strjoin(ft_strdup(path), "/");
 	ret = ft_strjoin(ret, command);
 	if (!ret)

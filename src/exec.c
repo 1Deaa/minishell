@@ -3,67 +3,134 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: halmuhis <halmuhis@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 22:12:56 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/04/01 22:12:56 by drahwanj         ###   ########.fr       */
+/*   Updated: 2025/05/12 10:41:16 by halmuhis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*get_path(t_shell *shell, t_execmd *ecmd)
+static void	get_cmd(t_shell *shell, t_pak *cmd)
 {
-	char	*path;
+	DIR	*dir;
 
-	path = find_path(shell, ecmd->argv[0]);
-	if (!path)
+	dir = check_cmd(shell, cmd);
+	if (!is_builtin(cmd) && cmd && cmd->full_cmd && dir)
+		redir_error(shell, IS_DIR, *(cmd->full_cmd), 126);
+	else if (!is_builtin(cmd) && cmd->full_path
+		&& access(cmd->full_path, F_OK) == -1)
+		redir_error(shell, NDIR, cmd->full_path, 1);
+	else if (!is_builtin(cmd) && cmd && cmd->full_path
+		&& access(cmd->full_path, X_OK) == -1)
+		redir_error(shell, NPERM, cmd->full_path, 126);
+	if (dir)
+		closedir(dir);
+}
+
+void	*exec_pak(t_shell *shell, t_pak *cmd)
+{
+	int	fd[2];
+
+	get_cmd(shell, cmd);
+	if (pipe(fd) == -1)
+		return (shell_error(shell, PIPERR, NULL, 1));
+	if (!is_forkable(shell, cmd, fd))
 	{
-		ft_printf(STDERR_FILENO, "%s: command not found\n", ecmd->argv[0]);
+		handle_fork(cmd->infile, cmd->outfile, fd);
 		return (NULL);
 	}
-	return (path);
+	if (cmd->next)
+	{
+		cmd->next->infile = fd[READ_END];
+		close(fd[WRITE_END]);
+	}
+	else
+	{
+		close(fd[WRITE_END]);
+		close(fd[READ_END]);
+	}
+	if (cmd->infile > STDERR_FILENO)
+		close(cmd->infile);
+	if (cmd->outfile > STDERR_FILENO)
+		close(cmd->outfile);
+	return (NULL);
 }
 
-static void	run_child(t_shell *shell, t_execmd *ecmd, char *path)
+int	executer(t_shell *shell, t_pak *cmd)
 {
-	shell_signal_reset();
-	execve(path, ecmd->argv, shell->envp);
-	ft_printf(2, NAME": execve error\n");
-	free(path);
-	exit(EXIT_FAILURE);
+	char	**arg;
+	int		paks;
+
+	paks = count_paks(cmd);
+	while (cmd)
+	{
+		arg = cmd->full_cmd;
+		if (arg && !ft_strcmp(*arg, "exit"))
+			shell->e_status = bn_exit(shell, cmd);
+		else if (!cmd->next && arg && !ft_strcmp(*arg, "cd"))
+			shell->e_status = 0;
+		else if (!cmd->next && arg && !ft_strcmp(*arg, "export"))
+			shell->e_status = export(shell, cmd);
+		else if (!cmd->next && arg && !ft_strcmp(*arg, "unset"))
+			shell->e_status = unset(shell, cmd);
+		else
+		{
+			shell_signal_ignore();
+			exec_pak(shell, cmd);
+		}
+		update_underscore_env(shell, cmd);
+		cmd = cmd->next;
+	}
+	wait_processes(shell, paks);
+	return (shell->e_status);
 }
 
-static void	child_exit(t_shell *shell, int *status, char *path)
-{
-	if (WIFEXITED(*status))
-		shell->exit = WEXITSTATUS(*status);
-	else if (WIFSIGNALED(*status))
-		shell->exit = 128 + WTERMSIG(*status);
-	free(path);
-}
-
-void	run_exec(t_shell *shell, t_execmd *ecmd)
+void	pak_fork(t_shell *shell, t_pak *cmd, int fd[2])
 {
 	pid_t	pid;
-	int		status;
-	char	*path;
 
-	path = get_path(shell, ecmd);
-	if (!path)
-		return ;
 	pid = fork();
 	if (pid < 0)
 	{
-		ft_printf(2, NAME": fork error\n");
-		free(path);
-		exit(EXIT_FAILURE);
+		close(fd[WRITE_END]);
+		close(fd[READ_END]);
+		shell_error(shell, FORKERR, NULL, 1);
 	}
-	if (pid == 0)
-		run_child(shell, ecmd, path);
-	else
+	else if (pid == 0)
 	{
-		waitpid(pid, &status, 0);
-		child_exit(shell, &status, path);
+		pak_process(shell, cmd, fd);
 	}
+	else if (pid > 0)
+	{
+		if (!cmd->next)
+			shell->last_pid = pid;
+	}
+}
+
+void	*is_forkable(t_shell *shell, t_pak *cmd, int fd[2])
+{
+	DIR	*dir;
+
+	dir = NULL;
+	if (cmd->full_cmd)
+		dir = opendir(*(cmd->full_cmd));
+	if (cmd->infile == -1 || cmd->outfile == -1)
+	{
+		if (dir)
+			closedir(dir);
+		return (NULL);
+	}
+	if (dir)
+		closedir(dir);
+	if ((cmd->full_path && access(cmd->full_path, X_OK) == 0)
+		|| is_builtin(cmd))
+		pak_fork(shell, cmd, fd);
+	else if (!is_builtin(cmd) && ((cmd->full_path
+				&& !access(cmd->full_path, F_OK)) || dir))
+		shell->e_status = 126;
+	else if (!is_builtin(cmd) && cmd->full_cmd)
+		shell->e_status = 127;
+	return ("STAR");
 }

@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    check_norminette.sh                                :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/02/17 15:53:45 by drahwanj          #+#    #+#              #
-#    Updated: 2025/02/17 15:53:53 by drahwanj         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 #!/bin/bash
 
 # Flag to track if all files pass
@@ -28,17 +16,6 @@ for file in src/*.c; do
 done
 
 for file in libft/*.c; do
-    result=$(norminette $file)
-
-    if [[ "$result" == *"OK!"* ]]; then
-        echo "$file: OK!"
-    else
-        echo "$file: ERROR!"
-        all_ok=false
-    fi
-done
-
-for file in libft/*.h; do
     result=$(norminette $file)
 
     if [[ "$result" == *"OK!"* ]]; then

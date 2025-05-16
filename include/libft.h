@@ -67,9 +67,9 @@ Join a C with S.
 */
 char	*ft_charjoin(char *s, char c);
 /*
-Convert integer to ASCII.
+Check if C is a digit.
 */
-char	*ft_itoa(int n);
+int		ft_isdigit(int c);
 /*
 Copies n - 1 bytes from a source string to a destination string.
 */
@@ -94,5 +94,15 @@ char	**ft_split(char const *s, char c);
 free 2D arr
 */
 void	free_split(char **arr);
+/*
+convert N into a null terminated string
+*/
+char	*ft_itoa(int n);
+/*
+convert STR into int
+*/
+int		ft_atoi(const char *str);
+
+bool	ft_isalnum(char c);
 
 #endif

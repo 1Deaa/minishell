@@ -1,69 +1,71 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_print.c                                      :+:      :+:    :+:   */
+/*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/27 05:14:54 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/27 05:14:55 by drahwanj         ###   ########.fr       */
+/*   Created: 2025/04/16 16:15:24 by drahwanj          #+#    #+#             */
+/*   Updated: 2025/04/16 16:15:25 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_indent(int depth, bool parent_last[])
+void	print_cmd_args(char **cmd)
 {
 	int	i;
 
-	i = 0;
-	while (i < depth - 1)
+	if (cmd && cmd[0])
 	{
-		if (parent_last[i])
-			printf("    ");
-		else
-			printf("│   ");
-		i++;
+		printf(" full_cmd:");
+		i = 0;
+		while (cmd[i])
+		{
+			printf(" \"%s\"", cmd[i]);
+			i++;
+		}
+		printf("\n");
 	}
+	else
+		printf(" full_cmd: (none)\n");
 }
 
-void	print_branch(int depth, bool is_last)
+void	print_fd_info(int infile, int outfile)
 {
-	if (depth > 0)
+	printf(" infile fd : %d\n", infile);
+	printf(" outfile fd: %d\n", outfile);
+}
+
+void	print_link_info(t_pak *prev, t_pak *next)
+{
+	printf(" prev pak  : %p\n", (void *)prev);
+	printf(" next pak  : %p\n", (void *)next);
+}
+
+void	print_one_pak(t_pak *pak, int idx)
+{
+	printf("━━━ Pak %d ━━━\n", idx);
+	print_cmd_args(pak->full_cmd);
+	if (pak->full_path)
+		printf(" full_path: %s\n", pak->full_path);
+	else
+		printf(" full_path: (null)\n");
+	print_fd_info(pak->infile, pak->outfile);
+	print_link_info(pak->prev, pak->next);
+}
+
+void	print_paks(t_pak *head)
+{
+	t_pak	*curr;
+	int		idx;
+
+	curr = head;
+	idx = 0;
+	while (curr)
 	{
-		if (is_last)
-			printf("└── ");
-		else
-			printf("├── ");
+		print_one_pak(curr, idx);
+		curr = curr->next;
+		idx++;
 	}
-}
-
-void	print_exec(t_execmd *ecmd)
-{
-	int	i;
-
-	printf("EXEC:");
-	i = 0;
-	while (ecmd->argv[i])
-	{
-		printf(" %s", ecmd->argv[i]);
-		i++;
-	}
-	printf("\n");
-}
-
-void	print_pipe(t_pipecmd *pcmd, int depth, bool parent_last[])
-{
-	printf("PIPE\n");
-	parent_last[depth] = pcmd->right == NULL;
-	print_ast(pcmd->left, depth + 1, false, parent_last);
-	print_ast(pcmd->right, depth + 1, true, parent_last);
-}
-
-void	print_redir(t_redircmd *rcmd, int depth, bool parent_last[])
-{
-	printf("REDIR: file = %s, fd = %d, flags = %d mode = %d\n",
-		rcmd->file, rcmd->fd, rcmd->flags, rcmd->mode);
-	parent_last[depth] = true;
-	print_ast(rcmd->cmd, depth + 1, true, parent_last);
 }

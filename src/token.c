@@ -44,7 +44,7 @@ static char	*special_token(const char **p)
 	return (token);
 }
 
-static char	*quoted_token(const char **p)
+static char	*quoted_token(const char **p, bool *combine)
 {
 	char		quote;
 	const char	*start;
@@ -60,6 +60,8 @@ static char	*quoted_token(const char **p)
 		(*p)++;
 	if (**p == quote)
 		(*p)++;
+	if (**p && !ft_isspace((unsigned char)**p) && !ft_strchr("|><", **p))
+		*combine = true;
 	len = *p - start;
 	token = (char *)malloc(len + 1);
 	if (!token)
@@ -69,7 +71,7 @@ static char	*quoted_token(const char **p)
 	return (token);
 }
 
-static char	*word_token(const char **p)
+static char	*word_token(const char **p, bool *combine)
 {
 	const char	*start;
 	size_t		len;
@@ -80,6 +82,8 @@ static char	*word_token(const char **p)
 	{
 		(*p)++;
 	}
+	if (**p && !ft_isspace((unsigned char)**p) && !ft_strchr("|><", **p))
+		*combine = true;
 	len = *p - start;
 	token = (char *)malloc(len + 1);
 	if (!token)
@@ -89,31 +93,31 @@ static char	*word_token(const char **p)
 	return (token);
 }
 
-t_token	*tokenize(const char *input)
+t_token	*tokenizer(const char *input, t_tokenization type)
 {
-	t_token		*head;
-	const char	*p;
-	char		*token;
+	struct s_tokenizer	ex;
 
-	head = NULL;
-	p = input;
-	while (*p)
+	ex.head = NULL;
+	ex.p = input;
+	ex.combine = false;
+	while (ex.p && *(ex.p))
 	{
-		p = skip_whitespace(p);
-		if (*p == '\0')
+		ex.p = skip_whitespace(ex.p);
+		if (*(ex.p) == '\0')
 			break ;
-		if (ft_strchr("<|>", *p))
-			token = special_token(&p);
-		else if (ft_strchr("'\"", *p))
-			token = quoted_token(&p);
+		if (ft_strchr("<|>", *(ex.p)))
+			ex.token = special_token(&(ex.p));
+		else if (ft_strchr("'\"", *(ex.p)))
+			ex.token = quoted_token(&(ex.p), &(ex.combine));
 		else
-			token = word_token(&p);
-		if (token)
+			ex.token = word_token(&(ex.p), &(ex.combine));
+		if (ex.token)
 		{
-			add_token(&head, token);
-			free(token);
+			add_token(&(ex.head), ex.token, &(ex.combine));
+			free(ex.token);
 		}
+		ex.combine = false;
 	}
-	assign_token_types(head);
-	return (head);
+	assign_token_types(ex.head, type);
+	return (ex.head);
 }

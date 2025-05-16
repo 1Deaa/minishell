@@ -5,4 +5,6 @@ libft.a
 Unstaged/
 .vscode/
 *.supp
+libftprintf.a
+libenvtools.a
 test.c

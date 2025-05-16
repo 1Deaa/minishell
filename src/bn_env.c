@@ -12,13 +12,24 @@
 
 #include "minishell.h"
 
-void	env(int argc, char **argv, char **envp)
+int	env(char **envp, t_pak *pak)
 {
-	if (argc != 1)
+	close_pak_infile(pak);
+	env_print("", envp);
+	return (0);
+}
+
+int	chdir_home(t_shell *shell)
+{
+	char	*home;
+	int		ret;
+
+	home = env_grab(shell->envp, "HOME");
+	if (!home)
 	{
-		ft_printf(2, "env: no arguments allowed.\n");
-		return ;
+		ft_printf(2, "%s: %s: HOME not set\n", C_NAME, "cd");
+		return (1);
 	}
-	(void)argv;
-	print_envp("", envp);
+	ret = chdir(home);
+	return (ret);
 }

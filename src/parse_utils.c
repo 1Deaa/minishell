@@ -5,82 +5,112 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/22 22:00:40 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/03/22 22:00:41 by drahwanj         ###   ########.fr       */
+/*   Created: 2025/04/19 14:24:01 by drahwanj          #+#    #+#             */
+/*   Updated: 2025/04/19 14:24:04 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	is_exec(t_token *token)
+int	count_args_tokens(t_token *token)
 {
-	if (token->type == TK_DOUBLE_QUOTED
-		|| token->type == TK_WORD
-		|| token->type == TK_SINGLE_QUOTED)
-		return (true);
-	return (false);
+	int	i;
+
+	i = 0;
+	while (token)
+	{
+		if (token->type == TK_WORD || token->type == TK_DOUBLE_QUOTED
+			|| token->type == TK_SINGLE_QUOTED)
+			i++;
+		else if (token->type == TK_PIPE)
+			break ;
+		else if (is_redirection(token))
+			token = token->next;
+		if (token)
+			token = token->next;
+	}
+	return (i);
 }
 
-int	count_exec_args(t_token *token)
+void	fill_args_tokens(t_shell *shell, t_args *args, t_pak **cur,\
+	t_token **token)
 {
-	t_token	*curr;
-	int		count;
+	int		i;
+
+	i = 0;
+	while (token && *token && i < args->argc)
+	{
+		if ((*token)->type == TK_PIPE)
+			break ;
+		if (is_redirection(*token))
+			parse_redir(shell, cur, token);
+		if (*token)
+		{
+			args->argv[i++] = (*token)->value;
+			*token = (*token)->next;
+		}
+	}
+	args->argv[i] = NULL;
+}
+
+void	free_paks(t_shell *shell, t_pak *head)
+{
+	t_pak	*tmp;
+
+	while (head)
+	{
+		tmp = head->next;
+		if (head->full_cmd)
+			free(head->full_cmd);
+		if (head->full_path)
+			free(head->full_path);
+		free(head);
+		head = tmp;
+	}
+	shell->cmds = NULL;
+	if (shell->tokens)
+		free_tokens(shell->tokens);
+	shell->tokens = NULL;
+}
+
+int	count_paks(t_pak *head)
+{
+	int	count;
 
 	count = 0;
-	curr = token;
-	while (curr && is_exec(token))
+	while (head)
 	{
-		count++;
-		curr = curr->next;
+		count ++;
+		head = head->next;
 	}
 	return (count);
 }
 
-void	print_ast(t_cmd *cmd, int depth, bool is_last, bool parent_last[])
+int	get_fd(t_shell *shell, int oldfd, t_token *token, int type)
 {
-	if (!cmd)
-		return ;
-	print_indent(depth, parent_last);
-	print_branch(depth, is_last);
-	if (cmd->type == PS_EXEC)
-		print_exec((t_execmd *)cmd);
-	else if (cmd->type == PS_PIPE)
-		print_pipe((t_pipecmd *)cmd, depth, parent_last);
-	else if (cmd->type == PS_REDIR)
-		print_redir((t_redircmd *)cmd, depth, parent_last);
-}
+	int	fd;
 
-void	print_ast_tree(t_cmd *ast)
-{
-	bool	parent_last[100];
-
-	ft_memzero(parent_last, sizeof(parent_last));
-	print_ast(ast, 0, true, parent_last);
-}
-
-void	configure_redir(t_redircmd *rcmd, const char *op)
-{
-	if (ft_strcmp(op, "<") == 0)
-	{
-		rcmd->flags = O_RDONLY;
-		rcmd->mode = 0;
-		rcmd->fd = 0;
-	}
-	else if (ft_strcmp(op, ">") == 0)
-	{
-		rcmd->flags = O_WRONLY | O_CREAT | O_TRUNC;
-		rcmd->mode = 0644;
-		rcmd->fd = 1;
-	}
-	else if (ft_strcmp(op, ">>") == 0)
-	{
-		rcmd->flags = O_WRONLY | O_CREAT | O_APPEND;
-		rcmd->mode = 0644;
-		rcmd->fd = 1;
-	}
-	else if (ft_strcmp(op, "<<") == 0)
-	{
-		rcmd->flags = 0; //TODO
-		rcmd->fd = 0; //TODO
-	}
+	if (oldfd > 2)
+		close(oldfd);
+	if (!token || !token->value)
+		return (ambiguous_redirect(shell, "", 1));
+	if (is_redirection(token->prev) && ft_strchr(token->value, ' ')
+		&& token->type == TK_WORD)
+		return (ambiguous_redirect(shell, token->value, 1));
+	else if (access(token->value, F_OK) == -1 && type == TK_REDIR_IN)
+		return (redir_error(shell, NDIR, token->value, 127));
+	else if (access(token->value, R_OK) == -1 && type == TK_REDIR_IN)
+		return (redir_error(shell, NPERM, token->value, 126));
+	else if (access(token->value, W_OK) == -1 && !access(token->value, F_OK)
+		&& (type == TK_REDIR_OUT || type == TK_APPEND))
+		return (redir_error(shell, NPERM, token->value, 126));
+	if (TK_APPEND == type)
+		fd = open(token->value, O_CREAT | O_WRONLY | O_APPEND, 0666);
+	else if (TK_REDIR_OUT == type)
+		fd = open(token->value, O_CREAT | O_WRONLY | O_TRUNC, 0666);
+	else if (TK_REDIR_IN == type && oldfd != -1)
+		fd = open(token->value, O_RDONLY);
+	else
+		fd = oldfd;
+	return (fd);
 }

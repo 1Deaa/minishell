@@ -12,6 +12,18 @@
 
 #include "minishell.h"
 
+volatile sig_atomic_t	g_signal;
+
+void	enable_ctrl_backslash(void)
+{
+	struct termios	term;
+
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+		return ;
+	term.c_cc[VQUIT] = 28;
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
+
 static void	disable_ctrl_backslash(void)
 {
 	struct termios	term;
@@ -25,17 +37,12 @@ static void	signal_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		printf("\n");
+		g_signal = SIGINT;
+		write(STDOUT_FILENO, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-}
-
-void	shell_signal_reset(void)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
 }
 
 void	shell_signal(void)
@@ -45,11 +52,7 @@ void	shell_signal(void)
 	sa.sa_handler = signal_handler;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_RESTART;
-	if (sigaction(SIGINT, &sa, NULL) == -1 || sigaction(SIGQUIT,
-			&sa, NULL) == -1)
-	{
-		printf("Sigaction Error\n");
-		exit(EXIT_FAILURE);
-	}
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);
 	disable_ctrl_backslash();
 }

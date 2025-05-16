@@ -29,11 +29,13 @@ t_token	*new_token(const char *value)
 		free(node);
 		return (NULL);
 	}
+	node->combine = false;
 	node->next = NULL;
+	node->prev = NULL;
 	return (node);
 }
 
-void	add_token(t_token **head, const char *value)
+void	add_token(t_token **head, const char *value, bool *combine)
 {
 	t_token	*node;
 	t_token	*current;
@@ -41,6 +43,7 @@ void	add_token(t_token **head, const char *value)
 	node = new_token(value);
 	if (!node)
 		return ;
+	node->combine = *combine;
 	if (*head == NULL)
 	{
 		*head = node;
@@ -76,28 +79,28 @@ void	print_tokens(t_token *token)
 	current = token;
 	while (current)
 	{
-		printf("TOKEN: %s\tTYPE: %d\n", current->value, current->type);
+		printf("TOKEN: \"%s\"\tTYPE: %d", current->value, current->type);
 		current = current->next;
 	}
 }
 
-void	assign_token_types(t_token *tokens)
+void	assign_token_types(t_token *tokens, t_tokenization type)
 {
 	while (tokens)
 	{
-		if (!ft_strcmp(tokens->value, "|"))
+		if (!ft_strcmp(tokens->value, "|") && type == DEFAULT)
 			tokens->type = TK_PIPE;
-		else if (!ft_strcmp(tokens->value, "<"))
+		else if (!ft_strcmp(tokens->value, "<") && type == DEFAULT)
 			tokens->type = TK_REDIR_IN;
-		else if (!ft_strcmp(tokens->value, ">"))
+		else if (!ft_strcmp(tokens->value, ">") && type == DEFAULT)
 			tokens->type = TK_REDIR_OUT;
-		else if (!ft_strcmp(tokens->value, ">>"))
+		else if (!ft_strcmp(tokens->value, ">>") && type == DEFAULT)
 			tokens->type = TK_APPEND;
-		else if (!ft_strcmp(tokens->value, "<<"))
+		else if (!ft_strcmp(tokens->value, "<<") && type == DEFAULT)
 			tokens->type = TK_HEREDOC;
-		else if (tokens->value[0] == '\'')
+		else if (tokens->value[0] == '\'' && type == DEFAULT)
 			tokens->type = TK_SINGLE_QUOTED;
-		else if (tokens->value[0] == '"')
+		else if (tokens->value[0] == '"' && type == DEFAULT)
 			tokens->type = TK_DOUBLE_QUOTED;
 		else
 			tokens->type = TK_WORD;

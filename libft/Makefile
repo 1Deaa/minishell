@@ -29,7 +29,11 @@ FILES = ft_strchr.c    \
 		ft_memzero.c   \
 		ft_strncmp.c   \
 		ft_free_split.c\
-		ft_split.c     
+		ft_split.c     \
+		ft_isdigit.c   \
+		ft_itoa.c      \
+		ft_atoi.c      \
+		ft_isalnum.c
 
 OBJS = $(FILES:.c=.o)
 
