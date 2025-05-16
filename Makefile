@@ -28,7 +28,7 @@ FILES = main.c \
 CC = cc
 RM = rm -rf
 CFLAGS = -Wall -Werror -Wextra -g
-LINK = -lreadline -lncurses libft/libft.a ft_printf/libftprintf.a
+LINK = -lreadline -lncurses libft/libft.a ft_printf/libftprintf.a env_tools/libenvtools.a
 INCLUDE = -I include
 MAKEFLAGS += --no-print-directory
 
@@ -42,6 +42,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@make -C libft
+	@make -C env_tools
 	@make -C ft_printf
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LINK)
 	@echo "./$(NAME) was created!"
@@ -56,12 +57,14 @@ $(OBJ_DIR):
 clean:
 	@make -C libft clean
 	@make -C ft_printf clean
+	@make -C env_tools clean
 	@echo "deleted all object files."
 	@$(RM) $(OBJ_DIR)
 
 fclean: clean
 	@make -C libft fclean
 	@make -C ft_printf fclean
+	@make -C env_tools fclean
 	@$(RM) $(NAME)
 	@echo "./$(NAME) was deleted."
 
