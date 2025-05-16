@@ -28,7 +28,13 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	shell.argv = argv;
-	shell.envp = dup_envp(envp);
+	shell.envp = env_dup(envp);
+	if (!shell.envp)
+	{
+		ft_printf(2, "Memory allocation for the environment failed!\n");
+		ft_printf(2, "Stopping shell...\n");
+		return (EXIT_FAILURE);
+	}
 	shell_init(&shell);
 	shell_signal();
 	shell_loop(&shell);

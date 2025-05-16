@@ -29,6 +29,7 @@
 # include "colors.h"
 # include "libft.h"
 # include "ft_printf.h"
+# include "env_tools.h"
 
 typedef struct s_shell	t_shell;
 typedef struct s_token	t_token;
@@ -255,5 +256,6 @@ int		export(t_pak *cmd, char ***envp, bool flag); // Changed from char **envp
 int		pwd(t_pak *cmd);
 int		bn_exit(t_shell *shell, t_pak *pak);
 int		cd(t_shell *shell, t_pak *cmd);
+int		unset(t_shell *shell, t_pak *cmd);
 
 #endif

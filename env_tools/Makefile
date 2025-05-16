@@ -7,7 +7,8 @@ FILES = env_dup.c \
 		env_count.c \
 		env_print.c \
 		env_grab.c \
-		env_grabvalue.c \
+		env_grabentry.c \
+		env_newentry.c \
 		env_index.c \
 		env_del.c
 

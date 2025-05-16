@@ -105,7 +105,7 @@ int	export(t_pak *cmd, char ***envp, bool flag)
 		close_pak_infile(cmd);
 	if (!cmd->full_cmd[1])
 	{
-		print_envp("", *envp);
+		env_print("", *envp);
 		return (0);
 	}
 	while (cmd->full_cmd[i])

@@ -1,34 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_grabvalue.c                                   :+:      :+:    :+:   */
+/*   bn_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 11:20:58 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/05/16 11:20:59 by drahwanj         ###   ########.fr       */
+/*   Created: 2025/05/16 13:51:54 by drahwanj          #+#    #+#             */
+/*   Updated: 2025/05/16 13:51:56 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "env_tools.h"
+#include "minishell.h"
 
-/*
-returns a pointer to the value of NAME inside ENVP, null if not found
-*/
-char	*env_grabvalue(char **envp, const char *name)
+int	unset(t_shell *shell, t_pak *cmd)
 {
-	int		i;
-	size_t	len;
+	int	i;
 
-	if (!envp || !name)
-		return (NULL);
-	len = ft_strlen(name);
-	i = 0;
-	while (envp[i])
+	i = 1;
+	while (cmd->full_cmd[i])
 	{
-		if (ft_strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
-			return (envp[i] + len + 1);
+		shell->envp = env_del(shell->envp, cmd->full_cmd[i]);
 		i++;
 	}
-	return (NULL);
+	return (0);
 }

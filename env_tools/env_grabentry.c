@@ -1,35 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bn_env.c                                           :+:      :+:    :+:   */
+/*   env_grabentry.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/13 22:23:05 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/04/13 22:23:06 by drahwanj         ###   ########.fr       */
+/*   Created: 2025/05/16 11:20:58 by drahwanj          #+#    #+#             */
+/*   Updated: 2025/05/16 11:20:59 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "env_tools.h"
 
-int	env(char **envp, t_pak *pak)
+/*
+returns a pointer to the value of NAME inside ENVP, null if not found
+*/
+char	*env_grabentry(char **envp, const char *name)
 {
-	close_pak_infile(pak);
-	env_print("", envp);
-	return (0);
-}
+	int		i;
+	size_t	len;
 
-int	chdir_home(t_shell *shell)
-{
-	char	*home;
-	int		ret;
-
-	home = env_grab(shell->envp, "HOME");
-	ret = chdir(home);
-	if (!home)
+	if (!envp || !name)
+		return (NULL);
+	len = ft_strlen(name);
+	i = 0;
+	while (envp[i])
 	{
-		ft_printf(2, "%s: %s: HOME not set\n", C_NAME, "cd");
-		return (1);
+		if (ft_strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
+			return (envp[i] + len + 1);
+		i++;
 	}
-	return (ret);
+	return (NULL);
 }

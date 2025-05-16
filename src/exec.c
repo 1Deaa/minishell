@@ -74,7 +74,7 @@ int	executer(t_shell *shell, t_pak *cmd)
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "export"))
 			shell->e_status = export(cmd, &shell->envp, true);
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "unset"))
-			shell->e_status = 0;
+			shell->e_status = unset(shell, cmd);
 		else
 		{
 			shell_signal_ignore();
