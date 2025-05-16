@@ -14,7 +14,8 @@ FILES = env_dup.c \
 		env_entry_name.c \
 		env_entry_value.c \
 		env_entry_grab.c \
-		env_print_export.c
+		env_print_export.c \
+		env_update.c
 
 OBJS = $(FILES:.c=.o)
 

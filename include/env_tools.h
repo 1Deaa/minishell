@@ -33,5 +33,6 @@ char	**env_del(char **envp, char *name);
 char	*env_entry_name(char *entry);
 char	*env_entry_value(char *entry);
 char	*env_entry_grab(char *entry);
+void	env_update(char **envp, char *name, char *value);
 
 #endif

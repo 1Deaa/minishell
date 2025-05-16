@@ -214,6 +214,7 @@ int		count_envp(char **envp);
 char	*get_envp(char **envp, const char *name);
 int		chdir_home(t_shell *shell);
 void	print_envp(const char *prefix, char **envp);
+void	update_underscore_env(t_shell *shell, t_pak *cmd);
 
 /* ************************************************************************** */
 /*                                EXECUTE                                     */

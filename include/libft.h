@@ -98,5 +98,9 @@ void	free_split(char **arr);
 convert N into a null terminated string
 */
 char	*ft_itoa(int n);
+/*
+convert STR into int
+*/
+int		ft_atoi(const char *str);
 
 #endif

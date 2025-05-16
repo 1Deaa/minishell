@@ -29,3 +29,13 @@ void	close_pak_infile(t_pak *pak)
 	if (pak && pak->infile > STDERR_FILENO && pak->infile != -1)
 		close(pak->infile);
 }
+
+void	update_underscore_env(t_shell *shell, t_pak *cmd)
+{
+	int		i;
+
+	i = 0;
+	while (cmd->full_cmd[i])
+		i++;
+	env_update(shell->envp, "_", cmd->full_cmd[i - 1]);
+}

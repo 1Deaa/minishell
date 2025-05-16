@@ -31,7 +31,8 @@ FILES = ft_strchr.c    \
 		ft_free_split.c\
 		ft_split.c     \
 		ft_isdigit.c   \
-		ft_itoa.c
+		ft_itoa.c      \
+		ft_atoi.c
 
 OBJS = $(FILES:.c=.o)
 
