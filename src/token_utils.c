@@ -79,7 +79,7 @@ void	print_tokens(t_token *token)
 	current = token;
 	while (current)
 	{
-		printf("TOKEN: \"%s\"\tTYPE: %d\t COMB: %d\n", current->value, current->type, current->combine);
+		printf("TOKEN: \"%s\"\tTYPE: %d", current->value, current->type);
 		current = current->next;
 	}
 }

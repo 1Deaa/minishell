@@ -19,19 +19,19 @@ static bool	is_valid_identifier(char *value)
 	if (!value || !value[0])
 	{
 		ft_printf(2, "%s: %s: `%s': not a valid identifier\n",
-				C_NAME, "export", value);
+			C_NAME, "export", value);
 		return (false);
 	}
 	if (!ft_isalpha(value[0]) && value[0] != '_')
 	{
 		ft_printf(2, "%s: %s: `%s': not a valid identifier\n",
-				C_NAME, "export", value);
+			C_NAME, "export", value);
 		return (false);
 	}
 	i = 0;
 	while (value[++i])
 	{
-		if (!ft_isalnum(value[i]) && value[i] != '_' && value[i] != '=' && value[i] != ' ')
+		if (!ft_isalnum(value[i]) && !ft_strchr("_= ", value[i]))
 		{
 			ft_printf(2, "%s: %s: `%s': not a valid identifier\n",
 				C_NAME, "export", value);
