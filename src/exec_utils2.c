@@ -35,7 +35,9 @@ void	update_underscore_env(t_shell *shell, t_pak *cmd)
 	int		i;
 
 	i = 0;
-	while (cmd->full_cmd[i])
+	if (!cmd || !cmd->full_cmd || !cmd->full_cmd[i])
+		return ;
+	while (cmd && cmd->full_cmd && cmd->full_cmd[i])
 		i++;
 	env_update(shell->envp, "_", cmd->full_cmd[i - 1]);
 }

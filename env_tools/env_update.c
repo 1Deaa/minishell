@@ -17,6 +17,8 @@ void	env_update(char **envp, char *name, char *value)
 	int		index;
 	char	*new;
 
+	if (!value)
+		return ;
 	index = env_index(envp, name);
 	if (index == -1)
 		return ;
