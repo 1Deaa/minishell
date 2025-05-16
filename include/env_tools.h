@@ -24,10 +24,14 @@ void	env_free(char **envp);
 char	**env_app(char **envp, char *value);
 size_t	env_count(char **args);
 void	env_print(const char *prefix, char **envp);
+void	env_print_export(const char *prefix, char **envp);
 char	*env_grabentry(char **envp, const char *name);
 char	*env_newentry(char *name, char *value);
 char	*env_grab(char **envp, const char *name);
 int		env_index(char **envp, char *name);
 char	**env_del(char **envp, char *name);
+char	*env_entry_name(char *entry);
+char	*env_entry_value(char *entry);
+char	*env_entry_grab(char *entry);
 
 #endif

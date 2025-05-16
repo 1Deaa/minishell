@@ -52,7 +52,7 @@ static char	*get_var_name(char *str)
 	name = malloc(sizeof(char) * (len + 1));
 	if (!name)
 	{
-		ft_printf(2, "faild to alloc");
+		ft_printf(2, "failed to alloc");
 		exit(1);
 	}
 	ft_strncpy(name, str, len);
@@ -105,7 +105,7 @@ int	export(t_pak *cmd, char ***envp, bool flag)
 		close_pak_infile(cmd);
 	if (!cmd->full_cmd[1])
 	{
-		env_print("", *envp);
+		env_print_export("declare -x", *envp);
 		return (0);
 	}
 	while (cmd->full_cmd[i])

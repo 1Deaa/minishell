@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_grabentry.c                                    :+:      :+:    :+:   */
+/*   env_entry_grab.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 11:47:12 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/05/16 11:47:12 by drahwanj         ###   ########.fr       */
+/*   Created: 2025/05/16 16:47:42 by drahwanj          #+#    #+#             */
+/*   Updated: 2025/05/16 16:47:43 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "env_tools.h"
 
 /*
-returns a pointer to NAME inside ENVP, null if not found
+returns a pointer to value of NAME
 */
-char	*env_grabentry(char **envp, const char *name)
+char	*env_entry_grab(char *entry)
 {
-	int		i;
-	size_t	len;
+	char	*value;
+	size_t	i;
 
-	if (!envp || !name)
-		return (NULL);
-	len = ft_strlen(name);
 	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], name, len) == 0)
-			return (envp[i]);
+	if (!entry || !ft_strchr(entry, '='))
+		return (NULL);
+	while (entry[i] != '=')
 		i++;
-	}
-	return (NULL);
+	i++;
+	value = entry + i;
+	return (value);
 }

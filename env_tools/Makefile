@@ -10,7 +10,11 @@ FILES = env_dup.c \
 		env_grabentry.c \
 		env_newentry.c \
 		env_index.c \
-		env_del.c
+		env_del.c \
+		env_entry_name.c \
+		env_entry_value.c \
+		env_entry_grab.c \
+		env_print_export.c
 
 OBJS = $(FILES:.c=.o)
 

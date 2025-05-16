@@ -59,6 +59,7 @@ typedef struct s_shell
 	char			**envp;
 	bool			debug;
 	bool			exit;
+	int				shlvl;
 	int				e_status;
 	pid_t			last_pid;
 	t_token			*tokens;

@@ -17,14 +17,17 @@ prints ENVP with PREFIX
 */
 void	env_print(const char *prefix, char **envp)
 {
-	int	i;
+	int		i;
+	char	*value;
 
 	if (!envp)
 		return ;
 	i = 0;
 	while (envp[i])
 	{
-		printf("%s %s\n", prefix, envp[i]);
+		value = env_entry_grab(envp[i]);
+		if (value)
+			printf("%s %s\n", prefix, envp[i]);
 		i++;
 	}
 }

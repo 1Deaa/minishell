@@ -28,7 +28,12 @@ FILES = main.c \
 CC = cc
 RM = rm -rf
 CFLAGS = -Wall -Werror -Wextra -g
-LINK = -lreadline -lncurses libft/libft.a ft_printf/libftprintf.a env_tools/libenvtools.a
+
+LIBFT_A = libft/libft.a
+FT_PRINTF_A = ft_printf/libftprintf.a
+ENVTOOLS_A = env_tools/libenvtools.a
+
+LINK = -lreadline -lncurses $(LIBFT_A) $(FT_PRINTF_A) $(ENVTOOLS_A)
 INCLUDE = -I include
 MAKEFLAGS += --no-print-directory
 
@@ -38,12 +43,18 @@ OBJ_DIR = obj
 SRC = $(addprefix $(SRC_DIR)/, $(FILES))
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 
-all: $(NAME)
+all: libft printf envtools $(NAME)
 
-$(NAME): $(OBJS)
+libft:
 	@make -C libft
-	@make -C env_tools
+
+printf:
 	@make -C ft_printf
+
+envtools:
+	@make -C env_tools
+
+$(NAME): $(LIBFT_A) $(FT_PRINTF_A) $(ENVTOOLS_A) $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LINK)
 	@echo "./$(NAME) was created!"
 
@@ -70,4 +81,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all fclean clean re
+.PHONY: all fclean clean re libft printf envtools

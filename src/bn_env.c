@@ -25,11 +25,11 @@ int	chdir_home(t_shell *shell)
 	int		ret;
 
 	home = env_grab(shell->envp, "HOME");
-	ret = chdir(home);
 	if (!home)
 	{
 		ft_printf(2, "%s: %s: HOME not set\n", C_NAME, "cd");
 		return (1);
 	}
+	ret = chdir(home);
 	return (ret);
 }

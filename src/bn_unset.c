@@ -17,6 +17,7 @@ int	unset(t_shell *shell, t_pak *cmd)
 	int	i;
 
 	i = 1;
+	close_pak_infile(cmd);
 	while (cmd->full_cmd[i])
 	{
 		shell->envp = env_del(shell->envp, cmd->full_cmd[i]);

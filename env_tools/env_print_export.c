@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_grabentry.c                                    :+:      :+:    :+:   */
+/*   env_print_export.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 11:47:12 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/05/16 11:47:12 by drahwanj         ###   ########.fr       */
+/*   Created: 2025/05/16 11:09:48 by drahwanj          #+#    #+#             */
+/*   Updated: 2025/05/16 11:10:04 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "env_tools.h"
 
 /*
-returns a pointer to NAME inside ENVP, null if not found
+prints ENVP with PREFIX for export
 */
-char	*env_grabentry(char **envp, const char *name)
+void	env_print_export(const char *prefix, char **envp)
 {
 	int		i;
-	size_t	len;
 
-	if (!envp || !name)
-		return (NULL);
-	len = ft_strlen(name);
+	if (!envp)
+		return ;
 	i = 0;
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], name, len) == 0)
-			return (envp[i]);
+		printf("%s %s\n", prefix, envp[i]);
 		i++;
 	}
-	return (NULL);
 }

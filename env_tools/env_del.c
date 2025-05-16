@@ -41,7 +41,7 @@ char	**env_del(char **envp, char *name)
 	target_index = env_index(envp, name);
 	if (target_index == -1 || size == 0)
 		return (envp);
-	target = env_grab(envp, name);
+	target = env_grabentry(envp, name);
 	new_env = (char **)malloc(sizeof(char *) * size);
 	if (!new_env)
 	{
