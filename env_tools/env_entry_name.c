@@ -20,7 +20,7 @@ char	*env_entry_name(char *entry)
 	i = 0;
 	if (!entry)
 		return (NULL);
-	while (entry[i] != '=')
+	while (entry[i] != '\0' && entry[i] != '=')
 		i++;
 	name = ft_strndup(entry, i);
 	return (name);

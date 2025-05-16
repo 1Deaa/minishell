@@ -103,4 +103,6 @@ convert STR into int
 */
 int		ft_atoi(const char *str);
 
+bool	ft_isalnum(char c);
+
 #endif

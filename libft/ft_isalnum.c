@@ -1,28 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_entry_value.c                                  :+:      :+:    :+:   */
+/*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: drahwanj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 15:27:20 by drahwanj          #+#    #+#             */
-/*   Updated: 2025/05/16 15:27:21 by drahwanj         ###   ########.fr       */
+/*   Created: 2025/05/16 20:38:29 by drahwanj          #+#    #+#             */
+/*   Updated: 2025/05/16 20:38:30 by drahwanj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "env_tools.h"
+#include "libft.h"
 
-char	*env_entry_value(char *entry)
+bool	ft_isalnum(char c)
 {
-	char	*value;
-	size_t	i;
-
-	i = 0;
-	if (!entry || !ft_strchr(entry, '='))
-		return (NULL);
-	while (entry[i] != '\0' && entry[i] != '=')
-		i++;
-	i++;
-	value = ft_strdup(entry + i);
-	return (value);
+	if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')
+		|| (c >= '0' && c <= '9'))
+		return (true);
+	return (false);
 }

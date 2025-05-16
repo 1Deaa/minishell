@@ -50,7 +50,7 @@ char	*exname(char *token, int *index)
 
 bool	is_expandable(char c)
 {
-	if (ft_isalpha(c) || c == '_' || c == '?')
+	if (ft_isalnum(c) || c == '_' || c == '?')
 		return (true);
 	return (false);
 }

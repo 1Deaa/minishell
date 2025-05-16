@@ -22,6 +22,8 @@ static void	combine_tokens(t_token *curr, t_token *next)
 	free(next->value);
 	curr->value = value;
 	curr->combine = next->combine;
+	if (curr->type == TK_WORD)
+		curr->type = next->type;
 	curr->next = next->next;
 	if (next->next)
 		(next->next)->prev = curr;

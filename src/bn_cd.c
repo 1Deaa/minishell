@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static int	handle_cd_errors(t_pak *cmd)
+/*static int	handle_cd_errors(t_pak *cmd)
 {
 	int	i;
 
@@ -123,4 +123,4 @@ int	cd(t_shell *shell, t_pak *cmd)
 		return (1);
 	}
 	return (update_pwd_vars(shell, oldpwd));
-}
+}*/

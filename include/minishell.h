@@ -254,7 +254,7 @@ char	*find_path(t_shell *shell, char *command);
 
 int		echo(t_pak *cmd);
 int		env(char **envp, t_pak *pak);
-int		export(t_pak *cmd, char ***envp, bool flag); // Changed from char **envp
+int		export(t_shell *shell, t_pak *cmd); // Changed from char **envp
 int		pwd(t_pak *cmd);
 int		bn_exit(t_shell *shell, t_pak *pak);
 int		cd(t_shell *shell, t_pak *cmd);

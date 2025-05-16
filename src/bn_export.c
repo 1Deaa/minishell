@@ -12,7 +12,91 @@
 
 #include "minishell.h"
 
-static	int	add_env_var(char *new_var, int env_index, char ***env)
+static bool	is_valid_identifier(char *value)
+{
+	int	i;
+
+	if (!value || !value[0])
+	{
+		ft_printf(2, "%s: %s: `%s': not a valid identifier\n",
+				C_NAME, "export", value);
+		return (false);
+	}
+	if (!ft_isalpha(value[0]) && value[0] != '_')
+	{
+		ft_printf(2, "%s: %s: `%s': not a valid identifier\n",
+				C_NAME, "export", value);
+		return (false);
+	}
+	i = 0;
+	while (value[++i])
+	{
+		if (!ft_isalnum(value[i]) && value[i] != '_' && value[i] != '=' && value[i] != ' ')
+		{
+			ft_printf(2, "%s: %s: `%s': not a valid identifier\n",
+				C_NAME, "export", value);
+			return (false);
+		}
+	}
+	return (true);
+}
+
+static bool	print_export(t_shell *shell, t_pak *cmd)
+{
+	if (cmd && cmd->full_cmd && !cmd->full_cmd[1])
+	{
+		env_print_export("declare -x", shell->envp);
+		return (true);
+	}
+	return (false);
+}
+
+static void	add_value(t_shell *shell, char *val)
+{
+	char	*name;
+	char	*value;
+	char	*entry;
+
+	name = env_entry_name(val);
+	value = env_entry_value(val);
+	if (!ft_strchr(val, '=') && !env_grab(shell->envp, name))
+	{
+		shell->envp = env_app(shell->envp, val);
+		return ;
+	}
+	if (!env_grabentry(shell->envp, name))
+	{
+		entry = env_newentry(name, value);
+		if (!entry)
+			return ;
+		shell->envp = env_app(shell->envp, entry);
+	}
+	env_update(shell->envp, name, value);
+}
+
+int	export(t_shell *shell, t_pak *cmd)
+{
+	int		i;
+	char	*value;
+
+	close_pak_infile(cmd);
+	if (print_export(shell, cmd))
+		return (0);
+	i = 0;
+	while (cmd && cmd->full_cmd && cmd->full_cmd[++i])
+	{
+		value = ft_strdup(cmd->full_cmd[i]);
+		if (!value || !is_valid_identifier(value))
+		{
+			shell->e_status = 1;
+			continue ;
+		}
+		add_value(shell, value);
+	}
+	return (shell->e_status);
+}
+
+/*static	int	add_env_var(char *new_var, int env_index, char ***env)
 {
 	int		i;
 	char	**new_env;
@@ -122,4 +206,4 @@ int	export(t_pak *cmd, char ***envp, bool flag)
 		i++;
 	}
 	return (1);
-}
+}*/
