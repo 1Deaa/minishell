@@ -16,7 +16,7 @@ extern int	g_signal;
 
 void	shell_exit(t_shell *shell)
 {
-	free_envp(shell->envp, count_envp(shell->envp));
+	env_free_i(shell->envp, env_count(shell->envp));
 	rl_clear_history();
 	printf("exit\n");
 	exit(shell->e_status);
