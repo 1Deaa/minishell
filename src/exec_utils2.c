@@ -41,3 +41,11 @@ void	update_underscore_env(t_shell *shell, t_pak *cmd)
 		i++;
 	env_update(shell->envp, "_", cmd->full_cmd[i - 1]);
 }
+
+void	close_inoutfiles(int infile, int outfile)
+{
+	if (infile > STDERR_FILENO)
+		close(infile);
+	if (outfile > STDERR_FILENO)
+		close(outfile);
+}

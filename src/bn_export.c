@@ -29,7 +29,7 @@ static bool	is_valid_identifier(char *value)
 		return (false);
 	}
 	i = 0;
-	while (value[++i])
+	while (value[++i] && value[i] != '=')
 	{
 		if (!ft_isalnum(value[i]) && !ft_strchr("_= ", value[i]))
 		{
