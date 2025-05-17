@@ -62,6 +62,8 @@ static void	add_value(t_shell *shell, char *val)
 	if (!ft_strchr(val, '=') && !env_grab(shell->envp, name))
 	{
 		shell->envp = env_app(shell->envp, val);
+		free(name);
+		free(value);
 		return ;
 	}
 	if (!env_grabentry(shell->envp, name))
@@ -72,6 +74,9 @@ static void	add_value(t_shell *shell, char *val)
 		shell->envp = env_app(shell->envp, entry);
 	}
 	env_update(shell->envp, name, value);
+	free(name);
+	free(value);
+	free(val);
 }
 
 int	export(t_shell *shell, t_pak *cmd)
