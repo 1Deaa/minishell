@@ -208,7 +208,6 @@ void	print_heredoc_warning(char *line, char *delimiter);
 /*                                  ENVP                                      */
 /* ************************************************************************** */
 
-int		bn_cd(t_shell *shell, t_pak *cmd);
 int		chdir_home(t_shell *shell);
 void	update_underscore_env(t_shell *shell, t_pak *cmd);
 
@@ -239,6 +238,7 @@ bool	is_builtin(t_pak *cmd);
 void	*pak_redir(t_shell *shell, t_pak *cmd, int fd[2]);
 void	*pak_process(t_shell *shell, t_pak *cmd, int fd[2]);
 void	close_pak_infile(t_pak *pak);
+void	close_inoutfiles(int infile, int outfile);
 /*
 FIND_PATH
 */
@@ -253,7 +253,7 @@ int		env(char **envp, t_pak *pak);
 int		export(t_shell *shell, t_pak *cmd); // Changed from char **envp
 int		pwd(t_pak *cmd);
 int		bn_exit(t_shell *shell, t_pak *pak);
-int		cd(t_shell *shell, t_pak *cmd);
 int		unset(t_shell *shell, t_pak *cmd);
+int		bn_cd(t_shell *shell, t_pak *cmd);
 
 #endif

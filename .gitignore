@@ -8,3 +8,4 @@ Unstaged/
 libftprintf.a
 libenvtools.a
 test.c
+minishell_tester

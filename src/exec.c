@@ -43,7 +43,10 @@ void	*exec_pak(t_shell *shell, t_pak *cmd)
 	}
 	if (cmd->next)
 	{
-		cmd->next->infile = fd[READ_END];
+		if (cmd->next->infile == STDIN_FILENO)
+			cmd->next->infile = fd[READ_END];
+		else
+			close(fd[READ_END]);
 		close(fd[WRITE_END]);
 	}
 	else
@@ -51,10 +54,7 @@ void	*exec_pak(t_shell *shell, t_pak *cmd)
 		close(fd[WRITE_END]);
 		close(fd[READ_END]);
 	}
-	if (cmd->infile > STDERR_FILENO)
-		close(cmd->infile);
-	if (cmd->outfile > STDERR_FILENO)
-		close(cmd->outfile);
+	close_inoutfiles(cmd->infile, cmd->outfile);
 	return (NULL);
 }
 
