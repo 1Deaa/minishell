@@ -208,8 +208,7 @@ void	print_heredoc_warning(char *line, char *delimiter);
 /*                                  ENVP                                      */
 /* ************************************************************************** */
 
-void	free_envp(char **envp, int count);
-int		count_envp(char **envp);
+int		bn_cd(t_shell *shell, t_pak *cmd);
 int		chdir_home(t_shell *shell);
 void	update_underscore_env(t_shell *shell, t_pak *cmd);
 

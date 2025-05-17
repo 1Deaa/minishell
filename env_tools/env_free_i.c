@@ -19,7 +19,6 @@ void	*env_free_i(char **envp, size_t n)
 {
 	size_t	i;
 
-	
 	if (!envp)
 		return (NULL);
 	i = env_count(envp);
