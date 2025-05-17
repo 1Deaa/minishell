@@ -22,8 +22,7 @@ FILES = main.c \
 		exec.c exec_utils.c exec_utils2.c \
 		find_path.c \
 		bn_echo.c bn_env.c bn_export.c bn_pwd.c bn_cd.c bn_exit.c bn_unset.c \
-		error.c \
-		envp.c 
+		error.c 
 
 CC = cc
 RM = rm -rf

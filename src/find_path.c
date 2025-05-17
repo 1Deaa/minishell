@@ -38,7 +38,7 @@ static char	**create_paths(t_shell *shell)
 	char	*path_var;
 	char	**ret;
 
-	path_var = get_envp(shell->envp, "PATH");
+	path_var = env_grab(shell->envp, "PATH");
 	if (!path_var)
 		return (NULL);
 	ret = ft_split(path_var, ':');

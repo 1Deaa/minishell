@@ -31,7 +31,7 @@ static char	*expand(char *name, t_shell *shell)
 		free(name);
 		return (ft_strdup("$"));
 	}
-	ret = ft_strdup(get_envp(shell->envp, name));
+	ret = ft_strdup(env_grab(shell->envp, name));
 	if (!ret)
 	{
 		free(name);

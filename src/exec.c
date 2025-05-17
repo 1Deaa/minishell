@@ -70,7 +70,7 @@ int	executer(t_shell *shell, t_pak *cmd)
 		if (arg && !ft_strcmp(*arg, "exit"))
 			shell->e_status = bn_exit(shell, cmd);
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "cd"))
-			shell->e_status = 0;
+			shell->e_status = bn_cd(shell, cmd);
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "export"))
 			shell->e_status = export(shell, cmd);
 		else if (!cmd->next && arg && !ft_strcmp(*arg, "unset"))
