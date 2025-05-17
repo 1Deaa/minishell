@@ -46,7 +46,7 @@ void	*exec_pak(t_shell *shell, t_pak *cmd)
 		if (cmd->next->infile == STDIN_FILENO)
 			cmd->next->infile = fd[READ_END];
 		else
-			close(fd[READ_END]);	
+			close(fd[READ_END]);
 		close(fd[WRITE_END]);
 	}
 	else
