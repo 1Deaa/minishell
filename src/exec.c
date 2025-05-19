@@ -64,6 +64,7 @@ int	executer(t_shell *shell, t_pak *cmd)
 	int		paks;
 
 	paks = count_paks(cmd);
+	update_underscore_env(shell, cmd);
 	while (cmd)
 	{
 		arg = cmd->full_cmd;
@@ -80,7 +81,6 @@ int	executer(t_shell *shell, t_pak *cmd)
 			shell_signal_ignore();
 			exec_pak(shell, cmd);
 		}
-		update_underscore_env(shell, cmd);
 		cmd = cmd->next;
 	}
 	wait_processes(shell, paks);
