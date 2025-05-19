@@ -18,7 +18,7 @@ static void	combine_tokens(t_token *curr, t_token *next)
 
 	if (curr->value && !ft_strcmp(curr->value, "$")
 		&& (next->type == TK_DOUBLE_QUOTED
-		|| next->type == TK_SINGLE_QUOTED))
+			|| next->type == TK_SINGLE_QUOTED))
 	{
 		value = ft_strdup(next->value);
 		free(curr->value);

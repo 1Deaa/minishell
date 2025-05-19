@@ -31,6 +31,7 @@ void	shell_init(t_shell *shell)
 	shell->exit = false;
 	shell->e_status = 0;
 	shell->last_pid = 0;
+	shell->heredocs = 0;
 	update_shlvl(shell);
 }
 
