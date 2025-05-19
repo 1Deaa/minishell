@@ -16,7 +16,15 @@ static void	combine_tokens(t_token *curr, t_token *next)
 {
 	char	*value;
 
-	value = ft_strjoin(curr->value, next->value);
+	if (curr->value && !ft_strcmp(curr->value, "$")
+		&& (next->type == TK_DOUBLE_QUOTED
+			|| next->type == TK_SINGLE_QUOTED))
+	{
+		value = ft_strdup(next->value);
+		free(curr->value);
+	}
+	else
+		value = ft_strjoin(curr->value, next->value);
 	if (!value)
 		return ;
 	free(next->value);

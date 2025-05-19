@@ -79,7 +79,7 @@ static int	write_heredoc_to_file(char *content, char *heredoc_file)
 	return (open(heredoc_file, O_RDONLY));
 }
 
-void	heredoc_child(char *delimiter)
+void	heredoc_child(char *delimiter, char *filename)
 {
 	char	*content;
 	int		fd;
@@ -89,15 +89,21 @@ void	heredoc_child(char *delimiter)
 	content = get_heredoc_input(delimiter);
 	if (!content)
 		return ;
-	fd = write_heredoc_to_file(content, HEREDOC_FILE);
+	if (!filename)
+	{
+		free(content);
+		exit(1);
+	}
+	fd = write_heredoc_to_file(content, filename);
 	free(content);
+	free(filename);
 	if (fd < 0)
 		exit(1);
 	close(fd);
 	exit(0);
 }
 
-int	handle_heredoc(char *delimiter)
+int	handle_heredoc(char *delimiter, char *file)
 {
 	t_proc	process;
 
@@ -107,7 +113,7 @@ int	handle_heredoc(char *delimiter)
 	if (process.pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
-		heredoc_child(delimiter);
+		heredoc_child(delimiter, file);
 	}
 	else
 	{
@@ -121,7 +127,7 @@ int	handle_heredoc(char *delimiter)
 		}
 		if (WIFEXITED(process.status) && WEXITSTATUS(process.status) != 0)
 			return (-1);
-		return (open(HEREDOC_FILE, O_RDONLY));
+		return (open_heredoc(file));
 	}
 	return (-1);
 }

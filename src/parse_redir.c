@@ -78,6 +78,8 @@ int	parse_redir_in(t_shell *shell, t_pak **curr, t_token **token)
 
 int	parse_redir(t_shell *shell, t_pak **curr, t_token **token)
 {
+	char	*filename;
+
 	if ((*token)->type == TK_REDIR_OUT)
 	{
 		parse_redir_out(shell, curr, token);
@@ -92,12 +94,14 @@ int	parse_redir(t_shell *shell, t_pak **curr, t_token **token)
 	}
 	else if ((*token)->type == TK_HEREDOC)
 	{
-		parse_heredoc(shell, curr, token);
+		filename = get_heredoc_file(++(shell->heredoc));
+		parse_heredoc(shell, curr, token, filename);
+		free(filename);
 	}
 	return (0);
 }
 
-int	parse_heredoc(t_shell *shell, t_pak **curr, t_token **token)
+int	parse_heredoc(t_shell *shell, t_pak **curr, t_token **token, char *file)
 {
 	int	old_infile;
 
@@ -105,7 +109,7 @@ int	parse_heredoc(t_shell *shell, t_pak **curr, t_token **token)
 	if ((*curr)->infile > STDERR_FILENO)
 		close((*curr)->infile);
 	old_infile = (*curr)->infile;
-	(*curr)->infile = handle_heredoc((*token)->value);
+	(*curr)->infile = handle_heredoc((*token)->value, file);
 	if (old_infile == -1)
 		close((*curr)->infile);
 	if (old_infile == -1)

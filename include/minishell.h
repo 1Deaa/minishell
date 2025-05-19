@@ -61,6 +61,7 @@ typedef struct s_shell
 	bool			exit;
 	int				shlvl;
 	int				e_status;
+	int				heredoc;
 	pid_t			last_pid;
 	t_token			*tokens;
 	t_pak			*cmds;
@@ -175,8 +176,11 @@ void	*pak_redir_util(t_shell *shell, t_pak *cmd, int fd[2]);
 int		parse_redir_out(t_shell *shell, t_pak **curr, t_token **token);
 int		parse_redir_in(t_shell *shell, t_pak **curr, t_token **token);
 int		parse_redir_app(t_shell *shell, t_pak **curr, t_token **token);
-int		parse_heredoc(t_shell *shell, t_pak **curr, t_token **token);
-int		handle_heredoc(char *delimiter);
+int		parse_heredoc(t_shell *shell, t_pak **curr, t_token **token,
+			char *file);
+int		handle_heredoc(char *delimiter, char *file);
+char	*get_heredoc_file(int file);
+int		open_heredoc(char *file);
 void	print_paks(t_pak *head);
 void	free_paks(t_shell *shell, t_pak *head);
 int		count_paks(t_pak *head);

@@ -19,6 +19,7 @@ void	update_shlvl(t_shell *shell)
 	shell->shlvl = ft_atoi(env_grab(shell->envp, "SHLVL")) + 1;
 	shlvl = ft_itoa(shell->shlvl);
 	env_update(shell->envp, "SHLVL", shlvl);
+	env_update(shell->envp, "SHELL", shell->argv[0]);
 	free(shlvl);
 }
 
@@ -30,6 +31,7 @@ void	shell_init(t_shell *shell)
 	shell->exit = false;
 	shell->e_status = 0;
 	shell->last_pid = 0;
+	shell->heredoc = 0;
 	update_shlvl(shell);
 }
 
