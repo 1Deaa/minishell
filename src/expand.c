@@ -16,8 +16,8 @@ static char	*expand(char *name, t_shell *shell)
 {
 	char	*ret;
 
-	(void)shell;
-	ret = NULL;
+	if (!name)
+		return (NULL);
 	if (!ft_strcmp(name, "0") || !ft_strcmp(name, "1") || !ft_strcmp(name, "?"))
 	{
 		ret = special_expand(name, shell);
