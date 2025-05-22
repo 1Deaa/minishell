@@ -94,8 +94,6 @@ int	parse_redir(t_shell *shell, t_pak **curr, t_token **token)
 	}
 	else if ((*token)->type == TK_HEREDOC)
 	{
-		if (shell->heredoc > 2147483646)
-			shell->heredoc = 0;
 		filename = get_heredoc_file(++(shell->heredoc));
 		parse_heredoc(shell, curr, token, filename);
 		free(filename);
