@@ -94,6 +94,7 @@ void	*pak_process(t_shell *shell, t_pak *cmd, int fd[2])
 		&& !ft_strcmp(*(cmd->full_cmd), "env"))
 		shell->e_status = env(shell->envp, cmd);
 	free_paks(shell, shell->cmds);
+	env_free(shell->envp);
 	exit(shell->e_status);
 }
 
